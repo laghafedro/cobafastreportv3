@@ -999,7 +999,7 @@
 </div>
 
 <script>
-const ADMIN_ACCOUNT = { username: "adminfedro", password: "admin111" };
+const ADMIN_ACCOUNT = { username: "admin", password: "admin123" };
 
 const KEBUN_ACCOUNTS = {
   "Kebun Induk Kelapa Tilong Kab. Kupang": "tilong123",
@@ -1294,7 +1294,7 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
       rects.push({x: areaX, y: areaY, w: w, h: h});
       rects.push({x: areaX + w + gap, y: areaY, w: w, h: h});
       rects.push({x: areaX, y: areaY + h + gap, w: w, h: h});
-      rects.push({x: areaX + w + gap, y: areaY, w: w, h: h});
+      rects.push({x: areaX + w + gap, y: areaY + h + gap, w: w, h: h}); // PERBAIKAN: y diubah menjadi areaY + h + gap
     }
   } else if (count === 5) {
     const h = (areaH - gap) / 2;
@@ -1555,7 +1555,7 @@ function renderCleanActivities(acts, startX, startY, maxW, maxH, styleType = 1){
 
   // Determine optimal font size: start large (52px), shrink only when nearing full
   let startFont = 52;
-  const minFont = 24; // Never too small!
+  const minFont = 24;
   let optimalFont = minFont;
   let computedCardHeights = [];
 
@@ -1567,7 +1567,7 @@ function renderCleanActivities(acts, startX, startY, maxW, maxH, styleType = 1){
     for(let i = 0; i < count; i++){
       const lines = splitText(acts[i], maxTextW, size, false);
       const textH = lines.length * lHeight;
-      const cardH = Math.max(88, textH + 36); // natural padding
+      const cardH = Math.max(88, textH + 36);
       cardHeights.push(cardH);
       totalNeededH += cardH;
     }
@@ -1582,7 +1582,6 @@ function renderCleanActivities(acts, startX, startY, maxW, maxH, styleType = 1){
 
   const lineHeight = Math.round(optimalFont * 1.38);
 
-  // Render cards strictly stacked from top downwards
   let currentY = startY;
 
   for(let i = 0; i < count; i++){
@@ -1594,7 +1593,6 @@ function renderCleanActivities(acts, startX, startY, maxW, maxH, styleType = 1){
 
     ctx.save();
     if(styleType === 1){
-      // Style 1: Emerald Formal Ivory Card with Gradient Left Edge
       ctx.shadowColor = 'rgba(6, 26, 12, 0.06)';
       ctx.shadowBlur = 12;
       ctx.shadowOffsetY = 4;
@@ -1618,7 +1616,6 @@ function renderCleanActivities(acts, startX, startY, maxW, maxH, styleType = 1){
       ctx.fill();
 
     } else if(styleType === 2){
-      // Style 2: Modern Dynamic Card with Gold Accent Tag
       ctx.shadowColor = 'rgba(6, 26, 12, 0.07)';
       ctx.shadowBlur = 14;
       ctx.shadowOffsetY = 4;
@@ -1639,7 +1636,6 @@ function renderCleanActivities(acts, startX, startY, maxW, maxH, styleType = 1){
       ctx.fill();
 
     } else {
-      // Style 3: Editorial Luxe Clean Card
       rr(itemX, itemY, itemW, curItemH, 12);
       ctx.fillStyle = '#f6faf7';
       ctx.fill();
@@ -1654,7 +1650,6 @@ function renderCleanActivities(acts, startX, startY, maxW, maxH, styleType = 1){
     }
     ctx.restore();
 
-    // Clean text rendering with auto-fitted font size
     const lines = splitText(text, maxTextW, optimalFont, false);
     const totalTextH = lines.length * lineHeight;
     let textStartY = itemY + (curItemH - totalTextH) / 2;
@@ -1670,7 +1665,6 @@ function renderCleanActivities(acts, startX, startY, maxW, maxH, styleType = 1){
     });
     ctx.restore();
 
-    // Advance Y downwards for the next card
     currentY += curItemH + itemGap;
   }
 }
@@ -1682,7 +1676,6 @@ function drawTemplate1(){
   ctx.fillStyle = '#f8faf9';
   ctx.fillRect(0, 0, 2160, 3054);
 
-  // Top header ribbon
   const topGrad = ctx.createLinearGradient(0, 0, 2160, 0);
   topGrad.addColorStop(0, THEME.greenDeep);
   topGrad.addColorStop(0.55, THEME.leaf);
@@ -1690,7 +1683,6 @@ function drawTemplate1(){
   ctx.fillStyle = topGrad;
   ctx.fillRect(0, 0, 2160, 16);
 
-  // Kop Dinas - BESAR, LEGA, TANPA TERTAMPA
   const top = 36;
   const logoSize = 230;
   if(logo1Ready) contain(logo1, 75, top + 8, logoSize, logoSize);
@@ -1698,28 +1690,23 @@ function drawTemplate1(){
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
   
-  // Baris 1: Pemerintah Provinsi NTT
   ctx.fillStyle = THEME.greenDeep;
   ctx.font = "800 34px 'Plus Jakarta Sans', Arial";
   ctx.fillText('PEMERINTAH PROVINSI NUSA TENGGARA TIMUR', 335, top + 10);
 
-  // Baris 2: Dinas Pertanian & Ketahanan Pangan
   ctx.fillStyle = THEME.navy;
   ctx.font = "800 70px 'Plus Jakarta Sans', Arial";
   ctx.fillText('DINAS PERTANIAN DAN KETAHANAN PANGAN', 335, top + 64);
 
-  // Baris 3: UPTD Kebun Dinas
   ctx.fillStyle = THEME.gold;
   ctx.font = "700 42px 'Plus Jakarta Sans', Arial";
   ctx.fillText('UPTD. Perbenihan Kebun Dinas & Laboratorium Hayati Perkebunan', 335, top + 158);
 
-  // Divider lines di bawah teks kop
   ctx.fillStyle = THEME.goldLine;
   ctx.fillRect(75, top + 248, 2010, 5);
   ctx.fillStyle = THEME.greenDeep;
   ctx.fillRect(75, top + 253, 560, 5);
 
-  // FIXED PHOTO COLLAGE AREA
   const photoArea = { x: 75, y: 315, w: 2010, h: 1600 };
   const count = Math.max(photos.length, 1);
   const rects = calculatePhotoLayout(photos, count, photoArea.x, photoArea.y, photoArea.w, photoArea.h, 20);
@@ -1728,7 +1715,6 @@ function drawTemplate1(){
     renderPhotoCard(r, idx, photos[idx], 14, '#ffffff', 6);
   });
 
-  // INFO BAR (Nama Kebun Besar & Tanggal)
   let cy = photoArea.y + photoArea.h + 22;
   const infoBarH = 120;
 
@@ -1749,19 +1735,16 @@ function drawTemplate1(){
   rr(75, cy, 2010, infoBarH, 16);
   ctx.stroke();
 
-  // Left green bar accent
   ctx.fillStyle = THEME.greenDeep;
   rr(75, cy, 12, infoBarH, 5);
   ctx.fill();
 
-  // Subtitle badge
   ctx.fillStyle = THEME.gold;
   ctx.font = "800 19px 'Plus Jakarta Sans', Arial";
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
   ctx.fillText('LOKASI KEBUN DINAS', 110, cy + 18);
 
-  // Date badge at right
   const dateStr = dateLabel($('date').value);
   ctx.font = "800 28px 'Plus Jakarta Sans', Arial";
   const dateW = ctx.measureText(dateStr).width + 60;
@@ -1775,7 +1758,6 @@ function drawTemplate1(){
   ctx.textBaseline = 'middle';
   ctx.fillText(dateStr, dateX + dateW/2, cy + 60);
 
-  // Garden name text auto-fit (DIPERBESAR NYATA)
   const maxGardenW = dateX - 140;
   let gardenFontSize = 56;
   ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
@@ -1788,7 +1770,6 @@ function drawTemplate1(){
   ctx.textBaseline = 'top';
   ctx.fillText($('gardenName').value, 110, cy + 46);
 
-  // ACTIVITIES SECTION (SUSUN DARI ATAS KE BAWAH)
   const actStartY = cy + infoBarH + 20;
   const footerY = 2814;
   const maxActH = footerY - actStartY - 16;
@@ -1808,7 +1789,6 @@ function drawTemplate2(){
   ctx.fillStyle = '#eef3ef';
   ctx.fillRect(0, 0, 2160, 3054);
 
-  // Top header banner card - BESAR & LEGA
   const topH = 265;
   rr(45, 26, 2070, topH, 20);
   const headGrad = ctx.createLinearGradient(45, 26, 2115, 291);
@@ -1818,7 +1798,6 @@ function drawTemplate2(){
   ctx.fillStyle = headGrad;
   ctx.fill();
 
-  // Gold accent strip on header
   ctx.fillStyle = THEME.goldBright;
   rr(45, 26 + topH - 6, 2070, 6, 3);
   ctx.fill();
@@ -1841,7 +1820,6 @@ function drawTemplate2(){
   ctx.font = "600 40px 'Plus Jakarta Sans', Arial";
   ctx.fillText('UPTD. Perbenihan Kebun Dinas & Laboratorium Hayati Perkebunan', 320, 188);
 
-  // FIXED PHOTO COLLAGE AREA
   const photoArea = { x: 45, y: 315, w: 2070, h: 1600 };
   const count = Math.max(photos.length, 1);
   const rects = calculatePhotoLayout(photos, count, photoArea.x, photoArea.y, photoArea.w, photoArea.h, 20);
@@ -1850,7 +1828,6 @@ function drawTemplate2(){
     renderPhotoCard(r, idx, photos[idx], 16, '#ffffff', 6);
   });
 
-  // INFO BAR CARD (DIPERBESAR)
   let cy = photoArea.y + photoArea.h + 20;
   const infoH = 120;
 
@@ -1868,12 +1845,10 @@ function drawTemplate2(){
   rr(45, cy, 2070, infoH, 16);
   ctx.stroke();
 
-  // Left gold accent
   ctx.fillStyle = THEME.gold;
   rr(45, cy, 12, infoH, 5);
   ctx.fill();
 
-  // Location label badge
   rr(75, cy + 36, 220, 48, 10);
   ctx.fillStyle = '#ebf5ee';
   ctx.fill();
@@ -1883,7 +1858,6 @@ function drawTemplate2(){
   ctx.textBaseline = 'middle';
   ctx.fillText('KEBUN DINAS', 185, cy + 60);
 
-  // Date label
   const dateStr = dateLabel($('date').value);
   ctx.fillStyle = '#1e4a2c';
   ctx.font = "800 30px 'Plus Jakarta Sans', Arial";
@@ -1903,7 +1877,6 @@ function drawTemplate2(){
   ctx.textAlign = 'left';
   ctx.fillText($('gardenName').value, 320, cy + 60);
 
-  // ACTIVITIES SECTION (SUSUN DARI ATAS)
   const actStartY = cy + infoH + 20;
   const footerY = 2814;
   const maxActH = footerY - actStartY - 16;
@@ -1923,7 +1896,6 @@ function drawTemplate3(){
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, 2160, 3054);
 
-  // Left vertical elegant stripe
   ctx.fillStyle = THEME.greenDeep;
   ctx.fillRect(0, 0, 24, 3054);
   ctx.fillStyle = THEME.gold;
@@ -1933,7 +1905,6 @@ function drawTemplate3(){
   const logoSize = 230;
   if(logo1Ready) contain(logo1, 70, top + 8, logoSize, logoSize);
 
-  // Date badge at top right
   const dateStr = dateLabel($('date').value);
   ctx.save();
   ctx.font = "800 28px 'Plus Jakarta Sans', Arial";
@@ -1949,7 +1920,6 @@ function drawTemplate3(){
   ctx.fillText(dateStr, dateX + dateW/2, top + 46);
   ctx.restore();
 
-  // Masthead text
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
   
@@ -1965,11 +1935,9 @@ function drawTemplate3(){
   ctx.font = "700 40px 'Plus Jakarta Sans', Arial";
   ctx.fillText('UPTD. Perbenihan Kebun Dinas & Laboratorium Hayati Perkebunan', 330, top + 158);
 
-  // Thin line
   ctx.fillStyle = THEME.goldLine;
   ctx.fillRect(70, top + 248, 2025, 5);
 
-  // FIXED PHOTO COLLAGE AREA
   const photoArea = { x: 70, y: 315, w: 2025, h: 1600 };
   const count = Math.max(photos.length, 1);
   const rects = calculatePhotoLayout(photos, count, photoArea.x, photoArea.y, photoArea.w, photoArea.h, 20);
@@ -1978,7 +1946,6 @@ function drawTemplate3(){
     renderPhotoCard(r, idx, photos[idx], 12, '#ffffff', 5);
   });
 
-  // Headline garden bar (DIPERBESAR)
   let cy = photoArea.y + photoArea.h + 22;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
@@ -1998,7 +1965,6 @@ function drawTemplate3(){
   ctx.fillStyle = '#cfe0d5';
   ctx.fillRect(70, cy + 104, 2025, 2.5);
 
-  // ACTIVITIES SECTION (SUSUN DARI ATAS)
   const actStartY = cy + 120;
   const footerY = 2814;
   const maxActH = footerY - actStartY - 16;
