@@ -722,11 +722,6 @@
       border-color: #b9dcbf;
       flex: 1;
     }
-    .archive-item button.del-btn {
-      background: #fae9e7;
-      color: var(--danger-color);
-      border-color: #f0b4ae;
-    }
 
     /* ===== WORKSPACE ===== */
     .workspace {
@@ -1013,8 +1008,7 @@
 </div>
 
 <script>
-// LINK GOOGLE APPS SCRIPT JEMBATAN GOOGLE DRIVE ANDA
-const GDRIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxs6VGbOvndXptvmqE7qHmFY6aMAfRpeXMySVJ30a_x652vwqWRg8dSUU3Emfiir_QUVg/exec";
+const GDRIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNiur-HREkRrYdqmctzL4bPdRd66cUIOhbutNm1HXQG4JXaT9ODhBHjVPprHrdD4yt/exec";
 
 const ADMIN_ACCOUNT = { username: "admin", password: "admin123" };
 
@@ -1276,13 +1270,13 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
     rects.push({ x: areaX + wLeft + gap, y: areaY + hHalf + gap, w: wRight, h: hHalf });
   } 
   else if (count === 4) {
-    // 4 FOTO: GRID 2 BARIS x 2 KOLOM (SIMETRIS)
+    // 4 FOTO: GRID 2x2 SIMETRIS PRESISI
     const w = (areaW - gap) / 2;
     const h = (areaH - gap) / 2;
-    rects.push({ x: areaX,           y: areaY,           w: w, h: h }); // Kiri Atas
-    rects.push({ x: areaX + w + gap, y: areaY,           w: w, h: h }); // Kanan Atas
-    rects.push({ x: areaX,           y: areaY + h + gap, w: w, h: h }); // Kiri Bawah
-    rects.push({ x: areaX + w + gap, y: areaY + h + gap, w: w, h: h }); // Kanan Bawah
+    rects.push({ x: areaX,           y: areaY,           w: w, h: h });
+    rects.push({ x: areaX + w + gap, y: areaY,           w: w, h: h });
+    rects.push({ x: areaX,           y: areaY + h + gap, w: w, h: h });
+    rects.push({ x: areaX + w + gap, y: areaY + h + gap, w: w, h: h });
   } 
   else if (count === 5) {
     const h = (areaH - gap) / 2;
@@ -1971,7 +1965,7 @@ function draw(){
 }
 
 // =========================================================================
-// INTEGRASI GOOGLE DRIVE CLOUD SYNC AKTIF (100% BEBAS CORS)
+// SINKRONISASI GOOGLE DRIVE (SIMPAN & BACA DARI SEMUA PERANGKAT)
 // =========================================================================
 function getOptimizedJpeg(){
   const tempCanvas = document.createElement('canvas');
@@ -1979,166 +1973,79 @@ function getOptimizedJpeg(){
   tempCanvas.height = 1696;
   const tCtx = tempCanvas.getContext('2d');
   tCtx.drawImage(canvas, 0, 0, 1200, 1696);
-  return tempCanvas.toDataURL('image/jpeg', 0.82);
+  return tempCanvas.toDataURL('image/jpeg', 0.80);
 }
 
-function getLocalArchives(){
-  try {
-    const raw = localStorage.getItem('gdrive_kolase_db');
-    return raw ? JSON.parse(raw) : [];
-  } catch(e){
-    return [];
-  }
-}
-
-function saveLocalArchives(list){
-  try {
-    localStorage.setItem('gdrive_kolase_db', JSON.stringify(list.slice(0, 60)));
-  } catch(e){}
-}
-
-async function saveArchive(){
+function saveArchive(){
   showStatusAlert('⏳ Sedang mengunggah kolase ke Google Drive Dinas...', 'loading', 0);
   const dateVal = $('date').value || new Date().toISOString().slice(0,10);
-  const parts = dateVal.split('-');
-  const newId = Date.now();
   const imageBase64 = getOptimizedJpeg();
 
-  const itemData = {
-    id: newId,
+  const payload = {
     garden: $('gardenName').value,
-    title: $('gardenName').value,
     date: dateVal,
-    month: Number(parts[1]),
-    year: Number(parts[0]),
     image: imageBase64,
-    activities: getActivities(),
-    template: currentTemplate,
     author: (currentUser && currentUser.name) ? currentUser.name : 'Petugas'
   };
 
-  $('archiveYear').value = itemData.year;
-  $('archiveMonth').value = itemData.month;
-
-  // 1. Simpan di cache lokal
-  let localList = getLocalArchives();
-  localList.unshift(itemData);
-  saveLocalArchives(localList);
-
-  // 2. Kirim ke Google Apps Script / Google Drive
-  try {
-    await fetch(GDRIVE_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({
-        garden: itemData.garden,
-        date: itemData.date,
-        image: imageBase64,
-        author: itemData.author
-      })
-    });
-
-    showStatusAlert('✅ Kolase BERHASIL tersimpan ke Google Drive & Cloud Arsip!', 'success', 6000);
-  } catch(err) {
-    showStatusAlert('✅ Kolase tersimpan di arsip perangkat.', 'success', 5000);
-  }
-
-  loadArchive();
+  fetch(GDRIVE_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(payload)
+  }).then(() => {
+    showStatusAlert('✅ Kolase BERHASIL tersimpan ke Google Drive & Cloud!', 'success', 6000);
+    setTimeout(loadArchive, 3000); // Tunggu file tersusun di Google Drive
+  }).catch((err) => {
+    showStatusAlert('Gagal mengunggah: ' + err.message, 'error');
+  });
 }
 
 function loadArchive(){
   let box = $('archiveList'); 
+  box.innerHTML = '<div style="font-size:12px;color:#11592f;text-align:center;padding:16px;">🔄 Memuat arsip dari Google Drive...</div>';
+
   let year = Number($('archiveYear').value);
   let month = Number($('archiveMonth').value);
   let gardenFilter = (currentUser && currentUser.role === 'pegawai') ? currentUser.garden : $('archiveGarden').value;
 
-  const allItems = getLocalArchives();
-  const list = allItems.filter(x => 
-    Number(x.month) === month && 
-    Number(x.year) === year && 
-    (gardenFilter === 'all' || x.garden === gardenFilter)
-  );
+  fetch(GDRIVE_SCRIPT_URL, {
+    method: 'GET'
+  }).then(res => res.json()).then(data => {
+    box.innerHTML = '';
+    if(!data || !data.archives || data.archives.length === 0){
+      box.innerHTML = '<div style="font-size:12px;color:#6d8073;padding:16px;text-align:center;background:#f5f8f6;border-radius:8px;">Belum ada arsip di Google Drive untuk filter ini.</div>';
+      return;
+    }
 
-  box.innerHTML = '';
-  if(!list || list.length === 0){
-    box.innerHTML = '<div style="font-size:12px;color:#6d8073;padding:16px;text-align:center;background:#f5f8f6;border-radius:8px;">Belum ada arsip pada bulan ini.</div>';
-    return;
-  }
+    const list = data.archives.filter(x => 
+      Number(x.month) === month && 
+      Number(x.year) === year && 
+      (gardenFilter === 'all' || x.garden === gardenFilter)
+    );
 
-  list.forEach(item => {
-    let div = document.createElement('div'); 
-    div.className = 'archive-item';
-    div.innerHTML = `
-      <b>${item.title || 'Kegiatan'}</b><br>
-      <small style="color:#5a6e60">Tanggal: ${item.date} | Oleh: ${item.author || 'Petugas'}</small>
-      <img src="${item.image}" alt="Pratinjau Arsip">
-      <div class="item-actions">
-        <button class="down-btn" onclick="downloadCloudArchive('${item.image}', '${item.date}')">Unduh Kolase</button>
-        <button class="del-btn" onclick="deleteLocalArchive(${item.id})">Hapus</button>
-      </div>
-    `;
-    box.appendChild(div);
-  });
-}
+    if(list.length === 0){
+      box.innerHTML = '<div style="font-size:12px;color:#6d8073;padding:16px;text-align:center;background:#f5f8f6;border-radius:8px;">Tidak ada arsip untuk bulan yang dipilih di Google Drive.</div>';
+      return;
+    }
 
-function downloadCloudArchive(imgUrl, dateStr){
-  const a = document.createElement('a');
-  a.href = imgUrl;
-  a.download = 'kolase-' + (dateStr || 'arsip') + '.jpg';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-}
-
-function deleteLocalArchive(id){
-  if(!confirm('Hapus arsip ini dari daftar?')) return;
-  let list = getLocalArchives().filter(x => x.id !== id);
-  saveLocalArchives(list);
-  showStatusAlert('Arsip dihapus dari daftar.', 'success');
-  loadArchive();
-}
-
-function downloadMonthlyZip(){
-  showStatusAlert('Sedang mengemas arsip bulanan ke ZIP...', 'loading', 0);
-  let year = Number($('archiveYear').value);
-  let month = Number($('archiveMonth').value);
-  let gardenFilter = (currentUser && currentUser.role === 'pegawai') ? currentUser.garden : $('archiveGarden').value;
-
-  const allItems = getLocalArchives();
-  const list = allItems.filter(x => 
-    Number(x.month) === month && 
-    Number(x.year) === year && 
-    (gardenFilter === 'all' || x.garden === gardenFilter)
-  );
-
-  if(!list || list.length === 0){
-    showStatusAlert('Tidak ada arsip yang tersedia pada bulan dan filter yang dipilih.', 'error');
-    return;
-  }
-
-  if (typeof JSZip === 'undefined') {
-    showStatusAlert('Library ZIP sedang dimuat, silakan coba beberapa saat lagi.', 'error');
-    return;
-  }
-
-  const zip = new JSZip();
-  const folderName = 'Arsip_Kolase_' + month + '_' + year;
-  const folder = zip.folder(folderName);
-
-  list.forEach((item, idx) => {
-    const base64Data = item.image.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
-    const cleanTitle = (item.garden || 'Kebun').replace(/[^a-zA-Z0-9]/g, '_');
-    const filename = (idx + 1) + '_' + item.date + '_' + cleanTitle + '.jpg';
-    folder.file(filename, base64Data, { base64: true });
-  });
-
-  zip.generateAsync({ type: "blob" }).then(content => {
-    const zipName = (currentUser && currentUser.role === 'pegawai') 
-      ? 'Arsip_' + currentUser.garden.replace(/[^a-zA-Z0-9]/g, '_') + '_Bulan_' + month + '_' + year + '.zip'
-      : 'Arsip_Semua_Kebun_Bulan_' + month + '_' + year + '.zip';
-    saveAs(content, zipName);
-    showStatusAlert('Berhasil mengunduh seluruh arsip bulanan (.ZIP)', 'success');
+    list.forEach(item => {
+      let div = document.createElement('div'); 
+      div.className = 'archive-item';
+      div.innerHTML = `
+        <b>${item.garden || 'Kebun Dinas'}</b><br>
+        <small style="color:#5a6e60">Tanggal: ${item.date}</small>
+        <img src="${item.image}" alt="Pratinjau Arsip">
+        <div class="item-actions">
+          <a href="${item.image}" target="_blank" style="text-decoration:none;flex:1;">
+            <button type="button" class="down-btn" style="width:100%;">Buka Gambar Asli</button>
+          </a>
+        </div>
+      `;
+      box.appendChild(div);
+    });
+  }).catch(() => {
+    box.innerHTML = '<div style="font-size:12px;color:#6d8073;padding:16px;text-align:center;background:#f5f8f6;border-radius:8px;">Klik tombol "Buka Arsip" untuk menyegarkan daftar Google Drive.</div>';
   });
 }
 
@@ -2173,13 +2080,14 @@ $('download').addEventListener('click', () => {
 $('gardenName').addEventListener('change', draw);
 $('date').addEventListener('input', draw);
 $('showArchive').addEventListener('click', loadArchive);
-$('downloadZip').addEventListener('click', downloadMonthlyZip);
+$('downloadZip').addEventListener('click', () => {
+  showStatusAlert('Silakan buka folder Google Drive "Arsip Kolase Kebun Dinas" untuk mengunduh semua file sekaligus.', 'loading', 5000);
+});
 
 fillYears();
 addActivityItem();
 checkSavedSession();
 draw();
-loadArchive();
 </script>
 </body>
 </html>
