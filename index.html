@@ -9,6 +9,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+  <!-- GOOGLE FIREBASE CLOUD SDK REALTIME -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
   <style>
     :root {
       --primary-navy: #0b1f14;
@@ -879,7 +884,7 @@
     </div>
 
     <div class="brand-header">
-      <h1 class="brand-title">FAST REPORT HD</h1>
+      <h1 class="brand-title">FAST REPORT UPTD PKDLHP</h1>
     </div>
     <div class="panel-desc">Sistem Pembuatan &amp; Arsip Dokumentasi Kegiatan Kebun Dinas Resolusi Tinggi</div>
 
@@ -949,7 +954,7 @@
 
     <div class="actions">
       <button class="make" id="generate" type="button">Simpan ke Arsip Online</button>
-      <button class="down" id="download" type="button">Unduh PNG </button>
+      <button class="down" id="download" type="button">Unduh PNG HD</button>
     </div>
 
     <div class="status-container">
@@ -959,7 +964,7 @@
     <div class="group archive-box">
       <div class="archive-label">
         <span>📂 Arsip Kegiatan Bulanan</span>
-        <span class="cloud-badge">☁️ Cloud Terhubung</span>
+        <span class="cloud-badge" id="syncStatusBadge">☁️ Firebase Realtime</span>
       </div>
       <select id="archiveGarden">
         <option value="all">Semua Kebun</option>
@@ -1013,6 +1018,13 @@
 </div>
 
 <script>
+// ===== INISIALISASI FIREBASE REALTIME DATABASE RESMI =====
+const firebaseConfig = {
+  databaseURL: "https://ntt-kolase-distankp-default-rtdb.asia-southeast1.firebasedatabase.app"
+};
+firebase.initializeApp(firebaseConfig);
+const dbRef = firebase.database().ref("laporan_kolase");
+
 const ADMIN_ACCOUNT = { username: "admin", password: "admin123" };
 
 const KEBUN_ACCOUNTS = {
@@ -1211,7 +1223,7 @@ function rr(x,y,w,h,r){
   ctx.arcTo(x+w,y,x+w,y+h,r);
   ctx.arcTo(x+w,y+h,x,y+h,r);
   ctx.arcTo(x,y+h,x,y,r);
-  ctx.arcTo(x,y,x+w,y,r);
+  ctx.arcTo(x,y+x+w,y,r);
   ctx.closePath();
 }
 
@@ -1252,24 +1264,19 @@ function dateLabel(value){
   return days[d.getDay()] + ', ' + day + ' ' + months[+month-1] + ' ' + year;
 }
 
-// =========================================================================
-// STRUKTUR TATA LETAK FOTO KOLASE PRESISI & REKONSTRUKSI DARI AWAL
-// =========================================================================
+// ===== STRUKTUR TATA LETAK FOTO KOLASE PRESISI & REKONSTRUKSI TOTAL =====
 function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap = 20){
   const rects = [];
 
   if (count <= 1) {
-    // 1 Foto Penuh
     rects.push({ x: areaX, y: areaY, w: areaW, h: areaH });
   } 
   else if (count === 2) {
-    // 2 Foto Berdampingan (Kiri & Kanan)
     const w = (areaW - gap) / 2;
     rects.push({ x: areaX, y: areaY, w: w, h: areaH });
     rects.push({ x: areaX + w + gap, y: areaY, w: w, h: areaH });
   } 
   else if (count === 3) {
-    // 3 Foto: 1 Utama Besar di Kiri + 2 Bertingkat di Kanan
     const wLeft = Math.round((areaW - gap) * 0.58);
     const wRight = areaW - gap - wLeft;
     const hHalf = (areaH - gap) / 2;
@@ -1278,16 +1285,15 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
     rects.push({ x: areaX + wLeft + gap, y: areaY + hHalf + gap, w: wRight, h: hHalf });
   } 
   else if (count === 4) {
-    // 4 FOTO: GRID 2 BARIS x 2 KOLOM (SIMETRIS & TERTATA RAPI)
+    // 4 FOTO: GRID 2x2 SIMETRIS & SEMPURNA
     const w = (areaW - gap) / 2;
     const h = (areaH - gap) / 2;
-    rects.push({ x: areaX,           y: areaY,           w: w, h: h }); // 1. Kiri Atas
-    rects.push({ x: areaX + w + gap, y: areaY,           w: w, h: h }); // 2. Kanan Atas
-    rects.push({ x: areaX,           y: areaY + h + gap, w: w, h: h }); // 3. Kiri Bawah
-    rects.push({ x: areaX + w + gap, y: areaY + h + gap, w: w, h: h }); // 4. Kanan Bawah
+    rects.push({ x: areaX,           y: areaY,           w: w, h: h }); // Kiri Atas
+    rects.push({ x: areaX + w + gap, y: areaY,           w: w, h: h }); // Kanan Atas
+    rects.push({ x: areaX,           y: areaY + h + gap, w: w, h: h }); // Kiri Bawah
+    rects.push({ x: areaX + w + gap, y: areaY + h + gap, w: w, h: h }); // Kanan Bawah
   } 
   else if (count === 5) {
-    // 5 Foto: 2 di Atas, 3 di Bawah
     const h = (areaH - gap) / 2;
     const wTop = (areaW - gap) / 2;
     const wBot = (areaW - gap * 2) / 3;
@@ -1298,7 +1304,6 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
     rects.push({ x: areaX + (wBot+gap)*2, y: areaY + h + gap, w: wBot, h: h });
   } 
   else if (count === 6) {
-    // 6 Foto: Grid 2 Baris x 3 Kolom
     const w = (areaW - gap * 2) / 3;
     const h = (areaH - gap) / 2;
     for (let r = 0; r < 2; r++) {
@@ -1308,7 +1313,6 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
     }
   } 
   else if (count === 7) {
-    // 7 Foto: 3 di Atas, 4 di Bawah
     const h = (areaH - gap) / 2;
     const wTop = (areaW - gap * 2) / 3;
     const wBot = (areaW - gap * 3) / 4;
@@ -1316,7 +1320,6 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
     for (let i = 0; i < 4; i++) rects.push({ x: areaX + i * (wBot + gap), y: areaY + h + gap, w: wBot, h: h });
   } 
   else if (count === 8) {
-    // 8 Foto: Grid 2 Baris x 4 Kolom
     const w = (areaW - gap * 3) / 4;
     const h = (areaH - gap) / 2;
     for (let r = 0; r < 2; r++) {
@@ -1326,7 +1329,6 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
     }
   } 
   else {
-    // 9 - 10 Foto: Grid 2 Baris x 5 Kolom
     const cols = 5;
     const rows = 2;
     const w = (areaW - gap * (cols - 1)) / cols;
@@ -1978,28 +1980,25 @@ function draw(){
 }
 
 // =========================================================================
-// UNIVERSAL CLOUD STORAGE SYNC (TERKONEKSI LANGSUNG ANTARA LAPTOP & HP)
+// REALTIME FIREBASE SYNC ENGINE (PASTI SYNC HP ⇄ LAPTOP)
 // =========================================================================
-const CLOUD_BIN_ID = "66cc4ff2acd3cb34a87a2d41"; // Central Cloud Store ID
-const CLOUD_MASTER_KEY = "$2a$10$tZ/n0BqfF0H6u8e7N7w6gOBuT.eWfHj8Z/l8l2iYvY.Fm9wzL2eK6";
-
 function getOptimizedThumbnail(){
-  // Menghasilkan kompresi gambar optimal agar proses upload/download antar HP & Laptop sangat cepat
   const tempCanvas = document.createElement('canvas');
-  tempCanvas.width = 1080;
-  tempCanvas.height = 1527;
+  tempCanvas.width = 900;
+  tempCanvas.height = 1272;
   const tCtx = tempCanvas.getContext('2d');
-  tCtx.drawImage(canvas, 0, 0, 1080, 1527);
-  return tempCanvas.toDataURL('image/jpeg', 0.82);
+  tCtx.drawImage(canvas, 0, 0, 900, 1272);
+  return tempCanvas.toDataURL('image/jpeg', 0.80);
 }
 
-async function saveArchive(){
-  showStatusAlert('⏳ Sedang mengunggah arsip ke Cloud Server...', 'loading', 0);
+function saveArchive(){
+  showStatusAlert('⏳ Sedang mengunggah arsip ke Firebase Cloud...', 'loading', 0);
   const dateVal = $('date').value || new Date().toISOString().slice(0,10);
   const parts = dateVal.split('-');
-  
+  const newId = Date.now();
+
   const itemData = {
-    id: Date.now(),
+    id: newId,
     garden: $('gardenName').value,
     title: $('gardenName').value,
     date: dateVal,
@@ -2014,104 +2013,63 @@ async function saveArchive(){
   $('archiveYear').value = itemData.year;
   $('archiveMonth').value = itemData.month;
 
-  // 1. Simpan di Local Cache perangkat
-  let localList = getLocalCache();
-  localList.unshift(itemData);
-  saveLocalCache(localList);
-
-  // 2. Unggah ke Cloud Hub agar terbaca di semua perangkat lain
-  try {
-    let cloudList = await fetchCloudArchives();
-    cloudList.unshift(itemData);
-    if(cloudList.length > 100) cloudList = cloudList.slice(0, 100);
-
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': CLOUD_MASTER_KEY
-      },
-      body: JSON.stringify({ archives: cloudList })
-    });
-
-    if(res.ok){
-      showStatusAlert('✅ Arsip BERHASIL tersimpan ke Cloud! Langsung muncul di HP & Laptop.', 'success', 5000);
+  // Kirim ke Firebase Cloud
+  dbRef.child(String(newId)).set(itemData, (error) => {
+    if (error) {
+      showStatusAlert('Gagal sinkron ke Cloud: ' + error.message, 'error');
     } else {
-      showStatusAlert('✅ Tersimpan di perangkat ini & Cloud buffer aktif.', 'success', 4000);
+      showStatusAlert('✅ Arsip BERHASIL tersimpan di Cloud Firebase! Sekarang dapat langsung dibuka di Laptop & HP.', 'success', 5000);
+      loadArchive();
     }
-  } catch(err) {
-    showStatusAlert('✅ Tersimpan di arsip perangkat. Hubungkan internet untuk sinkronisasi HP.', 'success', 4000);
-  }
-
-  loadArchive();
+  });
 }
 
-function getLocalCache(){
-  try {
-    let raw = localStorage.getItem('kolase_global_cache');
-    return raw ? JSON.parse(raw) : [];
-  } catch(e){
-    return [];
-  }
-}
-
-function saveLocalCache(list){
-  try {
-    localStorage.setItem('kolase_global_cache', JSON.stringify(list.slice(0, 40)));
-  } catch(e){}
-}
-
-async function fetchCloudArchives(){
-  try {
-    const res = await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}/latest`, {
-      headers: { 'X-Master-Key': CLOUD_MASTER_KEY }
-    });
-    if(res.ok){
-      const data = await res.json();
-      if(data && data.record && Array.isArray(data.record.archives)){
-        saveLocalCache(data.record.archives);
-        return data.record.archives;
-      }
-    }
-  } catch(e){}
-  return getLocalCache();
-}
-
-async function loadArchive(){
+function loadArchive(){
   let box = $('archiveList'); 
-  box.innerHTML = '<div style="font-size:12px;color:#11592f;text-align:center;padding:16px;">🔄 Menyinkronkan data arsip dari Cloud...</div>';
+  box.innerHTML = '<div style="font-size:12px;color:#11592f;text-align:center;padding:16px;">🔄 Mengambil arsip dari Firebase Realtime...</div>';
 
   let year = Number($('archiveYear').value);
   let month = Number($('archiveMonth').value);
   let gardenFilter = (currentUser && currentUser.role === 'pegawai') ? currentUser.garden : $('archiveGarden').value;
 
-  const allItems = await fetchCloudArchives();
-  
-  const list = allItems.filter(x => 
-    Number(x.month) === month && 
-    Number(x.year) === year && 
-    (gardenFilter === 'all' || x.garden === gardenFilter)
-  );
+  dbRef.once('value').then((snapshot) => {
+    box.innerHTML = '';
+    const data = snapshot.val();
+    if(!data){
+      box.innerHTML = '<div style="font-size:12px;color:#6d8073;padding:16px;text-align:center;background:#f5f8f6;border-radius:8px;">Belum ada arsip tersimpan di database online.</div>';
+      return;
+    }
 
-  box.innerHTML = '';
-  if(!list || list.length === 0){
-    box.innerHTML = '<div style="font-size:12px;color:#6d8073;padding:16px;text-align:center;background:#f5f8f6;border-radius:8px;">Belum ada arsip pada bulan & tahun ini di Cloud.</div>';
-    return;
-  }
+    const allItems = Object.values(data);
+    const list = allItems.filter(x => 
+      Number(x.month) === month && 
+      Number(x.year) === year && 
+      (gardenFilter === 'all' || x.garden === gardenFilter)
+    );
 
-  list.forEach(item => {
-    let div = document.createElement('div'); 
-    div.className = 'archive-item';
-    div.innerHTML = `
-      <b>${item.title || 'Kegiatan'}</b><br>
-      <small style="color:#5a6e60">Tanggal: ${item.date} | Oleh: ${item.author || 'Petugas'}</small>
-      <img src="${item.image}" alt="Pratinjau Arsip">
-      <div class="item-actions">
-        <button class="down-btn" onclick="downloadCloudArchive('${item.image}', '${item.date}')">Unduh Kolase</button>
-        <button class="del-btn" onclick="deleteCloudArchive(${item.id})">Hapus</button>
-      </div>
-    `;
-    box.appendChild(div);
+    if(list.length === 0){
+      box.innerHTML = '<div style="font-size:12px;color:#6d8073;padding:16px;text-align:center;background:#f5f8f6;border-radius:8px;">Tidak ada arsip untuk filter bulan dan kebun ini.</div>';
+      return;
+    }
+
+    list.sort((a, b) => b.id - a.id);
+
+    list.forEach(item => {
+      let div = document.createElement('div'); 
+      div.className = 'archive-item';
+      div.innerHTML = `
+        <b>${item.title || 'Kegiatan'}</b><br>
+        <small style="color:#5a6e60">Tanggal: ${item.date} | Oleh: ${item.author || 'Petugas'}</small>
+        <img src="${item.image}" alt="Pratinjau Arsip">
+        <div class="item-actions">
+          <button class="down-btn" onclick="downloadCloudArchive('${item.image}', '${item.date}')">Unduh Kolase</button>
+          <button class="del-btn" onclick="deleteCloudArchive(${item.id})">Hapus</button>
+        </div>
+      `;
+      box.appendChild(div);
+    });
+  }).catch((err) => {
+    box.innerHTML = '<div style="font-size:12px;color:#c02b1d;padding:16px;text-align:center;background:#fae9e7;border-radius:8px;">Koneksi internet bermasalah saat memuat arsip.</div>';
   });
 }
 
@@ -2124,72 +2082,61 @@ function downloadCloudArchive(imgUrl, dateStr){
   document.body.removeChild(a);
 }
 
-async function deleteCloudArchive(id){
-  if(!confirm('Apakah Anda yakin ingin menghapus arsip ini? Arsip akan terhapus dari semua HP & Laptop.')) return;
+function deleteCloudArchive(id){
+  if(!confirm('Apakah Anda yakin ingin menghapus arsip ini dari Cloud Server? Arsip akan terhapus dari semua perangkat.')) return;
   
-  showStatusAlert('Sedang menghapus arsip dari Cloud...', 'loading', 0);
-  let list = await fetchCloudArchives();
-  list = list.filter(x => x.id !== id);
-  saveLocalCache(list);
-
-  try {
-    await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': CLOUD_MASTER_KEY
-      },
-      body: JSON.stringify({ archives: list })
-    });
-    showStatusAlert('Arsip berhasil dihapus.', 'success');
-  } catch(e){
-    showStatusAlert('Arsip dihapus secara lokal.', 'success');
-  }
-  loadArchive();
+  showStatusAlert('Sedang menghapus arsip...', 'loading', 0);
+  dbRef.child(String(id)).remove().then(() => {
+    showStatusAlert('Arsip berhasil dihapus dari Cloud.', 'success');
+    loadArchive();
+  }).catch((e) => {
+    showStatusAlert('Gagal menghapus: ' + e.message, 'error');
+  });
 }
 
-async function downloadMonthlyZip(){
-  showStatusAlert('Sedang mengemas seluruh arsip bulanan dari Cloud ke file ZIP...', 'loading', 0);
+function downloadMonthlyZip(){
+  showStatusAlert('Sedang mengemas arsip bulanan ke ZIP...', 'loading', 0);
   let year = Number($('archiveYear').value);
   let month = Number($('archiveMonth').value);
   let gardenFilter = (currentUser && currentUser.role === 'pegawai') ? currentUser.garden : $('archiveGarden').value;
 
-  const allItems = await fetchCloudArchives();
-  const list = allItems.filter(x => 
-    Number(x.month) === month && 
-    Number(x.year) === year && 
-    (gardenFilter === 'all' || x.garden === gardenFilter)
-  );
+  dbRef.once('value').then((snapshot) => {
+    const data = snapshot.val();
+    if(!data){
+      showStatusAlert('Tidak ada arsip yang tersedia.', 'error');
+      return;
+    }
 
-  if(!list || list.length === 0){
-    showStatusAlert('Tidak ada arsip yang tersedia pada bulan dan filter yang dipilih.', 'error');
-    return;
-  }
+    const allItems = Object.values(data);
+    const list = allItems.filter(x => 
+      Number(x.month) === month && 
+      Number(x.year) === year && 
+      (gardenFilter === 'all' || x.garden === gardenFilter)
+    );
 
-  if (typeof JSZip === 'undefined') {
-    showStatusAlert('Library ZIP sedang dimuat, silakan coba lagi sebentar.', 'error');
-    return;
-  }
+    if(list.length === 0){
+      showStatusAlert('Tidak ada arsip untuk bulan yang dipilih.', 'error');
+      return;
+    }
 
-  const zip = new JSZip();
-  const folderName = 'Arsip_Kolase_' + month + '_' + year;
-  const folder = zip.folder(folderName);
+    const zip = new JSZip();
+    const folderName = 'Arsip_Kolase_' + month + '_' + year;
+    const folder = zip.folder(folderName);
 
-  list.forEach((item, idx) => {
-    const base64Data = item.image.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
-    const cleanTitle = (item.garden || 'Kebun').replace(/[^a-zA-Z0-9]/g, '_');
-    const filename = (idx + 1) + '_' + item.date + '_' + cleanTitle + '.jpg';
-    folder.file(filename, base64Data, { base64: true });
-  });
+    list.forEach((item, idx) => {
+      const base64Data = item.image.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
+      const cleanTitle = (item.garden || 'Kebun').replace(/[^a-zA-Z0-9]/g, '_');
+      const filename = (idx + 1) + '_' + item.date + '_' + cleanTitle + '.jpg';
+      folder.file(filename, base64Data, { base64: true });
+    });
 
-  zip.generateAsync({ type: "blob" }).then(content => {
-    const zipName = (currentUser && currentUser.role === 'pegawai') 
-      ? 'Arsip_' + currentUser.garden.replace(/[^a-zA-Z0-9]/g, '_') + '_Bulan_' + month + '_' + year + '.zip'
-      : 'Arsip_Semua_Kebun_Bulan_' + month + '_' + year + '.zip';
-    saveAs(content, zipName);
-    showStatusAlert('Berhasil mengunduh seluruh arsip bulanan (.ZIP)', 'success');
-  }).catch(err => {
-    showStatusAlert('Gagal membuat file ZIP: ' + err.message, 'error');
+    zip.generateAsync({ type: "blob" }).then(content => {
+      const zipName = (currentUser && currentUser.role === 'pegawai') 
+        ? 'Arsip_' + currentUser.garden.replace(/[^a-zA-Z0-9]/g, '_') + '_Bulan_' + month + '_' + year + '.zip'
+        : 'Arsip_Semua_Kebun_Bulan_' + month + '_' + year + '.zip';
+      saveAs(content, zipName);
+      showStatusAlert('Berhasil mengunduh seluruh arsip bulanan (.ZIP)', 'success');
+    });
   });
 }
 
