@@ -709,9 +709,9 @@
       border: 1px solid #e0ebe2;
     }
     .archive-item .item-actions { 
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px; 
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
     }
     .archive-item button {
       padding: 9px 12px;
@@ -721,6 +721,8 @@
       cursor: pointer;
       font-weight: 700;
       transition: all 0.2s ease;
+      flex: 1;
+      min-width: 110px;
     }
     .archive-item button.down-file-btn {
       background: linear-gradient(135deg, var(--primary-green), var(--primary-green-deep));
@@ -737,6 +739,17 @@
     }
     .archive-item button.view-file-btn:hover {
       background: #e1efe5;
+    }
+    .archive-item button.delete-file-btn {
+      background: #fae9e7;
+      color: var(--danger-color);
+      border-color: #f2c0ba;
+      flex: 0 0 100%;
+      margin-top: 4px;
+    }
+    .archive-item button.delete-file-btn:hover {
+      background: var(--danger-color);
+      color: #ffffff;
     }
 
     /* ===== WORKSPACE ===== */
@@ -807,7 +820,6 @@
       .thumbs { grid-template-columns: repeat(3, 1fr); }
       .actions { grid-template-columns: 1fr; }
       .archive-btn-group { grid-template-columns: 1fr; }
-      .archive-item .item-actions { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -1102,8 +1114,8 @@ function logout(){
 function applyUserPermissions(){
   if(!currentUser) return;
   if(currentUser.role === 'admin'){
-    document.getElementById('roleLabel').textContent = 'Admin Dinas';
-    document.getElementById('activeGardenLabel').textContent = 'Akses Penuh Semua Kebun';
+    document.getElementById('roleLabel').textContent = 'Admin Dinas (Akses Penuh)';
+    document.getElementById('activeGardenLabel').textContent = 'Semua Kebun Dinas';
     document.getElementById('gardenName').disabled = false;
     document.getElementById('archiveGarden').disabled = false;
   } else {
@@ -1225,7 +1237,7 @@ function rr(x,y,w,h,r){
   ctx.arcTo(x+w,y,x+w,y+h,r);
   ctx.arcTo(x+w,y+h,x,y+h,r);
   ctx.arcTo(x,y+h,x,y,r);
-  ctx.arcTo(x,y+x+w,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
   ctx.closePath();
 }
 
@@ -1266,7 +1278,7 @@ function dateLabel(value){
   return days[d.getDay()] + ', ' + day + ' ' + months[+month-1] + ' ' + year;
 }
 
-// ===== STRUKTUR TATA LETAK FOTO KOLASE REKONSTRUKSI TOTAL (1 - 10 FOTO) =====
+// ===== STRUKTUR TATA LETAK FOTO KOLASE PRESISI (1 - 10 FOTO) =====
 function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap = 20){
   const rects = [];
 
@@ -1287,7 +1299,6 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
     rects.push({ x: areaX + wLeft + gap, y: areaY + hHalf + gap, w: wRight, h: hHalf });
   } 
   else if (count === 4) {
-    // 4 FOTO: GRID 2x2 SIMETRIS PRESISI
     const w = (areaW - gap) / 2;
     const h = (areaH - gap) / 2;
     rects.push({ x: areaX,           y: areaY,           w: w, h: h });
@@ -1673,7 +1684,7 @@ function renderCleanActivities(acts, startX, startY, maxW, maxH, styleType = 1){
 }
 
 // ==========================================
-// TEMPLATES
+// TEMPLATES (DIPERBESAR NAMA KEBUN & TANGGAL)
 // ==========================================
 function drawTemplate1(){
   ctx.fillStyle = '#f8faf9';
@@ -1710,7 +1721,7 @@ function drawTemplate1(){
   ctx.fillStyle = THEME.greenDeep;
   ctx.fillRect(75, top + 253, 560, 5);
 
-  const photoArea = { x: 75, y: 315, w: 2010, h: 1600 };
+  const photoArea = { x: 75, y: 315, w: 2010, h: 1570 };
   const count = Math.max(photos.length, 1);
   const rects = calculatePhotoLayout(photos, count, photoArea.x, photoArea.y, photoArea.w, photoArea.h, 20);
 
@@ -1718,8 +1729,8 @@ function drawTemplate1(){
     renderPhotoCard(r, idx, photos[idx], 14, '#ffffff', 6);
   });
 
-  let cy = photoArea.y + photoArea.h + 22;
-  const infoBarH = 120;
+  let cy = photoArea.y + photoArea.h + 20;
+  const infoBarH = 145; // Ditinggikan agar teks besar leluasa
 
   ctx.save();
   ctx.shadowColor = 'rgba(6, 26, 12, 0.08)';
@@ -1739,39 +1750,41 @@ function drawTemplate1(){
   ctx.stroke();
 
   ctx.fillStyle = THEME.greenDeep;
-  rr(75, cy, 12, infoBarH, 5);
+  rr(75, cy, 14, infoBarH, 5);
   ctx.fill();
 
   ctx.fillStyle = THEME.gold;
-  ctx.font = "800 19px 'Plus Jakarta Sans', Arial";
+  ctx.font = "800 22px 'Plus Jakarta Sans', Arial";
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
   ctx.fillText('LOKASI KEBUN DINAS', 110, cy + 18);
 
+  // TANGGAL DIPERBESAR (36px)
   const dateStr = dateLabel($('date').value);
-  ctx.font = "800 28px 'Plus Jakarta Sans', Arial";
+  ctx.font = "800 36px 'Plus Jakarta Sans', Arial";
   const dateW = ctx.measureText(dateStr).width + 60;
   const dateX = 2085 - dateW - 18;
 
-  rr(dateX, cy + 26, dateW, 68, 12);
+  rr(dateX, cy + 32, dateW, 82, 14);
   ctx.fillStyle = THEME.greenDeep;
   ctx.fill();
   ctx.fillStyle = '#ffffff';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText(dateStr, dateX + dateW/2, cy + 60);
+  ctx.fillText(dateStr, dateX + dateW/2, cy + 73);
 
+  // NAMA KEBUN DIPERBESAR (68px)
   const maxGardenW = dateX - 140;
-  let gardenFontSize = 56;
+  let gardenFontSize = 68;
   ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
-  while(ctx.measureText($('gardenName').value).width > maxGardenW && gardenFontSize > 28){
+  while(ctx.measureText($('gardenName').value).width > maxGardenW && gardenFontSize > 34){
     gardenFontSize -= 2;
     ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
   }
   ctx.fillStyle = THEME.navy;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
-  ctx.fillText($('gardenName').value, 110, cy + 46);
+  ctx.fillText($('gardenName').value, 110, cy + 52);
 
   const actStartY = cy + infoBarH + 20;
   const footerY = 2814;
@@ -1820,7 +1833,7 @@ function drawTemplate2(){
   ctx.font = "600 40px 'Plus Jakarta Sans', Arial";
   ctx.fillText('UPTD. Perbenihan Kebun Dinas & Laboratorium Hayati Perkebunan', 320, 188);
 
-  const photoArea = { x: 45, y: 315, w: 2070, h: 1600 };
+  const photoArea = { x: 45, y: 315, w: 2070, h: 1570 };
   const count = Math.max(photos.length, 1);
   const rects = calculatePhotoLayout(photos, count, photoArea.x, photoArea.y, photoArea.w, photoArea.h, 20);
 
@@ -1829,7 +1842,7 @@ function drawTemplate2(){
   });
 
   let cy = photoArea.y + photoArea.h + 20;
-  const infoH = 120;
+  const infoH = 145;
 
   ctx.save();
   ctx.shadowColor = 'rgba(6, 26, 12, 0.09)';
@@ -1846,36 +1859,39 @@ function drawTemplate2(){
   ctx.stroke();
 
   ctx.fillStyle = THEME.gold;
-  rr(45, cy, 12, infoH, 5);
+  rr(45, cy, 14, infoH, 5);
   ctx.fill();
 
-  rr(75, cy + 36, 220, 48, 10);
+  rr(75, cy + 42, 240, 60, 12);
   ctx.fillStyle = '#ebf5ee';
   ctx.fill();
   ctx.fillStyle = THEME.greenDeep;
-  ctx.font = "800 19px 'Plus Jakarta Sans', Arial";
+  ctx.font = "800 24px 'Plus Jakarta Sans', Arial";
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('KEBUN DINAS', 185, cy + 60);
+  ctx.fillText('KEBUN DINAS', 195, cy + 72);
 
+  // TANGGAL BESAR (38px)
   const dateStr = dateLabel($('date').value);
   ctx.fillStyle = '#1e4a2c';
-  ctx.font = "800 30px 'Plus Jakarta Sans', Arial";
+  ctx.font = "800 38px 'Plus Jakarta Sans', Arial";
   ctx.textAlign = 'right';
-  ctx.fillText(dateStr, 2065, cy + 60);
+  ctx.textBaseline = 'middle';
+  ctx.fillText(dateStr, 2065, cy + 72);
 
   const dateAreaW = ctx.measureText(dateStr).width + 60;
-  const maxGardenW = 2070 - 340 - dateAreaW;
+  const maxGardenW = 2070 - 360 - dateAreaW;
 
-  let gardenFontSize = 54;
+  // NAMA KEBUN BESAR (68px)
+  let gardenFontSize = 68;
   ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
-  while(ctx.measureText($('gardenName').value).width > maxGardenW && gardenFontSize > 28){
+  while(ctx.measureText($('gardenName').value).width > maxGardenW && gardenFontSize > 34){
     gardenFontSize -= 2;
     ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
   }
   ctx.fillStyle = '#061d0f';
   ctx.textAlign = 'left';
-  ctx.fillText($('gardenName').value, 320, cy + 60);
+  ctx.fillText($('gardenName').value, 340, cy + 72);
 
   const actStartY = cy + infoH + 20;
   const footerY = 2814;
@@ -1902,19 +1918,20 @@ function drawTemplate3(){
   const logoSize = 230;
   if(logo1Ready) contain(logo1, 70, top + 8, logoSize, logoSize);
 
+  // TANGGAL BESAR DI KOP
   const dateStr = dateLabel($('date').value);
   ctx.save();
-  ctx.font = "800 28px 'Plus Jakarta Sans', Arial";
+  ctx.font = "800 36px 'Plus Jakarta Sans', Arial";
   const dateW = ctx.measureText(dateStr).width + 60;
   const dateX = 2095 - dateW;
-  rr(dateX, top + 12, dateW, 68, 12);
+  rr(dateX, top + 10, dateW, 82, 14);
   ctx.fillStyle = THEME.greenDeep;
   ctx.fill();
 
   ctx.fillStyle = '#ffffff';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText(dateStr, dateX + dateW/2, top + 46);
+  ctx.fillText(dateStr, dateX + dateW/2, top + 51);
   ctx.restore();
 
   ctx.textAlign = 'left';
@@ -1935,7 +1952,7 @@ function drawTemplate3(){
   ctx.fillStyle = THEME.goldLine;
   ctx.fillRect(70, top + 248, 2025, 5);
 
-  const photoArea = { x: 70, y: 315, w: 2025, h: 1600 };
+  const photoArea = { x: 70, y: 315, w: 2025, h: 1570 };
   const count = Math.max(photos.length, 1);
   const rects = calculatePhotoLayout(photos, count, photoArea.x, photoArea.y, photoArea.w, photoArea.h, 20);
 
@@ -1943,26 +1960,27 @@ function drawTemplate3(){
     renderPhotoCard(r, idx, photos[idx], 12, '#ffffff', 5);
   });
 
-  let cy = photoArea.y + photoArea.h + 22;
+  let cy = photoArea.y + photoArea.h + 20;
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
   ctx.fillStyle = THEME.gold;
-  ctx.font = "800 22px 'Plus Jakarta Sans', Arial";
+  ctx.font = "800 24px 'Plus Jakarta Sans', Arial";
   ctx.fillText('DOKUMENTASI LAPORAN HARIAN', 70, cy);
 
-  let gardenFontSize = 58;
+  // NAMA KEBUN BESAR (72px)
+  let gardenFontSize = 72;
   ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
-  while(ctx.measureText($('gardenName').value).width > 2000 && gardenFontSize > 30){
+  while(ctx.measureText($('gardenName').value).width > 2000 && gardenFontSize > 36){
     gardenFontSize -= 2;
     ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
   }
   ctx.fillStyle = '#0a2212';
-  ctx.fillText($('gardenName').value, 70, cy + 34);
+  ctx.fillText($('gardenName').value, 70, cy + 38);
 
   ctx.fillStyle = '#cfe0d5';
-  ctx.fillRect(70, cy + 104, 2025, 2.5);
+  ctx.fillRect(70, cy + 120, 2025, 3);
 
-  const actStartY = cy + 120;
+  const actStartY = cy + 138;
   const footerY = 2814;
   const maxActH = footerY - actStartY - 16;
   const acts = getActivities();
@@ -1982,7 +2000,7 @@ function draw(){
 }
 
 // =========================================================================
-// SINKRONISASI GOOGLE DRIVE (SIMPAN, BACA & DOWNLOAD DARI SEMUA PERANGKAT)
+// SINKRONISASI GOOGLE DRIVE (SIMPAN, BACA, UNDUH & HAPUS OLEH ADMIN)
 // =========================================================================
 function getOptimizedJpeg(){
   const tempCanvas = document.createElement('canvas');
@@ -1999,6 +2017,7 @@ function saveArchive(){
   const imageBase64 = getOptimizedJpeg();
 
   const payload = {
+    action: "save",
     garden: $('gardenName').value,
     date: dateVal,
     image: imageBase64,
@@ -2046,9 +2065,16 @@ function loadArchive(){
       return;
     }
 
+    const isAdmin = currentUser && currentUser.role === 'admin';
+
     list.forEach(item => {
       let div = document.createElement('div'); 
       div.className = 'archive-item';
+      
+      let deleteButtonHtml = isAdmin 
+        ? `<button type="button" class="delete-file-btn" onclick="deleteArchiveItem('${item.id}', '${item.garden}', '${item.date}')">🗑️ Hapus Arsip (Admin)</button>` 
+        : '';
+
       div.innerHTML = `
         <b>${item.garden || 'Kebun Dinas'}</b><br>
         <small style="color:#5a6e60">Tanggal: ${item.date}</small>
@@ -2056,6 +2082,7 @@ function loadArchive(){
         <div class="item-actions">
           <button type="button" class="down-file-btn" onclick="directDownloadArchive('${item.image}', '${item.garden}', '${item.date}')">📥 Unduh Gambar HD</button>
           <button type="button" class="view-file-btn" onclick="window.open('${item.image}', '_blank')">👁️ Lihat Full HD</button>
+          ${deleteButtonHtml}
         </div>
       `;
       box.appendChild(div);
@@ -2065,7 +2092,30 @@ function loadArchive(){
   });
 }
 
-// FUNGSI UNDUH LANGSUNG DARI ARSIP GOOGLE DRIVE
+// FUNGSI HAPUS KHUSUS ADMIN
+function deleteArchiveItem(fileId, gardenName, dateStr){
+  if (!confirm(`Yakin ingin menghapus arsip ${gardenName} (${dateStr}) secara permanen dari Google Drive?`)) {
+    return;
+  }
+
+  showStatusAlert('⏳ Sedang menghapus file dari Google Drive...', 'loading', 0);
+
+  fetch(GDRIVE_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({
+      action: "delete",
+      id: fileId
+    })
+  }).then(() => {
+    showStatusAlert('✅ Arsip BERHASIL dihapus dari Google Drive!', 'success', 5000);
+    setTimeout(loadArchive, 2500);
+  }).catch((err) => {
+    showStatusAlert('Gagal menghapus: ' + err.message, 'error');
+  });
+}
+
 function directDownloadArchive(imageUrl, gardenName, dateStr){
   showStatusAlert('Mengunduh gambar arsip...', 'loading', 2500);
   fetch(imageUrl)
@@ -2083,7 +2133,6 @@ function directDownloadArchive(imageUrl, gardenName, dateStr){
       showStatusAlert('✅ Berhasil mengunduh gambar arsip!', 'success');
     })
     .catch(() => {
-      // Fallback jika direct fetch CORS terhalang browser
       const a = document.createElement('a');
       a.href = imageUrl;
       a.target = '_blank';
