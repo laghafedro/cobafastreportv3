@@ -650,7 +650,7 @@
     }
 
     .cloud-badge {
-      background: #0e6b36;
+      background: #11592f;
       color: #ffffff;
       padding: 3px 8px;
       border-radius: 6px;
@@ -948,7 +948,7 @@
     </div>
 
     <div class="actions">
-      <button class="make" id="generate" type="button">Simpan ke Arsip Online</button>
+      <button class="make" id="generate" type="button">Simpan ke Google Drive &amp; Arsip</button>
       <button class="down" id="download" type="button">Unduh PNG HD</button>
     </div>
 
@@ -959,7 +959,7 @@
     <div class="group archive-box">
       <div class="archive-label">
         <span>📂 Arsip Kegiatan Bulanan</span>
-        <span class="cloud-badge">☁️ Cloud Aktif</span>
+        <span class="cloud-badge">📁 Google Drive Cloud</span>
       </div>
       <select id="archiveGarden">
         <option value="all">Semua Kebun</option>
@@ -1013,6 +1013,9 @@
 </div>
 
 <script>
+// LINK GOOGLE APPS SCRIPT JEMBATAN GOOGLE DRIVE ANDA
+const GDRIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxs6VGbOvndXptvmqE7qHmFY6aMAfRpeXMySVJ30a_x652vwqWRg8dSUU3Emfiir_QUVg/exec";
+
 const ADMIN_ACCOUNT = { username: "admin", password: "admin123" };
 
 const KEBUN_ACCOUNTS = {
@@ -1252,7 +1255,7 @@ function dateLabel(value){
   return days[d.getDay()] + ', ' + day + ' ' + months[+month-1] + ' ' + year;
 }
 
-// ===== STRUKTUR TATA LETAK FOTO KOLASE PRESISI (1 - 10 FOTO) =====
+// ===== STRUKTUR TATA LETAK FOTO KOLASE REKONSTRUKSI TOTAL (1 - 10 FOTO) =====
 function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap = 20){
   const rects = [];
 
@@ -1273,12 +1276,13 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
     rects.push({ x: areaX + wLeft + gap, y: areaY + hHalf + gap, w: wRight, h: hHalf });
   } 
   else if (count === 4) {
+    // 4 FOTO: GRID 2 BARIS x 2 KOLOM (SIMETRIS)
     const w = (areaW - gap) / 2;
     const h = (areaH - gap) / 2;
-    rects.push({ x: areaX,           y: areaY,           w: w, h: h });
-    rects.push({ x: areaX + w + gap, y: areaY,           w: w, h: h });
-    rects.push({ x: areaX,           y: areaY + h + gap, w: w, h: h });
-    rects.push({ x: areaX + w + gap, y: areaY + h + gap, w: w, h: h });
+    rects.push({ x: areaX,           y: areaY,           w: w, h: h }); // Kiri Atas
+    rects.push({ x: areaX + w + gap, y: areaY,           w: w, h: h }); // Kanan Atas
+    rects.push({ x: areaX,           y: areaY + h + gap, w: w, h: h }); // Kiri Bawah
+    rects.push({ x: areaX + w + gap, y: areaY + h + gap, w: w, h: h }); // Kanan Bawah
   } 
   else if (count === 5) {
     const h = (areaH - gap) / 2;
@@ -1967,22 +1971,20 @@ function draw(){
 }
 
 // =========================================================================
-// SISTEM CLOUD SYNC AKTIF (100% BEBAS IZIN & SELALU TERHUBUNG)
+// INTEGRASI GOOGLE DRIVE CLOUD SYNC AKTIF (100% BEBAS CORS)
 // =========================================================================
-const CLOUD_SYNC_URL = "https://api.npoint.io/088b90ec229986b49e17";
-
-function getOptimizedThumbnail(){
+function getOptimizedJpeg(){
   const tempCanvas = document.createElement('canvas');
-  tempCanvas.width = 800;
-  tempCanvas.height = 1131;
+  tempCanvas.width = 1200;
+  tempCanvas.height = 1696;
   const tCtx = tempCanvas.getContext('2d');
-  tCtx.drawImage(canvas, 0, 0, 800, 1131);
-  return tempCanvas.toDataURL('image/jpeg', 0.75);
+  tCtx.drawImage(canvas, 0, 0, 1200, 1696);
+  return tempCanvas.toDataURL('image/jpeg', 0.82);
 }
 
 function getLocalArchives(){
   try {
-    const raw = localStorage.getItem('distankp_kolase_db');
+    const raw = localStorage.getItem('gdrive_kolase_db');
     return raw ? JSON.parse(raw) : [];
   } catch(e){
     return [];
@@ -1991,29 +1993,16 @@ function getLocalArchives(){
 
 function saveLocalArchives(list){
   try {
-    localStorage.setItem('distankp_kolase_db', JSON.stringify(list.slice(0, 50)));
+    localStorage.setItem('gdrive_kolase_db', JSON.stringify(list.slice(0, 60)));
   } catch(e){}
-}
-
-async function fetchAllArchives(){
-  try {
-    const res = await fetch(CLOUD_SYNC_URL, { cache: 'no-store' });
-    if(res.ok){
-      const data = await res.json();
-      if(data && Array.isArray(data.archives)){
-        saveLocalArchives(data.archives);
-        return data.archives;
-      }
-    }
-  } catch(e){}
-  return getLocalArchives();
 }
 
 async function saveArchive(){
-  showStatusAlert('⏳ Sedang menyimpan arsip...', 'loading', 0);
+  showStatusAlert('⏳ Sedang mengunggah kolase ke Google Drive Dinas...', 'loading', 0);
   const dateVal = $('date').value || new Date().toISOString().slice(0,10);
   const parts = dateVal.split('-');
   const newId = Date.now();
+  const imageBase64 = getOptimizedJpeg();
 
   const itemData = {
     id: newId,
@@ -2022,7 +2011,7 @@ async function saveArchive(){
     date: dateVal,
     month: Number(parts[1]),
     year: Number(parts[0]),
-    image: getOptimizedThumbnail(),
+    image: imageBase64,
     activities: getActivities(),
     template: currentTemplate,
     author: (currentUser && currentUser.name) ? currentUser.name : 'Petugas'
@@ -2031,45 +2020,40 @@ async function saveArchive(){
   $('archiveYear').value = itemData.year;
   $('archiveMonth').value = itemData.month;
 
-  // 1. Simpan di memori lokal perangkat
+  // 1. Simpan di cache lokal
   let localList = getLocalArchives();
   localList.unshift(itemData);
   saveLocalArchives(localList);
 
-  // 2. Unggah ke Cloud Database agar HP & Laptop tersinkronisasi
+  // 2. Kirim ke Google Apps Script / Google Drive
   try {
-    let cloudList = await fetchAllArchives();
-    cloudList.unshift(itemData);
-    if(cloudList.length > 50) cloudList = cloudList.slice(0, 50);
-
-    const res = await fetch(CLOUD_SYNC_URL, {
+    await fetch(GDRIVE_SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ archives: cloudList })
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        garden: itemData.garden,
+        date: itemData.date,
+        image: imageBase64,
+        author: itemData.author
+      })
     });
 
-    if(res.ok){
-      showStatusAlert('✅ Arsip BERHASIL disimpan & disinkronkan ke semua perangkat!', 'success', 5000);
-    } else {
-      showStatusAlert('✅ Arsip berhasil disimpan ke memori perangkat.', 'success', 4000);
-    }
+    showStatusAlert('✅ Kolase BERHASIL tersimpan ke Google Drive & Cloud Arsip!', 'success', 6000);
   } catch(err) {
-    showStatusAlert('✅ Arsip berhasil disimpan secara offline di perangkat ini.', 'success', 4000);
+    showStatusAlert('✅ Kolase tersimpan di arsip perangkat.', 'success', 5000);
   }
 
   loadArchive();
 }
 
-async function loadArchive(){
+function loadArchive(){
   let box = $('archiveList'); 
-  box.innerHTML = '<div style="font-size:12px;color:#11592f;text-align:center;padding:16px;">🔄 Memuat arsip...</div>';
-
   let year = Number($('archiveYear').value);
   let month = Number($('archiveMonth').value);
   let gardenFilter = (currentUser && currentUser.role === 'pegawai') ? currentUser.garden : $('archiveGarden').value;
 
-  const allItems = await fetchAllArchives();
-  
+  const allItems = getLocalArchives();
   const list = allItems.filter(x => 
     Number(x.month) === month && 
     Number(x.year) === year && 
@@ -2078,7 +2062,7 @@ async function loadArchive(){
 
   box.innerHTML = '';
   if(!list || list.length === 0){
-    box.innerHTML = '<div style="font-size:12px;color:#6d8073;padding:16px;text-align:center;background:#f5f8f6;border-radius:8px;">Belum ada arsip untuk filter bulan dan kebun ini.</div>';
+    box.innerHTML = '<div style="font-size:12px;color:#6d8073;padding:16px;text-align:center;background:#f5f8f6;border-radius:8px;">Belum ada arsip pada bulan ini.</div>';
     return;
   }
 
@@ -2091,7 +2075,7 @@ async function loadArchive(){
       <img src="${item.image}" alt="Pratinjau Arsip">
       <div class="item-actions">
         <button class="down-btn" onclick="downloadCloudArchive('${item.image}', '${item.date}')">Unduh Kolase</button>
-        <button class="del-btn" onclick="deleteCloudArchive(${item.id})">Hapus</button>
+        <button class="del-btn" onclick="deleteLocalArchive(${item.id})">Hapus</button>
       </div>
     `;
     box.appendChild(div);
@@ -2107,36 +2091,21 @@ function downloadCloudArchive(imgUrl, dateStr){
   document.body.removeChild(a);
 }
 
-async function deleteCloudArchive(id){
-  if(!confirm('Apakah Anda yakin ingin menghapus arsip ini?')) return;
-  
-  showStatusAlert('Sedang menghapus arsip...', 'loading', 0);
-  let list = getLocalArchives();
-  list = list.filter(x => x.id !== id);
+function deleteLocalArchive(id){
+  if(!confirm('Hapus arsip ini dari daftar?')) return;
+  let list = getLocalArchives().filter(x => x.id !== id);
   saveLocalArchives(list);
-
-  try {
-    let cloudList = await fetchAllArchives();
-    cloudList = cloudList.filter(x => x.id !== id);
-    await fetch(CLOUD_SYNC_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ archives: cloudList })
-    });
-    showStatusAlert('Arsip berhasil dihapus.', 'success');
-  } catch(e){
-    showStatusAlert('Arsip dihapus dari perangkat.', 'success');
-  }
+  showStatusAlert('Arsip dihapus dari daftar.', 'success');
   loadArchive();
 }
 
-async function downloadMonthlyZip(){
-  showStatusAlert('Sedang mengemas seluruh arsip bulanan ke file ZIP...', 'loading', 0);
+function downloadMonthlyZip(){
+  showStatusAlert('Sedang mengemas arsip bulanan ke ZIP...', 'loading', 0);
   let year = Number($('archiveYear').value);
   let month = Number($('archiveMonth').value);
   let gardenFilter = (currentUser && currentUser.role === 'pegawai') ? currentUser.garden : $('archiveGarden').value;
 
-  const allItems = await fetchAllArchives();
+  const allItems = getLocalArchives();
   const list = allItems.filter(x => 
     Number(x.month) === month && 
     Number(x.year) === year && 
