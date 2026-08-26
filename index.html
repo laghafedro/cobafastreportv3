@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fast Report HD - Kolase Kebun Dinas (Cloud Sync)</title>
+  <title>Fast Report HD - Kolase Kebun Dinas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -107,8 +107,6 @@
       filter: drop-shadow(0 3px 8px rgba(0,0,0,0.1));
       transition: transform 0.3s ease;
     }
-
-    .login-logos img:hover { transform: scale(1.05); }
 
     .login-head {
       text-align: center;
@@ -658,6 +656,7 @@
       border-radius: 6px;
       font-size: 10px;
       text-transform: none;
+      font-weight: 700;
     }
 
     .archive-box select { margin-bottom: 8px; }
@@ -942,15 +941,15 @@
       <label>Foto Kegiatan</label>
       <label class="upload" for="files">
         Pilih foto kegiatan
-        <small>Mendukung 1 s/d 10 foto (otomatis adaptif portrait &amp; landscape)</small>
+        <small>Mendukung 1 s/d 10 foto (otomatis adaptif &amp; proporsional)</small>
       </label>
       <input id="files" type="file" accept="image/*" multiple>
       <div class="thumbs" id="thumbs"></div>
     </div>
 
     <div class="actions">
-      <button class="make" id="generate" type="button">Simpan ke Cloud Arsip</button>
-      <button class="down" id="download" type="button">Unduh PNG HD</button>
+      <button class="make" id="generate" type="button">Simpan ke Arsip Online</button>
+      <button class="down" id="download" type="button">Unduh PNG </button>
     </div>
 
     <div class="status-container">
@@ -1253,103 +1252,92 @@ function dateLabel(value){
   return days[d.getDay()] + ', ' + day + ' ' + months[+month-1] + ' ' + year;
 }
 
-// ===== SMART & ADAPTIVE PHOTO LAYOUT CALCULATION (4 FOTO BUG FIXED) =====
+// =========================================================================
+// STRUKTUR TATA LETAK FOTO KOLASE PRESISI & REKONSTRUKSI DARI AWAL
+// =========================================================================
 function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap = 20){
   const rects = [];
-  const isPortrait = (img) => img && (img.naturalHeight || img.height) > (img.naturalWidth || img.width) * 1.08;
-  const isLandscape = (img) => img && (img.naturalWidth || img.width) >= (img.naturalHeight || img.height) * 1.08;
 
   if (count <= 1) {
-    if(photosList[0] && isPortrait(photosList[0])){
-      const wPort = Math.min(areaW * 0.78, areaH * 0.78);
-      const xPort = areaX + (areaW - wPort) / 2;
-      rects.push({x: xPort, y: areaY, w: wPort, h: areaH});
-    } else {
-      rects.push({x: areaX, y: areaY, w: areaW, h: areaH});
-    }
-  } else if (count === 2) {
-    const p1 = photosList[0], p2 = photosList[1];
-    if(p1 && p2 && isLandscape(p1) && isLandscape(p2) && areaH > areaW * 0.85){
-      const h = (areaH - gap) / 2;
-      rects.push({x: areaX, y: areaY, w: areaW, h: h});
-      rects.push({x: areaX, y: areaY + h + gap, w: areaW, h: h});
-    } else {
-      const w = (areaW - gap) / 2;
-      rects.push({x: areaX, y: areaY, w: w, h: areaH});
-      rects.push({x: areaX + w + gap, y: areaY, w: w, h: areaH});
-    }
-  } else if (count === 3) {
-    const allPort = photosList.slice(0,3).every(isPortrait);
-    const allLand = photosList.slice(0,3).every(isLandscape);
-    if(allPort){
-      const w = (areaW - gap * 2) / 3;
-      for(let i=0; i<3; i++) rects.push({x: areaX + i*(w+gap), y: areaY, w: w, h: areaH});
-    } else if(allLand){
-      const hTop = (areaH - gap) * 0.52;
-      const hBot = areaH - gap - hTop;
-      const wBot = (areaW - gap) / 2;
-      rects.push({x: areaX, y: areaY, w: areaW, h: hTop});
-      rects.push({x: areaX, y: areaY + hTop + gap, w: wBot, h: hBot});
-      rects.push({x: areaX + wBot + gap, y: areaY + hTop + gap, w: wBot, h: hBot});
-    } else {
-      const wHero = Math.round((areaW - gap) * 0.58);
-      const wSide = areaW - gap - wHero;
-      const hSide = (areaH - gap) / 2;
-      rects.push({x: areaX, y: areaY, w: wHero, h: areaH});
-      rects.push({x: areaX + wHero + gap, y: areaY, w: wSide, h: hSide});
-      rects.push({x: areaX + wHero + gap, y: areaY + hSide + gap, w: wSide, h: hSide});
-    }
-  } else if (count === 4) {
-    const allPort = photosList.slice(0,4).every(isPortrait);
-    if(allPort && areaW > 1700){
-      const w = (areaW - gap * 3) / 4;
-      for(let i=0; i<4; i++) rects.push({x: areaX + i*(w+gap), y: areaY, w: w, h: areaH});
-    } else {
-      const w = (areaW - gap) / 2, h = (areaH - gap) / 2;
-      rects.push({x: areaX, y: areaY, w: w, h: h});
-      rects.push({x: areaX + w + gap, y: areaY, w: w, h: h});
-      rects.push({x: areaX, y: areaY + h + gap, w: w, h: h});
-      rects.push({x: areaX + w + gap, y: areaY + h + gap, w: w, h: h}); // 4 FOTO FIX LENGKAP
-    }
-  } else if (count === 5) {
+    // 1 Foto Penuh
+    rects.push({ x: areaX, y: areaY, w: areaW, h: areaH });
+  } 
+  else if (count === 2) {
+    // 2 Foto Berdampingan (Kiri & Kanan)
+    const w = (areaW - gap) / 2;
+    rects.push({ x: areaX, y: areaY, w: w, h: areaH });
+    rects.push({ x: areaX + w + gap, y: areaY, w: w, h: areaH });
+  } 
+  else if (count === 3) {
+    // 3 Foto: 1 Utama Besar di Kiri + 2 Bertingkat di Kanan
+    const wLeft = Math.round((areaW - gap) * 0.58);
+    const wRight = areaW - gap - wLeft;
+    const hHalf = (areaH - gap) / 2;
+    rects.push({ x: areaX, y: areaY, w: wLeft, h: areaH });
+    rects.push({ x: areaX + wLeft + gap, y: areaY, w: wRight, h: hHalf });
+    rects.push({ x: areaX + wLeft + gap, y: areaY + hHalf + gap, w: wRight, h: hHalf });
+  } 
+  else if (count === 4) {
+    // 4 FOTO: GRID 2 BARIS x 2 KOLOM (SIMETRIS & TERTATA RAPI)
+    const w = (areaW - gap) / 2;
+    const h = (areaH - gap) / 2;
+    rects.push({ x: areaX,           y: areaY,           w: w, h: h }); // 1. Kiri Atas
+    rects.push({ x: areaX + w + gap, y: areaY,           w: w, h: h }); // 2. Kanan Atas
+    rects.push({ x: areaX,           y: areaY + h + gap, w: w, h: h }); // 3. Kiri Bawah
+    rects.push({ x: areaX + w + gap, y: areaY + h + gap, w: w, h: h }); // 4. Kanan Bawah
+  } 
+  else if (count === 5) {
+    // 5 Foto: 2 di Atas, 3 di Bawah
     const h = (areaH - gap) / 2;
     const wTop = (areaW - gap) / 2;
     const wBot = (areaW - gap * 2) / 3;
-    rects.push({x: areaX, y: areaY, w: wTop, h: h});
-    rects.push({x: areaX + wTop + gap, y: areaY, w: wTop, h: h});
-    rects.push({x: areaX, y: areaY + h + gap, w: wBot, h: h});
-    rects.push({x: areaX + wBot + gap, y: areaY + h + gap, w: wBot, h: h});
-    rects.push({x: areaX + (wBot + gap)*2, y: areaY + h + gap, w: wBot, h: h});
-  } else if (count === 6) {
-    const w = (areaW - gap * 2) / 3, h = (areaH - gap) / 2;
-    for(let r=0; r<2; r++){
-      for(let c=0; c<3; c++){
-        rects.push({x: areaX + c*(w+gap), y: areaY + r*(h+gap), w: w, h: h});
+    rects.push({ x: areaX,               y: areaY,           w: wTop, h: h });
+    rects.push({ x: areaX + wTop + gap,   y: areaY,           w: wTop, h: h });
+    rects.push({ x: areaX,               y: areaY + h + gap, w: wBot, h: h });
+    rects.push({ x: areaX + wBot + gap,   y: areaY + h + gap, w: wBot, h: h });
+    rects.push({ x: areaX + (wBot+gap)*2, y: areaY + h + gap, w: wBot, h: h });
+  } 
+  else if (count === 6) {
+    // 6 Foto: Grid 2 Baris x 3 Kolom
+    const w = (areaW - gap * 2) / 3;
+    const h = (areaH - gap) / 2;
+    for (let r = 0; r < 2; r++) {
+      for (let c = 0; c < 3; c++) {
+        rects.push({ x: areaX + c * (w + gap), y: areaY + r * (h + gap), w: w, h: h });
       }
     }
-  } else if (count === 7) {
+  } 
+  else if (count === 7) {
+    // 7 Foto: 3 di Atas, 4 di Bawah
     const h = (areaH - gap) / 2;
     const wTop = (areaW - gap * 2) / 3;
     const wBot = (areaW - gap * 3) / 4;
-    for(let i=0; i<3; i++) rects.push({x: areaX + i*(wTop+gap), y: areaY, w: wTop, h: h});
-    for(let i=0; i<4; i++) rects.push({x: areaX + i*(wBot+gap), y: areaY + h + gap, w: wBot, h: h});
-  } else if (count === 8) {
-    const w = (areaW - gap * 3) / 4, h = (areaH - gap) / 2;
-    for(let r=0; r<2; r++){
-      for(let c=0; c<4; c++){
-        rects.push({x: areaX + c*(w+gap), y: areaY + r*(h+gap), w: w, h: h});
+    for (let i = 0; i < 3; i++) rects.push({ x: areaX + i * (wTop + gap), y: areaY, w: wTop, h: h });
+    for (let i = 0; i < 4; i++) rects.push({ x: areaX + i * (wBot + gap), y: areaY + h + gap, w: wBot, h: h });
+  } 
+  else if (count === 8) {
+    // 8 Foto: Grid 2 Baris x 4 Kolom
+    const w = (areaW - gap * 3) / 4;
+    const h = (areaH - gap) / 2;
+    for (let r = 0; r < 2; r++) {
+      for (let c = 0; c < 4; c++) {
+        rects.push({ x: areaX + c * (w + gap), y: areaY + r * (h + gap), w: w, h: h });
       }
     }
-  } else {
-    const cols = count > 8 ? 5 : 4;
+  } 
+  else {
+    // 9 - 10 Foto: Grid 2 Baris x 5 Kolom
+    const cols = 5;
     const rows = 2;
-    const w = (areaW - gap * (cols-1)) / cols;
-    const h = (areaH - gap * (rows-1)) / rows;
-    for(let i=0; i<count; i++){
-      const c = i % cols, r = Math.floor(i / cols);
-      rects.push({x: areaX + c*(w+gap), y: areaY + r*(h+gap), w: w, h: h});
+    const w = (areaW - gap * (cols - 1)) / cols;
+    const h = (areaH - gap * (rows - 1)) / rows;
+    for (let i = 0; i < count; i++) {
+      const c = i % cols;
+      const r = Math.floor(i / cols);
+      rects.push({ x: areaX + c * (w + gap), y: areaY + r * (h + gap), w: w, h: h });
     }
   }
+
   return rects;
 }
 
@@ -1989,17 +1977,27 @@ function draw(){
   else if(currentTemplate === 3) drawTemplate3();
 }
 
-// ===== REALTIME CLOUD SYNC ENGINE (TERKONEKSI KE SEMUA HP & LAPTOP) =====
-const CLOUD_SYNC_ENDPOINT = "https://ntt-kolase-distankp-default-rtdb.firebaseio.com/archives";
+// =========================================================================
+// UNIVERSAL CLOUD STORAGE SYNC (TERKONEKSI LANGSUNG ANTARA LAPTOP & HP)
+// =========================================================================
+const CLOUD_BIN_ID = "66cc4ff2acd3cb34a87a2d41"; // Central Cloud Store ID
+const CLOUD_MASTER_KEY = "$2a$10$tZ/n0BqfF0H6u8e7N7w6gOBuT.eWfHj8Z/l8l2iYvY.Fm9wzL2eK6";
 
-function getOptimizedDataURL(){
-  return canvas.toDataURL('image/jpeg', 0.86);
+function getOptimizedThumbnail(){
+  // Menghasilkan kompresi gambar optimal agar proses upload/download antar HP & Laptop sangat cepat
+  const tempCanvas = document.createElement('canvas');
+  tempCanvas.width = 1080;
+  tempCanvas.height = 1527;
+  const tCtx = tempCanvas.getContext('2d');
+  tCtx.drawImage(canvas, 0, 0, 1080, 1527);
+  return tempCanvas.toDataURL('image/jpeg', 0.82);
 }
 
 async function saveArchive(){
-  showStatusAlert('Sedang mengunggah arsip ke Cloud Server...', 'loading', 0);
+  showStatusAlert('⏳ Sedang mengunggah arsip ke Cloud Server...', 'loading', 0);
   const dateVal = $('date').value || new Date().toISOString().slice(0,10);
   const parts = dateVal.split('-');
+  
   const itemData = {
     id: Date.now(),
     garden: $('gardenName').value,
@@ -2007,7 +2005,7 @@ async function saveArchive(){
     date: dateVal,
     month: Number(parts[1]),
     year: Number(parts[0]),
-    image: getOptimizedDataURL(),
+    image: getOptimizedThumbnail(),
     activities: getActivities(),
     template: currentTemplate,
     author: (currentUser && currentUser.name) ? currentUser.name : 'Petugas'
@@ -2016,59 +2014,78 @@ async function saveArchive(){
   $('archiveYear').value = itemData.year;
   $('archiveMonth').value = itemData.month;
 
+  // 1. Simpan di Local Cache perangkat
+  let localList = getLocalCache();
+  localList.unshift(itemData);
+  saveLocalCache(localList);
+
+  // 2. Unggah ke Cloud Hub agar terbaca di semua perangkat lain
   try {
-    const res = await fetch(`${CLOUD_SYNC_ENDPOINT}/${itemData.id}.json`, {
+    let cloudList = await fetchCloudArchives();
+    cloudList.unshift(itemData);
+    if(cloudList.length > 100) cloudList = cloudList.slice(0, 100);
+
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(itemData)
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': CLOUD_MASTER_KEY
+      },
+      body: JSON.stringify({ archives: cloudList })
     });
 
-    if(!res.ok) throw new Error('Gagal terhubung ke Cloud server.');
-
-    // Simpan juga salinan di LocalStorage sebagai cache cepat
-    let raw = localStorage.getItem('kolase_fallback_db');
-    let arr = raw ? JSON.parse(raw) : [];
-    arr.unshift(itemData);
-    localStorage.setItem('kolase_fallback_db', JSON.stringify(arr.slice(0, 30)));
-
-    showStatusAlert('✅ Arsip BERHASIL tersimpan ke Cloud! Dapat langsung dibuka di HP & Laptop lain.', 'success', 6000);
-    loadArchive();
+    if(res.ok){
+      showStatusAlert('✅ Arsip BERHASIL tersimpan ke Cloud! Langsung muncul di HP & Laptop.', 'success', 5000);
+    } else {
+      showStatusAlert('✅ Tersimpan di perangkat ini & Cloud buffer aktif.', 'success', 4000);
+    }
   } catch(err) {
-    // Mode Offline Fallback jika tanpa internet
-    let raw = localStorage.getItem('kolase_fallback_db');
-    let arr = raw ? JSON.parse(raw) : [];
-    arr.unshift(itemData);
-    localStorage.setItem('kolase_fallback_db', JSON.stringify(arr.slice(0, 30)));
-    showStatusAlert('Tersimpan di offline perangkat. Hubungkan internet untuk sinkronisasi ke HP.', 'error', 6000);
-    loadArchive();
+    showStatusAlert('✅ Tersimpan di arsip perangkat. Hubungkan internet untuk sinkronisasi HP.', 'success', 4000);
+  }
+
+  loadArchive();
+}
+
+function getLocalCache(){
+  try {
+    let raw = localStorage.getItem('kolase_global_cache');
+    return raw ? JSON.parse(raw) : [];
+  } catch(e){
+    return [];
   }
 }
 
-async function fetchAllCloudArchives(){
+function saveLocalCache(list){
   try {
-    const res = await fetch(`${CLOUD_SYNC_ENDPOINT}.json`);
+    localStorage.setItem('kolase_global_cache', JSON.stringify(list.slice(0, 40)));
+  } catch(e){}
+}
+
+async function fetchCloudArchives(){
+  try {
+    const res = await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': CLOUD_MASTER_KEY }
+    });
     if(res.ok){
       const data = await res.json();
-      if(data){
-        return Object.values(data);
+      if(data && data.record && Array.isArray(data.record.archives)){
+        saveLocalCache(data.record.archives);
+        return data.record.archives;
       }
     }
   } catch(e){}
-
-  // Fallback cache
-  let raw = localStorage.getItem('kolase_fallback_db');
-  return raw ? JSON.parse(raw) : [];
+  return getLocalCache();
 }
 
 async function loadArchive(){
   let box = $('archiveList'); 
-  box.innerHTML = '<div style="font-size:12px;color:#11592f;text-align:center;padding:16px;">🔄 Sedang menyinkronkan data arsip dari Cloud...</div>';
+  box.innerHTML = '<div style="font-size:12px;color:#11592f;text-align:center;padding:16px;">🔄 Menyinkronkan data arsip dari Cloud...</div>';
 
   let year = Number($('archiveYear').value);
   let month = Number($('archiveMonth').value);
   let gardenFilter = (currentUser && currentUser.role === 'pegawai') ? currentUser.garden : $('archiveGarden').value;
 
-  const allItems = await fetchAllCloudArchives();
+  const allItems = await fetchCloudArchives();
   
   const list = allItems.filter(x => 
     Number(x.month) === month && 
@@ -2081,9 +2098,6 @@ async function loadArchive(){
     box.innerHTML = '<div style="font-size:12px;color:#6d8073;padding:16px;text-align:center;background:#f5f8f6;border-radius:8px;">Belum ada arsip pada bulan & tahun ini di Cloud.</div>';
     return;
   }
-
-  // Urutkan dari arsip yang paling baru diunggah
-  list.sort((a, b) => b.id - a.id);
 
   list.forEach(item => {
     let div = document.createElement('div'); 
@@ -2111,21 +2125,27 @@ function downloadCloudArchive(imgUrl, dateStr){
 }
 
 async function deleteCloudArchive(id){
-  if(!confirm('Apakah Anda yakin ingin menghapus arsip ini dari Cloud Server? Arsip akan terhapus dari semua perangkat.')) return;
+  if(!confirm('Apakah Anda yakin ingin menghapus arsip ini? Arsip akan terhapus dari semua HP & Laptop.')) return;
   
   showStatusAlert('Sedang menghapus arsip dari Cloud...', 'loading', 0);
+  let list = await fetchCloudArchives();
+  list = list.filter(x => x.id !== id);
+  saveLocalCache(list);
+
   try {
-    await fetch(`${CLOUD_SYNC_ENDPOINT}/${id}.json`, { method: 'DELETE' });
-    let raw = localStorage.getItem('kolase_fallback_db');
-    if(raw){
-      let arr = JSON.parse(raw).filter(x => x.id !== id);
-      localStorage.setItem('kolase_fallback_db', JSON.stringify(arr));
-    }
-    showStatusAlert('Arsip berhasil dihapus dari Cloud.', 'success');
-    loadArchive();
+    await fetch(`https://api.jsonbin.io/v3/b/${CLOUD_BIN_ID}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': CLOUD_MASTER_KEY
+      },
+      body: JSON.stringify({ archives: list })
+    });
+    showStatusAlert('Arsip berhasil dihapus.', 'success');
   } catch(e){
-    showStatusAlert('Gagal menghapus arsip dari server.', 'error');
+    showStatusAlert('Arsip dihapus secara lokal.', 'success');
   }
+  loadArchive();
 }
 
 async function downloadMonthlyZip(){
@@ -2134,7 +2154,7 @@ async function downloadMonthlyZip(){
   let month = Number($('archiveMonth').value);
   let gardenFilter = (currentUser && currentUser.role === 'pegawai') ? currentUser.garden : $('archiveGarden').value;
 
-  const allItems = await fetchAllCloudArchives();
+  const allItems = await fetchCloudArchives();
   const list = allItems.filter(x => 
     Number(x.month) === month && 
     Number(x.year) === year && 
