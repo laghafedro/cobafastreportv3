@@ -3,32 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fast Report Seksi Kebun Dinas - Kolase Kebun Dinas</title>
+  <title>Fast Report HD - Kolase Kebun Dinas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700;9..144,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <style>
     :root {
-      --primary-navy: #0f241a;
-      --primary-green: #135d32;
-      --primary-green-deep: #0c3e21;
-      --primary-green-light: #1d7a46;
-      --accent-gold: #a67c2e;
-      --accent-gold-light: #eed9a8;
-      --bg-app: #eef2f5;
+      --primary-navy: #0b1f14;
+      --primary-green: #11592f;
+      --primary-green-deep: #082d17;
+      --primary-green-light: #1c7c44;
+      --accent-gold: #b3852b;
+      --accent-gold-bright: #d4a742;
+      --accent-gold-light: #f7e8c3;
+      --bg-app: #eef3ef;
       --panel-bg: #ffffff;
-      --card-bg: #f8faf9;
-      --card-border: #dbe4dd;
-      --text-main: #14221a;
-      --text-muted: #5a6e60;
-      --line-color: #d4dfd6;
+      --card-bg: #f8faf8;
+      --card-border: #d7e3da;
+      --text-main: #122117;
+      --text-muted: #566c5d;
+      --line-color: #d1dfd4;
       --danger-color: #c02b1d;
       --success-color: #0e6b36;
-      --shadow-sm: 0 4px 12px rgba(8, 32, 16, 0.08);
-      --shadow-md: 0 8px 24px rgba(8, 32, 16, 0.12);
-      --shadow-lg: 0 16px 48px rgba(8, 32, 16, 0.18);
+      --shadow-sm: 0 4px 14px rgba(8, 32, 16, 0.06);
+      --shadow-md: 0 8px 24px rgba(8, 32, 16, 0.10);
+      --shadow-lg: 0 16px 48px rgba(8, 32, 16, 0.16);
       --shadow-xl: 0 24px 64px rgba(8, 32, 16, 0.22);
       --radius: 16px;
       --radius-sm: 10px;
@@ -39,9 +40,9 @@
 
     body {
       margin: 0;
-      background: radial-gradient(circle at 10% 20%, #dfeae2 0%, transparent 40%),
-                  radial-gradient(circle at 90% 80%, #d9e6dc 0%, transparent 40%),
-                  radial-gradient(circle at 50% 50%, #e8f0ea 0%, transparent 60%),
+      background: radial-gradient(circle at 12% 15%, #deede1 0%, transparent 45%),
+                  radial-gradient(circle at 88% 85%, #d8e8dc 0%, transparent 45%),
+                  radial-gradient(circle at 50% 50%, #e9f2eb 0%, transparent 60%),
                   var(--bg-app);
       font-family: 'Plus Jakarta Sans', sans-serif;
       color: var(--text-main);
@@ -53,7 +54,7 @@
     #loginOverlay {
       position: fixed;
       inset: 0;
-      background: rgba(8, 28, 17, 0.75);
+      background: rgba(6, 23, 14, 0.80);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       z-index: 9999;
@@ -64,19 +65,19 @@
     }
 
     .login-box {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
       border-radius: 32px;
       max-width: 480px;
       width: 100%;
       padding: 44px 36px 36px;
-      box-shadow: var(--shadow-xl), 0 0 0 1px rgba(255, 255, 255, 0.4);
+      box-shadow: var(--shadow-xl), 0 0 0 1px rgba(255, 255, 255, 0.5);
       position: relative;
-      animation: loginFade 0.5s ease-out;
+      animation: loginFade 0.45s ease-out;
     }
 
     @keyframes loginFade {
-      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      from { opacity: 0; transform: translateY(18px) scale(0.98); }
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
@@ -88,14 +89,14 @@
       right: 0;
       height: 6px;
       border-radius: 32px 32px 0 0;
-      background: linear-gradient(90deg, var(--primary-green-deep), var(--primary-green) 50%, var(--accent-gold) 80%, var(--accent-gold-light));
+      background: linear-gradient(90deg, var(--primary-green-deep), var(--primary-green) 50%, var(--accent-gold) 80%, var(--accent-gold-bright));
     }
 
     .login-logos {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 24px;
+      gap: 22px;
       margin-bottom: 20px;
     }
 
@@ -103,17 +104,15 @@
       height: 64px;
       width: auto;
       object-fit: contain;
-      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.08));
+      filter: drop-shadow(0 3px 8px rgba(0,0,0,0.1));
       transition: transform 0.3s ease;
     }
 
-    .login-logos img:hover {
-      transform: scale(1.05);
-    }
+    .login-logos img:hover { transform: scale(1.05); }
 
     .login-head {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 26px;
     }
 
     .login-head .sub {
@@ -126,7 +125,7 @@
     }
 
     .login-head h2 {
-      margin: 2px 0 8px;
+      margin: 2px 0 6px;
       font-family: 'Fraunces', serif;
       color: var(--primary-navy);
       font-size: 30px;
@@ -146,7 +145,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 6px;
       margin-bottom: 22px;
-      background: #edf4ef;
+      background: #e9f2eb;
       padding: 4px;
       border-radius: 14px;
     }
@@ -167,11 +166,7 @@
     .role-tab.active {
       background: #ffffff;
       color: var(--primary-green-deep);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    }
-
-    .role-tab:hover:not(.active) {
-      color: var(--primary-green);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
     }
 
     .login-btn {
@@ -186,39 +181,28 @@
       cursor: pointer;
       margin-top: 18px;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 20px rgba(19, 93, 50, 0.35);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .login-btn::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, transparent 50%, rgba(255,255,255,0.1));
-      pointer-events: none;
+      box-shadow: 0 4px 20px rgba(17, 89, 47, 0.35);
     }
 
     .login-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 30px rgba(19, 93, 50, 0.45);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(17, 89, 47, 0.45);
     }
-    .login-btn:active { transform: translateY(0px); }
 
     .login-hint {
-      margin-top: 20px;
+      margin-top: 18px;
       font-size: 12px;
-      color: #435c4b;
-      background: #f2f7f3;
-      padding: 16px 18px;
-      border-radius: 14px;
+      color: #3b5742;
+      background: #f1f7f2;
+      padding: 14px 16px;
+      border-radius: 12px;
       border-left: 4px solid var(--primary-green);
-      line-height: 1.7;
+      line-height: 1.6;
     }
 
     .login-hint code {
-      background: #dce8df;
-      padding: 2px 10px;
+      background: #d8e8dc;
+      padding: 2px 8px;
       border-radius: 4px;
       font-weight: 700;
       color: var(--primary-navy);
@@ -227,13 +211,12 @@
 
     /* ===== APP LAYOUT ===== */
     .app {
-      max-width: 1640px;
+      max-width: 1660px;
       min-height: 100vh;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 460px 1fr;
+      grid-template-columns: 470px 1fr;
       background: transparent;
-      gap: 0;
     }
 
     /* ===== PANEL ===== */
@@ -244,7 +227,7 @@
       overflow-y: auto;
       max-height: 100vh;
       position: relative;
-      box-shadow: 4px 0 30px rgba(0,0,0,0.04);
+      box-shadow: 4px 0 28px rgba(0,0,0,0.03);
     }
 
     .panel::before {
@@ -254,52 +237,34 @@
       top: 0;
       right: 0;
       height: 6px;
-      background: linear-gradient(90deg, var(--primary-green-deep), var(--primary-green) 50%, var(--accent-gold) 80%, var(--accent-gold-light));
+      background: linear-gradient(90deg, var(--primary-green-deep), var(--primary-green) 50%, var(--accent-gold) 80%, var(--accent-gold-bright));
     }
 
-    .panel::-webkit-scrollbar {
-      width: 4px;
-    }
-    .panel::-webkit-scrollbar-track {
-      background: #edf2ee;
-    }
-    .panel::-webkit-scrollbar-thumb {
-      background: var(--primary-green);
-      border-radius: 4px;
-    }
+    .panel::-webkit-scrollbar { width: 5px; }
+    .panel::-webkit-scrollbar-track { background: #eaf1ec; }
+    .panel::-webkit-scrollbar-thumb { background: var(--primary-green); border-radius: 4px; }
 
     .panel-top-logos {
       display: flex;
       align-items: center;
       gap: 14px;
-      padding: 14px 18px;
-      background: linear-gradient(135deg, #f4f8f5, #ecf4ee);
-      border: 1px solid #d3e2d7;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, #f2f7f4, #e9f2eb);
+      border: 1px solid #d0e2d5;
       border-radius: var(--radius-sm);
       margin-bottom: 18px;
-      transition: all 0.3s ease;
-    }
-
-    .panel-top-logos:hover {
-      border-color: var(--primary-green);
-      box-shadow: 0 2px 12px rgba(19, 93, 50, 0.08);
     }
 
     .panel-top-logos img {
-      height: 44px;
+      height: 42px;
       width: auto;
       object-fit: contain;
-      transition: transform 0.3s ease;
-    }
-
-    .panel-top-logos img:hover {
-      transform: scale(1.05);
     }
 
     .panel-top-logos .logo-divider {
       width: 1px;
-      height: 34px;
-      background: #c5d8cb;
+      height: 32px;
+      background: #c3d6c7;
     }
 
     .panel-top-logos .org-text {
@@ -313,13 +278,6 @@
       font-size: 10px;
       font-weight: 600;
       color: var(--text-muted);
-    }
-
-    .brand-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 2px;
     }
 
     .brand-title {
@@ -336,39 +294,33 @@
     }
 
     .panel-desc {
-      margin: 4px 0 20px;
+      margin: 4px 0 18px;
       color: var(--text-muted);
       font-size: 12.5px;
-      line-height: 1.6;
+      line-height: 1.55;
       border-left: 3px solid var(--primary-green);
-      padding-left: 14px;
-      background: linear-gradient(90deg, rgba(19,93,50,0.05), transparent);
+      padding-left: 12px;
+      background: linear-gradient(90deg, rgba(17,89,47,0.05), transparent);
     }
 
     .user-badge {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: linear-gradient(135deg, #ecf4ee, #e4efe7);
-      padding: 14px 18px;
+      background: linear-gradient(135deg, #e9f4ec, #e0ede4);
+      padding: 12px 16px;
       border-radius: var(--radius-sm);
-      margin-bottom: 24px;
-      border: 1px solid #c9decb;
-      transition: all 0.3s ease;
-    }
-
-    .user-badge:hover {
-      border-color: var(--primary-green);
-      box-shadow: 0 2px 12px rgba(19, 93, 50, 0.08);
+      margin-bottom: 22px;
+      border: 1px solid #c7decb;
     }
 
     .user-info {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--primary-green-deep);
     }
     .user-info b {
       display: block;
-      font-size: 14px;
+      font-size: 13.5px;
       color: var(--primary-navy);
       margin-top: 2px;
     }
@@ -377,24 +329,20 @@
       background: #fae9e7;
       color: var(--danger-color);
       border: 1px solid #f2c0ba;
-      padding: 7px 16px;
-      font-size: 12px;
+      padding: 6px 14px;
+      font-size: 11.5px;
       font-weight: 700;
       border-radius: 8px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
     }
     .logout-btn:hover {
       background: var(--danger-color);
       color: #fff;
-      border-color: var(--danger-color);
-      transform: scale(1.02);
     }
 
-    /* ===== FORM ELEMENTS ===== */
-    .group {
-      margin-bottom: 20px;
-    }
+    /* ===== FORM ===== */
+    .group { margin-bottom: 18px; }
 
     label {
       display: block;
@@ -408,13 +356,13 @@
 
     input, textarea, select {
       width: 100%;
-      padding: 12px 16px;
-      border: 2px solid #cbd7ce;
+      padding: 12px 15px;
+      border: 2px solid #ccd9cf;
       border-radius: var(--radius-sm);
       font: 13.5px 'Plus Jakarta Sans', sans-serif;
       background: #ffffff;
       color: var(--text-main);
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
     }
 
     select:disabled {
@@ -427,13 +375,7 @@
     input:focus, textarea:focus, select:focus {
       outline: none;
       border-color: var(--primary-green);
-      box-shadow: 0 0 0 4px rgba(19, 93, 50, 0.12);
-    }
-
-    textarea {
-      min-height: 54px;
-      resize: vertical;
-      line-height: 1.5;
+      box-shadow: 0 0 0 4px rgba(17, 89, 47, 0.12);
     }
 
     /* ===== TEMPLATE SELECTOR ===== */
@@ -441,31 +383,30 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .template-option {
       cursor: pointer;
-      border: 2px solid #cbd7ce;
+      border: 2px solid #cbd9ce;
       border-radius: var(--radius-sm);
-      padding: 14px 6px;
+      padding: 12px 6px;
       text-align: center;
       background: #ffffff;
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
       position: relative;
     }
 
     .template-option:hover {
       border-color: var(--primary-green);
-      background: #f3f9f4;
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-sm);
+      background: #f4faf5;
+      transform: translateY(-2px);
     }
 
     .template-option.active {
       border-color: var(--primary-green);
-      background: linear-gradient(135deg, #e5f3e8, #d4e8da);
-      box-shadow: 0 0 0 3px var(--primary-green), var(--shadow-sm);
+      background: linear-gradient(135deg, #e5f4e8, #d4ebd9);
+      box-shadow: 0 0 0 2.5px var(--primary-green), var(--shadow-sm);
     }
 
     .template-option .title {
@@ -482,23 +423,20 @@
     /* ===== ACTIVITY CARDS ===== */
     .activity-card {
       position: relative;
-      padding: 8px 36px 8px 12px;
+      padding: 6px 36px 6px 12px;
       margin-bottom: 8px;
-      border: 2px solid #cbd7ce;
+      border: 2px solid #ccd9cf;
       border-radius: var(--radius-sm);
       background: #ffffff;
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
     }
     .activity-card:focus-within {
       border-color: var(--primary-green);
-      box-shadow: 0 0 0 4px rgba(19, 93, 50, 0.10);
-    }
-    .activity-card:hover {
-      border-color: #a8c0b0;
+      box-shadow: 0 0 0 3px rgba(17, 89, 47, 0.10);
     }
     .activity-card textarea {
       display: block;
-      min-height: 44px;
+      min-height: 42px;
       padding: 0;
       border: 0;
       border-radius: 0;
@@ -506,24 +444,25 @@
       font-size: 13px;
       background: transparent;
       box-shadow: none;
+      resize: vertical;
     }
     .remove-activity {
       position: absolute;
       right: 7px;
       top: 50%;
       transform: translateY(-50%);
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       padding: 0;
       border: 0;
       border-radius: 50%;
       background: #fae9e7;
       color: var(--danger-color);
       cursor: pointer;
-      font-size: 18px;
-      line-height: 28px;
+      font-size: 16px;
+      line-height: 26px;
       font-weight: bold;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
     }
     .remove-activity:hover {
       background: var(--danger-color);
@@ -537,46 +476,44 @@
       justify-content: center;
       gap: 6px;
       width: 100%;
-      padding: 12px;
-      border: 2px dashed #8bb397;
+      padding: 11px;
+      border: 2px dashed #87af93;
       border-radius: var(--radius-sm);
-      background: #edf6ef;
+      background: #ecf5ee;
       color: var(--primary-green);
       font-weight: 700;
       font-size: 13px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
     }
     .add-activity:hover {
-      background: #dceddf;
+      background: #ddeee1;
       border-color: var(--primary-green);
       transform: translateY(-2px);
-      box-shadow: var(--shadow-sm);
     }
 
     /* ===== UPLOAD ===== */
     .upload {
       display: block;
-      padding: 20px 12px;
-      border: 2px dashed #8bb397;
+      padding: 18px 12px;
+      border: 2px dashed #87af93;
       border-radius: var(--radius-sm);
-      background: #edf6ef;
+      background: #ecf5ee;
       color: var(--primary-green-deep);
       text-align: center;
       font-weight: 700;
       font-size: 13px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.25s ease;
     }
     .upload:hover {
-      background: #dceddf;
+      background: #ddeee1;
       border-color: var(--primary-green);
       transform: translateY(-2px);
-      box-shadow: var(--shadow-sm);
     }
     .upload small {
       display: block;
-      margin-top: 6px;
+      margin-top: 4px;
       font-size: 11px;
       font-weight: 500;
       color: var(--text-muted);
@@ -587,20 +524,15 @@
       display: grid;
       grid-template-columns: repeat(5, 1fr);
       gap: 8px;
-      margin-top: 14px;
+      margin-top: 12px;
     }
     .thumb {
       position: relative;
       aspect-ratio: 1;
       overflow: hidden;
       border-radius: var(--radius-sm);
-      background: #e5eee7;
+      background: #e2ede5;
       border: 2px solid var(--line-color);
-      transition: all 0.3s ease;
-    }
-    .thumb:hover {
-      border-color: var(--primary-green);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     .thumb img {
       width: 100%;
@@ -610,24 +542,19 @@
     }
     .thumb button {
       position: absolute;
-      right: 4px;
-      top: 4px;
-      width: 22px;
-      height: 22px;
+      right: 3px;
+      top: 3px;
+      width: 20px;
+      height: 20px;
       padding: 0;
       border: 0;
       border-radius: 50%;
       background: rgba(192, 43, 29, 0.92);
       color: #fff;
       cursor: pointer;
-      font-size: 14px;
-      line-height: 22px;
+      font-size: 12px;
+      line-height: 20px;
       font-weight: bold;
-      transition: all 0.3s ease;
-    }
-    .thumb button:hover {
-      background: var(--danger-color);
-      transform: scale(1.1);
     }
 
     /* ===== BUTTONS ===== */
@@ -635,65 +562,50 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-top: 22px;
+      margin-top: 20px;
     }
 
     button {
-      padding: 14px;
+      padding: 13px;
       border: 0;
       border-radius: var(--radius-sm);
       font-weight: 800;
       font-size: 13px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
+      transition: all 0.25s ease;
     }
-
-    button::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, transparent 50%, rgba(255,255,255,0.1));
-      pointer-events: none;
-    }
-
-    button:active { transform: scale(0.98); }
 
     .make {
       background: linear-gradient(135deg, var(--primary-green), var(--primary-green-deep));
       color: #fff;
-      box-shadow: 0 4px 16px rgba(19, 93, 50, 0.30);
+      box-shadow: 0 4px 14px rgba(17, 89, 47, 0.30);
     }
     .make:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 28px rgba(19, 93, 50, 0.40);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(17, 89, 47, 0.40);
     }
 
     .down {
-      background: linear-gradient(135deg, #173e27, #0f2e1d);
+      background: linear-gradient(135deg, #163d26, #0e2a1b);
       color: #fff;
-      box-shadow: 0 4px 16px rgba(23, 62, 39, 0.25);
+      box-shadow: 0 4px 14px rgba(22, 61, 38, 0.25);
     }
     .down:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 28px rgba(23, 62, 39, 0.35);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(22, 61, 38, 0.35);
     }
 
     /* ===== STATUS ===== */
-    .status-container {
-      margin-top: 16px;
-      min-height: 24px;
-    }
+    .status-container { margin-top: 14px; min-height: 20px; }
     .status-alert {
       display: none;
-      padding: 14px 18px;
+      padding: 12px 16px;
       border-radius: var(--radius-sm);
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 700;
       line-height: 1.4;
       border: 1.5px solid transparent;
-      animation: fadeIn 0.3s ease-in-out;
+      animation: fadeIn 0.25s ease-in-out;
     }
     .status-alert.success {
       display: block;
@@ -714,29 +626,23 @@
       border-color: #bed6e6;
     }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-8px); }
+      from { opacity: 0; transform: translateY(-6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     /* ===== ARCHIVE ===== */
     .archive-box {
-      margin-top: 24px;
-      padding: 20px 18px;
+      margin-top: 22px;
+      padding: 18px 16px;
       border-radius: var(--radius);
       background: var(--card-bg);
       border: 1.5px solid var(--card-border);
-      transition: all 0.3s ease;
-    }
-
-    .archive-box:hover {
-      border-color: #b8d0c0;
-      box-shadow: var(--shadow-sm);
     }
 
     .archive-label {
       display: block;
-      margin-bottom: 14px;
-      font-size: 12px;
+      margin-bottom: 12px;
+      font-size: 11.5px;
       font-weight: 800;
       letter-spacing: 0.8px;
       text-transform: uppercase;
@@ -749,125 +655,82 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
-      margin-top: 6px;
+      margin-top: 4px;
     }
     .btn-archive {
-      padding: 11px;
+      padding: 10px;
       font-size: 12px;
       border-radius: var(--radius-sm);
-      border: 1.5px solid #d2ded5;
+      border: 1.5px solid #cedcd2;
       background: #ffffff;
       color: var(--primary-navy);
       font-weight: 700;
-      transition: all 0.3s ease;
+      cursor: pointer;
     }
-    .btn-archive:hover { 
-      background: #edf4ef; 
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-sm);
-    }
+    .btn-archive:hover { background: #ecf4ee; }
     .btn-zip {
       background: linear-gradient(135deg, var(--primary-green), var(--primary-green-deep));
       color: #fff;
       border-color: var(--primary-green-deep);
     }
-    .btn-zip:hover { 
-      background: var(--primary-green-deep);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(19, 93, 50, 0.30);
-    }
 
     #archiveList {
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      margin-top: 16px;
-      max-height: 400px;
+      gap: 12px;
+      margin-top: 14px;
+      max-height: 380px;
       overflow-y: auto;
       padding-right: 4px;
     }
 
-    #archiveList::-webkit-scrollbar {
-      width: 4px;
-    }
-    #archiveList::-webkit-scrollbar-track {
-      background: #edf2ee;
-      border-radius: 4px;
-    }
-    #archiveList::-webkit-scrollbar-thumb {
-      background: var(--primary-green);
-      border-radius: 4px;
-    }
-
     .archive-item {
-      padding: 16px;
-      border: 1px solid #d4dfd7;
+      padding: 14px;
+      border: 1px solid #d2dfd6;
       border-radius: var(--radius-sm);
       background: #ffffff;
       font-size: 12px;
       box-shadow: var(--shadow-sm);
-      transition: all 0.3s ease;
     }
-
-    .archive-item:hover {
-      border-color: var(--primary-green);
-      box-shadow: var(--shadow-md);
-    }
-
     .archive-item img {
       width: 100%;
-      border-radius: 8px;
-      margin: 10px 0;
+      border-radius: 6px;
+      margin: 8px 0;
     }
-    .archive-item .item-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
+    .archive-item .item-actions { display: flex; gap: 8px; }
     .archive-item button {
-      padding: 7px 16px;
-      font-size: 11.5px;
+      padding: 6px 14px;
+      font-size: 11px;
       border-radius: 6px;
       border: 1px solid #ccc;
       cursor: pointer;
       font-weight: 700;
-      transition: all 0.3s ease;
     }
     .archive-item button.down-btn {
       background: #e7f5ec;
       color: var(--primary-green);
       border-color: #b9dcbf;
     }
-    .archive-item button.down-btn:hover {
-      background: var(--primary-green);
-      color: #fff;
-      transform: translateY(-2px);
-    }
     .archive-item button.del-btn {
       background: #fae9e7;
       color: var(--danger-color);
       border-color: #f0b4ae;
     }
-    .archive-item button.del-btn:hover {
-      background: var(--danger-color);
-      color: #fff;
-      transform: translateY(-2px);
-    }
 
     /* ===== WORKSPACE ===== */
     .workspace {
-      padding: 30px 28px;
+      padding: 28px 24px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: radial-gradient(circle at 50% 0%, #f7faf8, #eef4f0);
+      background: radial-gradient(circle at 50% 0%, #f6faf7, #edf4ef);
     }
 
     .workspace-head {
       width: 100%;
       max-width: 870px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -886,24 +749,19 @@
       color: #ffffff;
       font-size: 11px;
       font-weight: 800;
-      padding: 6px 16px;
+      padding: 6px 14px;
       border-radius: 20px;
       letter-spacing: 1.2px;
-      box-shadow: 0 2px 12px rgba(8, 32, 16, 0.25);
+      box-shadow: 0 2px 10px rgba(8, 32, 16, 0.20);
     }
 
     .canvas-box {
-      padding: 20px;
+      padding: 16px;
       border-radius: var(--radius);
-      background: linear-gradient(135deg, #e5ede7, #dce8df);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.6), var(--shadow-lg);
+      background: linear-gradient(135deg, #e3ece5, #dae7dc);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.7), var(--shadow-lg);
       max-width: 870px;
       width: 100%;
-      transition: all 0.3s ease;
-    }
-
-    .canvas-box:hover {
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.6), var(--shadow-xl);
     }
 
     canvas {
@@ -911,8 +769,8 @@
       width: 100%;
       height: auto;
       background: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 20px 60px -12px rgba(10,38,20,0.25);
+      border-radius: 6px;
+      box-shadow: 0 16px 48px -8px rgba(8,36,18,0.22);
     }
 
     /* ===== RESPONSIVE ===== */
@@ -921,7 +779,7 @@
       .panel { border-right: 0; border-bottom: 1px solid var(--line-color); max-height: none; }
     }
     @media (max-width: 600px) {
-      .login-box { padding: 28px 18px; }
+      .login-box { padding: 26px 18px; }
       .brand-title { font-size: 20px; }
       .template-selector { grid-template-columns: 1fr 1fr; }
       .thumbs { grid-template-columns: repeat(3, 1fr); }
@@ -979,7 +837,7 @@
       </div>
       <div class="group">
         <label>Kata Sandi Admin</label>
-        <input type="password" id="passAdmin" placeholder="">
+        <input type="password" id="passAdmin" placeholder="admin123">
       </div>
     </div>
 
@@ -1010,7 +868,7 @@
     </div>
 
     <div class="brand-header">
-      <h1 class="brand-title">FAST REPORT</h1>
+      <h1 class="brand-title">FAST REPORT HD</h1>
     </div>
     <div class="panel-desc">Sistem Pembuatan &amp; Arsip Dokumentasi Kegiatan Kebun Dinas Resolusi Tinggi</div>
 
@@ -1026,16 +884,16 @@
       <label>Pilihan Gaya Desain Kolase</label>
       <div class="template-selector">
         <div class="template-option active" data-template="1" onclick="setTemplate(1)">
-          <div class="title">Classic Clean</div>
-          <div class="desc">Resmi &amp; Elegan</div>
+          <div class="title">Emerald Formal</div>
+          <div class="desc">Elegan &amp; Proporsional</div>
         </div>
         <div class="template-option" data-template="2" onclick="setTemplate(2)">
-          <div class="title">Modern Card</div>
-          <div class="desc">Aksen Dinamis</div>
+          <div class="title">Modern Dynamic</div>
+          <div class="desc">Aksen Dinamis Kontemporer</div>
         </div>
         <div class="template-option" data-template="3" onclick="setTemplate(3)">
-          <div class="title">Magazine Split</div>
-          <div class="desc">Editorial Visual</div>
+          <div class="title">Editorial Luxe</div>
+          <div class="desc">Visual Dominan Jurnalistik</div>
         </div>
       </div>
     </div>
@@ -1132,7 +990,7 @@
   <main class="workspace">
     <div class="workspace-head">
       <h2>Pratinjau Kolase</h2>
-      <span class="badge-hd"></span>
+      <span class="badge-hd">2160 × 3054 ULTRA HD</span>
     </div>
     <div class="canvas-box">
       <canvas id="canvas" width="2160" height="3054"></canvas>
@@ -1141,7 +999,7 @@
 </div>
 
 <script>
-const ADMIN_ACCOUNT = { username: "admin", password: "elbool123" };
+const ADMIN_ACCOUNT = { username: "admin", password: "admin123" };
 
 const KEBUN_ACCOUNTS = {
   "Kebun Induk Kelapa Tilong Kab. Kupang": "tilong123",
@@ -1257,14 +1115,14 @@ function showStatusAlert(msg, type = 'success', autoHide = 4500){
 
 let currentTemplate = 1;
 const THEME = {
-  green: '#135d32',
-  greenDeep: '#0a3219',
-  navy: '#0b1d14',
-  leaf: '#2e824d',
+  green: '#11592f',
+  greenDeep: '#082d17',
+  navy: '#0b1f14',
+  leaf: '#207843',
   leafSoft: '#edf5ef',
-  gold: '#a67c2e',
+  gold: '#b3852b',
   goldBright: '#cca148',
-  goldLine: '#dfcfa6',
+  goldLine: '#e2d3ab',
   footerBg: '#f2f7f4',
   footerBorder: '#cadcd0'
 };
@@ -1380,14 +1238,15 @@ function dateLabel(value){
   return days[d.getDay()] + ', ' + day + ' ' + months[+month-1] + ' ' + year;
 }
 
-function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap = 24){
+// ===== SMART & ADAPTIVE PHOTO LAYOUT CALCULATION =====
+function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap = 20){
   const rects = [];
   const isPortrait = (img) => img && (img.naturalHeight || img.height) > (img.naturalWidth || img.width) * 1.08;
   const isLandscape = (img) => img && (img.naturalWidth || img.width) >= (img.naturalHeight || img.height) * 1.08;
 
   if (count <= 1) {
     if(photosList[0] && isPortrait(photosList[0])){
-      const wPort = Math.min(areaW * 0.72, areaH * 0.75);
+      const wPort = Math.min(areaW * 0.78, areaH * 0.78);
       const xPort = areaX + (areaW - wPort) / 2;
       rects.push({x: xPort, y: areaY, w: wPort, h: areaH});
     } else {
@@ -1395,7 +1254,7 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
     }
   } else if (count === 2) {
     const p1 = photosList[0], p2 = photosList[1];
-    if(p1 && p2 && isLandscape(p1) && isLandscape(p2)){
+    if(p1 && p2 && isLandscape(p1) && isLandscape(p2) && areaH > areaW * 0.85){
       const h = (areaH - gap) / 2;
       rects.push({x: areaX, y: areaY, w: areaW, h: h});
       rects.push({x: areaX, y: areaY + h + gap, w: areaW, h: h});
@@ -1411,11 +1270,11 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
       const w = (areaW - gap * 2) / 3;
       for(let i=0; i<3; i++) rects.push({x: areaX + i*(w+gap), y: areaY, w: w, h: areaH});
     } else if(allLand){
-      const hTop = (areaH - gap) * 0.54;
+      const hTop = (areaH - gap) * 0.52;
       const hBot = areaH - gap - hTop;
       const wBot = (areaW - gap) / 2;
       rects.push({x: areaX, y: areaY, w: areaW, h: hTop});
-      rects.push({x: areaX + wBot + gap, y: areaY + hTop + gap, w: wBot, h: hBot});
+      rects.push({x: areaX, y: areaY + hTop + gap, w: wBot, h: hBot});
       rects.push({x: areaX + wBot + gap, y: areaY + hTop + gap, w: wBot, h: hBot});
     } else {
       const wHero = Math.round((areaW - gap) * 0.58);
@@ -1423,11 +1282,11 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
       const hSide = (areaH - gap) / 2;
       rects.push({x: areaX, y: areaY, w: wHero, h: areaH});
       rects.push({x: areaX + wHero + gap, y: areaY, w: wSide, h: hSide});
-      rects.push({x: areaX + wHero + gap, y: areaY + wSide + gap, w: wSide, h: hSide});
+      rects.push({x: areaX + wHero + gap, y: areaY + hSide + gap, w: wSide, h: hSide});
     }
   } else if (count === 4) {
     const allPort = photosList.slice(0,4).every(isPortrait);
-    if(allPort && areaW > 1600){
+    if(allPort && areaW > 1700){
       const w = (areaW - gap * 3) / 4;
       for(let i=0; i<4; i++) rects.push({x: areaX + i*(w+gap), y: areaY, w: w, h: areaH});
     } else {
@@ -1435,7 +1294,7 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
       rects.push({x: areaX, y: areaY, w: w, h: h});
       rects.push({x: areaX + w + gap, y: areaY, w: w, h: h});
       rects.push({x: areaX, y: areaY + h + gap, w: w, h: h});
-      rects.push({x: areaX + w + gap, y: areaY + h + gap, w: w, h: h});
+      rects.push({x: areaX + w + gap, y: areaY, w: w, h: h});
     }
   } else if (count === 5) {
     const h = (areaH - gap) / 2;
@@ -1479,10 +1338,10 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
   return rects;
 }
 
-function renderPhotoCard(r, idx, photo, radius = 16, borderColor = '#ffffff', borderWidth = 8){
+function renderPhotoCard(r, idx, photo, radius = 16, borderColor = '#ffffff', borderWidth = 6){
   ctx.save();
-  ctx.shadowColor = 'rgba(8, 32, 16, 0.16)';
-  ctx.shadowBlur = 18;
+  ctx.shadowColor = 'rgba(6, 26, 13, 0.14)';
+  ctx.shadowBlur = 16;
   ctx.shadowOffsetY = 6;
   rr(r.x, r.y, r.w, r.h, radius);
   ctx.fillStyle = '#ffffff';
@@ -1496,15 +1355,16 @@ function renderPhotoCard(r, idx, photo, radius = 16, borderColor = '#ffffff', bo
     cover(photo, r.x, r.y, r.w, r.h);
   } else {
     const grad = ctx.createLinearGradient(r.x, r.y, r.x + r.w, r.y + r.h);
-    grad.addColorStop(0, '#eaf2ec');
+    grad.addColorStop(0, '#ebf3ed');
     grad.addColorStop(1, '#d5e6da');
     ctx.fillStyle = grad;
     ctx.fillRect(r.x, r.y, r.w, r.h);
-    ctx.fillStyle = '#225534';
-    ctx.font = "bold " + Math.min(36, Math.round(r.w * 0.085)) + "px 'Plus Jakarta Sans', Arial";
+
+    ctx.fillStyle = '#1c6138';
+    ctx.font = "bold " + Math.min(36, Math.round(r.w * 0.08)) + "px 'Plus Jakarta Sans', Arial";
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('FOTO KEGIATAN ' + (idx + 1), r.x + r.w/2, r.y + r.h/2);
+    ctx.fillText('DOKUMENTASI FOTO ' + (idx + 1), r.x + r.w/2, r.y + r.h/2);
   }
   ctx.restore();
 
@@ -1518,6 +1378,7 @@ function renderPhotoCard(r, idx, photo, radius = 16, borderColor = '#ffffff', bo
   }
 }
 
+// ===== SOCIAL ICONS & BRANDING =====
 function drawIconBadge(x, y, size, radius, fillStyle){
   ctx.save();
   rr(x, y, size, size, radius);
@@ -1641,25 +1502,25 @@ function renderUnifiedFooter(yPos, height = 240){
   fGrad.addColorStop(0.5, THEME.leaf);
   fGrad.addColorStop(1, THEME.gold);
   ctx.fillStyle = fGrad;
-  ctx.fillRect(0, yPos, 2160, 8);
+  ctx.fillRect(0, yPos, 2160, 7);
 
   if (logo2Ready) {
-    contain(logo2, 60, yPos + 26, 270, height - 52);
+    contain(logo2, 60, yPos + 18, 300, height - 36);
   }
 
-  const midX = 370;
+  const midX = 380;
   const cy = yPos + height / 2;
-  drawGlobeIcon(midX + 20, cy - 24, 22, THEME.green);
+  drawGlobeIcon(midX + 24, cy - 24, 24, THEME.green);
 
   ctx.textAlign = 'left';
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#0f2916';
+  ctx.fillStyle = '#0b2413';
   ctx.font = "800 36px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('www.distankp.nttprov.go.id', midX + 60, cy - 24);
+  ctx.fillText('www.distankp.nttprov.go.id', midX + 62, cy - 24);
 
-  ctx.fillStyle = '#4c5f50';
-  ctx.font = "600 24px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('Portal Informasi & Dokumentasi Kebun Dinas Pertanian & Ketahanan Pangan NTT', midX + 60, cy + 28);
+  ctx.fillStyle = '#4c6252';
+  ctx.font = "600 23px 'Plus Jakarta Sans', Arial";
+  ctx.fillText('Portal Informasi & Dokumentasi Kebun Dinas Pertanian & Ketahanan Pangan NTT', midX + 62, cy + 28);
 
   const iconSize = 60;
   const gap = 16;
@@ -1667,10 +1528,10 @@ function renderUnifiedFooter(yPos, height = 240){
   const startX = 2160 - 70 - totalIconsWidth;
   const iconY = yPos + (height - iconSize) / 2;
 
-  ctx.fillStyle = '#203d27';
-  ctx.font = "700 20px 'Plus Jakarta Sans', Arial";
+  ctx.fillStyle = '#1e3c25';
+  ctx.font = "800 21px 'Plus Jakarta Sans', Arial";
   ctx.textAlign = 'right';
-  ctx.fillText('IKUTI KAMI:', startX - 20, iconY + iconSize/2 + 4);
+  ctx.fillText('IKUTI KAMI:', startX - 20, iconY + iconSize/2 + 3);
 
   let curX = startX;
   drawFacebookIcon(curX, iconY, iconSize); curX += iconSize + gap;
@@ -1681,500 +1542,473 @@ function renderUnifiedFooter(yPos, height = 240){
   ctx.restore();
 }
 
-// ===== RENDER KEGIATAN DENGAN FONT LEBIH BESAR DAN BULLET =====
-function renderDynamicActivities(acts, startX, startY, maxW, maxH){
+// ===== RENDER CLEAN ACTIVITIES STACKED FROM TOP (LARGE INITIAL FONT & SMART SHRINK) =====
+function renderCleanActivities(acts, startX, startY, maxW, maxH, styleType = 1){
   if(!acts || acts.length === 0) return;
 
   const count = acts.length;
-  let totalChars = acts.reduce((sum, item) => sum + item.length, 0);
-  
-  // Ukuran font lebih besar
-  let bestFontSize = 42;
-  let bestLineHeight = 62;
-  let bestItemGap = 34;
-  
-  const minFont = 28;
-  const maxFont = 54;
-  
-  function calculateHeight(fontSize) {
-    const lineHeight = fontSize * 1.5;
-    const itemGap = fontSize * 0.75;
-    let totalHeight = 0;
-    let maxLines = 0;
-    
-    acts.forEach(item => {
-      const lines = splitText(item, maxW - 100, fontSize);
-      maxLines = Math.max(maxLines, lines.length);
-      totalHeight += lines.length * lineHeight + itemGap + 20;
-    });
-    
-    return { totalHeight, maxLines, lineHeight, itemGap };
-  }
-  
-  for (let size = maxFont; size >= minFont; size -= 1) {
-    const result = calculateHeight(size);
-    if (result.totalHeight <= maxH * 1.05) {
-      let largerSize = size + 1;
-      while (largerSize <= maxFont) {
-        const largerResult = calculateHeight(largerSize);
-        if (largerResult.totalHeight <= maxH * 1.05) {
-          size = largerSize;
-          largerSize++;
-        } else {
-          break;
-        }
-      }
-      
-      const fillRatio = result.totalHeight / maxH;
-      if (fillRatio < 0.5 && size < maxFont) {
-        let biggerSize = Math.min(size + 4, maxFont);
-        const biggerResult = calculateHeight(biggerSize);
-        if (biggerResult.totalHeight <= maxH * 1.05) {
-          size = biggerSize;
-          const finalResult = calculateHeight(size);
-          bestFontSize = size;
-          bestLineHeight = finalResult.lineHeight;
-          bestItemGap = finalResult.itemGap;
-          break;
-        }
-      }
-      
-      bestFontSize = size;
-      bestLineHeight = result.lineHeight;
-      bestItemGap = result.itemGap;
+  const paddingLeft = (styleType === 2) ? 42 : 32;
+  const paddingRight = 30;
+  const maxTextW = maxW - paddingLeft - paddingRight;
+
+  const itemGap = count === 1 ? 0 : (count <= 3 ? 16 : (count <= 5 ? 12 : 10));
+
+  // Determine optimal font size: start large (52px), shrink only when nearing full
+  let startFont = 52;
+  const minFont = 24; // Never too small!
+  let optimalFont = minFont;
+  let computedCardHeights = [];
+
+  for(let size = startFont; size >= minFont; size -= 2){
+    const lHeight = Math.round(size * 1.38);
+    const cardHeights = [];
+    let totalNeededH = 0;
+
+    for(let i = 0; i < count; i++){
+      const lines = splitText(acts[i], maxTextW, size, false);
+      const textH = lines.length * lHeight;
+      const cardH = Math.max(88, textH + 36); // natural padding
+      cardHeights.push(cardH);
+      totalNeededH += cardH;
+    }
+    totalNeededH += (count - 1) * itemGap;
+
+    if(totalNeededH <= maxH || size === minFont){
+      optimalFont = size;
+      computedCardHeights = cardHeights;
       break;
     }
   }
-  
-  let finalResult = calculateHeight(bestFontSize);
-  while (finalResult.totalHeight > maxH * 1.02 && bestFontSize > minFont) {
-    bestFontSize -= 1;
-    finalResult = calculateHeight(bestFontSize);
-    bestLineHeight = finalResult.lineHeight;
-    bestItemGap = finalResult.itemGap;
-  }
-  
-  while (bestFontSize < maxFont) {
-    const testSize = bestFontSize + 1;
-    const testResult = calculateHeight(testSize);
-    if (testResult.totalHeight <= maxH * 1.02) {
-      bestFontSize = testSize;
-      bestLineHeight = testResult.lineHeight;
-      bestItemGap = testResult.itemGap;
-    } else {
-      break;
-    }
-  }
-  
-  finalResult = calculateHeight(bestFontSize);
-  bestLineHeight = finalResult.lineHeight;
-  bestItemGap = finalResult.itemGap;
-  
-  let curY = startY + 8;
-  const fontSize = bestFontSize;
-  const lineHeight = bestLineHeight;
-  const itemGap = bestItemGap;
-  
-  // Ukuran bullet yang lebih besar
-  const bulletSize = Math.round(fontSize * 0.35);
-  const bulletX = startX + 28;
-  
-  acts.forEach((item, index) => {
-    const lines = splitText(item, maxW - 80, fontSize);
-    const itemBoxH = Math.max(lines.length * lineHeight + 24, fontSize * 2);
-    
-    // Box kegiatan dengan shadow lebih halus
+
+  const lineHeight = Math.round(optimalFont * 1.38);
+
+  // Render cards strictly stacked from top downwards
+  let currentY = startY;
+
+  for(let i = 0; i < count; i++){
+    const itemX = startX;
+    const curItemH = computedCardHeights[i] || Math.max(88, lineHeight + 36);
+    const itemY = currentY;
+    const itemW = maxW;
+    const text = acts[i];
+
     ctx.save();
-    rr(startX + 10, curY - 8, maxW - 20, itemBoxH, 14);
-    ctx.fillStyle = '#ffffff';
-    ctx.fill();
-    ctx.shadowColor = 'rgba(8, 32, 16, 0.04)';
-    ctx.shadowBlur = 8;
-    ctx.shadowOffsetY = 2;
-    ctx.strokeStyle = '#e2ede6';
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-    ctx.restore();
-    
-    // Garis aksen hijau di kiri
-    ctx.save();
-    ctx.fillStyle = THEME.green;
-    rr(startX + 10, curY - 8, 6, itemBoxH, 3);
-    ctx.fill();
-    ctx.restore();
-    
-    // Bullet point - lingkaran hijau solid
-    const circleY = curY + itemBoxH / 2;
-    const rBullet = bulletSize * 0.5;
-    ctx.save();
-    const cGrad = ctx.createRadialGradient(
-      bulletX - rBullet * 0.2, circleY - rBullet * 0.2, rBullet * 0.1,
-      bulletX, circleY, rBullet
-    );
-    cGrad.addColorStop(0, '#3a9a5a');
-    cGrad.addColorStop(1, THEME.greenDeep);
-    ctx.fillStyle = cGrad;
-    ctx.beginPath();
-    ctx.arc(bulletX, circleY, rBullet, 0, Math.PI*2);
-    ctx.fill();
-    ctx.restore();
-    
-    // Teks kegiatan - mulai setelah bullet
-    let textY = curY + 12;
-    const textStartX = bulletX + bulletSize + 12;
-    
-    lines.forEach((l, lIdx) => {
-      ctx.save();
-      ctx.fillStyle = '#0f1f15';
-      ctx.font = "600 " + fontSize + "px 'Plus Jakarta Sans', Arial";
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'top';
-      ctx.fillText(l, textStartX, textY);
+    if(styleType === 1){
+      // Style 1: Emerald Formal Ivory Card with Gradient Left Edge
+      ctx.shadowColor = 'rgba(6, 26, 12, 0.06)';
+      ctx.shadowBlur = 12;
+      ctx.shadowOffsetY = 4;
+      rr(itemX, itemY, itemW, curItemH, 14);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
       ctx.restore();
-      textY += lineHeight;
+
+      ctx.save();
+      ctx.strokeStyle = '#d4e4da';
+      ctx.lineWidth = 1.8;
+      rr(itemX, itemY, itemW, curItemH, 14);
+      ctx.stroke();
+
+      const barGrad = ctx.createLinearGradient(itemX, itemY, itemX, itemY + curItemH);
+      barGrad.addColorStop(0, THEME.greenDeep);
+      barGrad.addColorStop(0.7, THEME.leaf);
+      barGrad.addColorStop(1, THEME.gold);
+      ctx.fillStyle = barGrad;
+      rr(itemX, itemY, 10, curItemH, 5);
+      ctx.fill();
+
+    } else if(styleType === 2){
+      // Style 2: Modern Dynamic Card with Gold Accent Tag
+      ctx.shadowColor = 'rgba(6, 26, 12, 0.07)';
+      ctx.shadowBlur = 14;
+      ctx.shadowOffsetY = 4;
+      rr(itemX, itemY, itemW, curItemH, 16);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+      ctx.restore();
+
+      ctx.save();
+      ctx.strokeStyle = '#cbe0d2';
+      ctx.lineWidth = 2;
+      rr(itemX, itemY, itemW, curItemH, 16);
+      ctx.stroke();
+
+      ctx.fillStyle = THEME.gold;
+      const tagH = Math.min(32, Math.max(20, curItemH * 0.4));
+      rr(itemX + 16, itemY + (curItemH - tagH)/2, 7, tagH, 3.5);
+      ctx.fill();
+
+    } else {
+      // Style 3: Editorial Luxe Clean Card
+      rr(itemX, itemY, itemW, curItemH, 12);
+      ctx.fillStyle = '#f6faf7';
+      ctx.fill();
+      ctx.strokeStyle = '#d0e2d5';
+      ctx.lineWidth = 1.8;
+      rr(itemX, itemY, itemW, curItemH, 12);
+      ctx.stroke();
+
+      ctx.fillStyle = THEME.green;
+      rr(itemX, itemY, 8, curItemH, 4);
+      ctx.fill();
+    }
+    ctx.restore();
+
+    // Clean text rendering with auto-fitted font size
+    const lines = splitText(text, maxTextW, optimalFont, false);
+    const totalTextH = lines.length * lineHeight;
+    let textStartY = itemY + (curItemH - totalTextH) / 2;
+
+    ctx.save();
+    ctx.fillStyle = '#0f2416';
+    ctx.font = "600 " + optimalFont + "px 'Plus Jakarta Sans', Arial";
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+
+    lines.forEach((l, lIdx) => {
+      ctx.fillText(l, itemX + paddingLeft, textStartY + lIdx * lineHeight);
     });
-    
-    curY += itemBoxH + itemGap;
-  });
+    ctx.restore();
+
+    // Advance Y downwards for the next card
+    currentY += curItemH + itemGap;
+  }
 }
 
+// ==========================================
+// TEMPLATE 1: EMERALD FORMAL (Clean & HD)
+// ==========================================
 function drawTemplate1(){
-  ctx.fillStyle = '#ffffff';
+  ctx.fillStyle = '#f8faf9';
   ctx.fillRect(0, 0, 2160, 3054);
 
+  // Top header ribbon
   const topGrad = ctx.createLinearGradient(0, 0, 2160, 0);
   topGrad.addColorStop(0, THEME.greenDeep);
-  topGrad.addColorStop(0.6, THEME.leaf);
+  topGrad.addColorStop(0.55, THEME.leaf);
   topGrad.addColorStop(1, THEME.gold);
   ctx.fillStyle = topGrad;
-  ctx.fillRect(0, 0, 2160, 18);
+  ctx.fillRect(0, 0, 2160, 16);
 
-  const top = 50;
+  // Kop Dinas - BESAR, LEGA, TANPA TERTAMPA
+  const top = 36;
   const logoSize = 230;
-  if(logo1Ready) contain(logo1, 80, top, logoSize, logoSize);
+  if(logo1Ready) contain(logo1, 75, top + 8, logoSize, logoSize);
 
   ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  
+  // Baris 1: Pemerintah Provinsi NTT
   ctx.fillStyle = THEME.greenDeep;
-  ctx.font = "800 28px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('PEMERINTAH PROVINSI NUSA TENGGARA TIMUR', 355, top + 48);
+  ctx.font = "800 34px 'Plus Jakarta Sans', Arial";
+  ctx.fillText('PEMERINTAH PROVINSI NUSA TENGGARA TIMUR', 335, top + 10);
 
+  // Baris 2: Dinas Pertanian & Ketahanan Pangan
   ctx.fillStyle = THEME.navy;
   ctx.font = "800 70px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('DINAS PERTANIAN DAN KETAHANAN PANGAN', 355, top + 128);
+  ctx.fillText('DINAS PERTANIAN DAN KETAHANAN PANGAN', 335, top + 64);
 
+  // Baris 3: UPTD Kebun Dinas
   ctx.fillStyle = THEME.gold;
   ctx.font = "700 42px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('UPTD. Perbenihan Kebun Dinas & Laboratorium Hayati Perkebunan', 355, top + 190);
+  ctx.fillText('UPTD. Perbenihan Kebun Dinas & Laboratorium Hayati Perkebunan', 335, top + 158);
 
+  // Divider lines di bawah teks kop
   ctx.fillStyle = THEME.goldLine;
-  ctx.fillRect(80, top + 248, 2000, 5);
+  ctx.fillRect(75, top + 248, 2010, 5);
   ctx.fillStyle = THEME.greenDeep;
-  ctx.fillRect(80, top + 253, 500, 5);
+  ctx.fillRect(75, top + 253, 560, 5);
 
-  const acts = getActivities();
-  const totalChars = acts.reduce((a, b) => a + b.length, 0);
-  let photoH = 1480;
-  if(acts.length > 2 || totalChars > 120) photoH = 1380;
-  if(acts.length > 4 || totalChars > 300) photoH = 1250;
-
-  const photoArea = { x: 80, y: 335, w: 2000, h: photoH };
+  // FIXED PHOTO COLLAGE AREA
+  const photoArea = { x: 75, y: 315, w: 2010, h: 1600 };
   const count = Math.max(photos.length, 1);
-  const rects = calculatePhotoLayout(photos, count, photoArea.x, photoArea.y, photoArea.w, photoArea.h, 24);
-
-  rects.forEach((r, idx) => {
-    renderPhotoCard(r, idx, photos[idx], 16, '#ffffff', 8);
-  });
-
-  ctx.save();
-  const ambGrad = ctx.createLinearGradient(0, photoArea.y + photoArea.h, 0, photoArea.y + photoArea.h + 40);
-  ambGrad.addColorStop(0, 'rgba(10, 42, 22, 0.16)');
-  ambGrad.addColorStop(1, 'rgba(10, 42, 22, 0)');
-  ctx.fillStyle = ambGrad;
-  ctx.fillRect(photoArea.x, photoArea.y + photoArea.h, photoArea.w, 40);
-  ctx.restore();
-
-  let cy = photoArea.y + photoArea.h + 34;
-
-  ctx.save();
-  ctx.shadowColor = 'rgba(8, 36, 18, 0.12)';
-  ctx.shadowBlur = 22;
-  ctx.shadowOffsetY = 8;
-  rr(80, cy, 2000, 126, 16);
-  const infoGrad = ctx.createLinearGradient(80, cy, 2080, cy);
-  infoGrad.addColorStop(0, '#f1f8f3');
-  infoGrad.addColorStop(1, '#ffffff');
-  ctx.fillStyle = infoGrad;
-  ctx.fill();
-  ctx.restore();
-
-  ctx.strokeStyle = '#cbe0d2';
-  ctx.lineWidth = 2;
-  rr(80, cy, 2000, 126, 16);
-  ctx.stroke();
-
-  ctx.fillStyle = THEME.greenDeep;
-  rr(80, cy, 14, 126, 4);
-  ctx.fill();
-
-  ctx.fillStyle = THEME.gold;
-  ctx.font = "800 20px 'Plus Jakarta Sans', Arial";
-  ctx.textAlign = 'left';
-  ctx.fillText('UPTD KEBUN DINAS • LOKASI KEGIATAN', 120, cy + 38);
-
-  const dateStr = dateLabel($('date').value);
-  ctx.font = "800 30px 'Plus Jakarta Sans', Arial";
-  const dateW = ctx.measureText(dateStr).width + 68;
-  const dateX = 2080 - dateW - 22;
-
-  rr(dateX, cy + 28, dateW, 70, 10);
-  ctx.fillStyle = THEME.greenDeep;
-  ctx.fill();
-  ctx.fillStyle = '#ffffff';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(dateStr, dateX + dateW/2, cy + 63);
-
-  const maxGardenW = dateX - 140;
-  let gardenFontSize = 46;
-  ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
-  while(ctx.measureText($('gardenName').value).width > maxGardenW && gardenFontSize > 28){
-    gardenFontSize -= 2;
-    ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
-  }
-  ctx.fillStyle = THEME.greenDeep;
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'alphabetic';
-  ctx.fillText($('gardenName').value, 120, cy + 92);
-  ctx.restore();
-
-  const actBoxY = cy + 150;
-  const actBoxH = 2780 - actBoxY;
-
-  ctx.save();
-  ctx.shadowColor = 'rgba(8, 36, 18, 0.1)';
-  ctx.shadowBlur = 20;
-  ctx.shadowOffsetY = 6;
-  rr(80, actBoxY, 2000, actBoxH, 18);
-  ctx.fillStyle = '#f7faf8';
-  ctx.fill();
-  ctx.restore();
-
-  ctx.strokeStyle = '#d4e5da';
-  ctx.lineWidth = 2;
-  rr(80, actBoxY, 2000, actBoxH, 18);
-  ctx.stroke();
-
-  ctx.fillStyle = THEME.greenDeep;
-  ctx.font = "800 28px 'Plus Jakarta Sans', Arial";
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'alphabetic';
-  ctx.fillText('RINCIAN KEGIATAN LAPANGAN', 120, actBoxY + 50);
-
-  ctx.fillStyle = THEME.gold;
-  ctx.fillRect(120, actBoxY + 62, 200, 4);
-
-  ctx.save();
-  const countBadgeText = 'TOTAL: ' + acts.length + ' KEGIATAN';
-  ctx.font = "800 20px 'Plus Jakarta Sans', Arial";
-  const cBadgeW = ctx.measureText(countBadgeText).width + 36;
-  rr(2080 - cBadgeW - 20, actBoxY + 28, cBadgeW, 42, 8);
-  ctx.fillStyle = '#e8f3ec';
-  ctx.fill();
-  ctx.strokeStyle = '#bad7c3';
-  ctx.lineWidth = 1.5;
-  ctx.stroke();
-  ctx.fillStyle = THEME.greenDeep;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(countBadgeText, 2080 - cBadgeW/2 - 20, actBoxY + 49);
-  ctx.restore();
-
-  renderDynamicActivities(acts, 120, actBoxY + 105, 1920, actBoxH - 125);
-  ctx.restore();
-
-  renderUnifiedFooter(2814, 240);
-}
-
-function drawTemplate2(){
-  ctx.fillStyle = '#f3f6f4';
-  ctx.fillRect(0, 0, 2160, 3054);
-
-  rr(50, 40, 2060, 255, 18);
-  const headGrad = ctx.createLinearGradient(50, 40, 2110, 295);
-  headGrad.addColorStop(0, '#0c3e21');
-  headGrad.addColorStop(1, '#175a33');
-  ctx.fillStyle = headGrad;
-  ctx.fill();
-
-  const logoSize = 230;
-  if(logo1Ready) contain(logo1, 75, 52, logoSize, logoSize);
-
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'alphabetic';
-  ctx.fillStyle = '#c8e8d4';
-  ctx.font = "800 26px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('PEMERINTAH PROVINSI NUSA TENGGARA TIMUR', 335, 110);
-
-  ctx.fillStyle = '#ffffff';
-  ctx.font = "800 64px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('DINAS PERTANIAN DAN KETAHANAN PANGAN', 335, 182);
-
-  ctx.fillStyle = '#eed9a8';
-  ctx.font = "600 38px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('UPTD. Perbenihan Kebun Dinas & Laboratorium Hayati Perkebunan', 335, 248);
-
-  const acts = getActivities();
-  const totalChars = acts.reduce((a, b) => a + b.length, 0);
-  let photoH = 1460;
-  if(acts.length > 2 || totalChars > 120) photoH = 1360;
-  if(acts.length > 4 || totalChars > 300) photoH = 1240;
-
-  const photoArea = { x: 50, y: 325, w: 2060, h: photoH };
-  const count = Math.max(photos.length, 1);
-  const rects = calculatePhotoLayout(photos, count, photoArea.x, photoArea.y, photoArea.w, photoArea.h, 24);
-
-  rects.forEach((r, idx) => {
-    renderPhotoCard(r, idx, photos[idx], 18, '#ffffff', 8);
-  });
-
-  const cardY = photoArea.y + photoArea.h + 28;
-  const cardH = 2780 - cardY;
-
-  ctx.save();
-  ctx.shadowColor = 'rgba(10, 36, 18, 0.12)';
-  ctx.shadowBlur = 22;
-  ctx.shadowOffsetY = 8;
-  ctx.fillStyle = '#ffffff';
-  rr(50, cardY, 2060, cardH, 18);
-  ctx.fill();
-  ctx.restore();
-
-  ctx.strokeStyle = '#d4e3d8';
-  ctx.lineWidth = 2;
-  rr(50, cardY, 2060, cardH, 18);
-  ctx.stroke();
-
-  const cGrad = ctx.createLinearGradient(50, cardY, 2110, cardY);
-  cGrad.addColorStop(0, THEME.greenDeep);
-  cGrad.addColorStop(0.5, THEME.leaf);
-  cGrad.addColorStop(1, THEME.gold);
-  ctx.fillStyle = cGrad;
-  rr(50, cardY, 2060, 10, 5);
-  ctx.fill();
-
-  let cy = cardY + 58;
-
-  ctx.fillStyle = '#eaf4ee';
-  rr(90, cy, 260, 48, 6);
-  ctx.fill();
-  ctx.fillStyle = THEME.greenDeep;
-  ctx.font = "800 20px 'Plus Jakarta Sans', Arial";
-  ctx.textAlign = 'center';
-  ctx.fillText('LOKASI KEGIATAN', 220, cy + 31);
-
-  const dateStr = dateLabel($('date').value);
-  ctx.fillStyle = '#2c4a35';
-  ctx.font = "800 34px 'Plus Jakarta Sans', Arial";
-  ctx.textAlign = 'right';
-  ctx.fillText(dateStr, 2060, cy + 34);
-
-  cy += 74;
-
-  let gardenFontSize = 50;
-  ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
-  while(ctx.measureText($('gardenName').value).width > 1950 && gardenFontSize > 30){
-    gardenFontSize -= 2;
-    ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
-  }
-  ctx.fillStyle = '#0a2414';
-  ctx.textAlign = 'left';
-  ctx.fillText($('gardenName').value, 90, cy);
-  cy += 22;
-
-  ctx.fillStyle = '#e2ede6';
-  ctx.fillRect(90, cy, 1980, 2);
-  cy += 38;
-
-  renderDynamicActivities(acts, 90, cy, 1980, cardY + cardH - cy - 20);
-
-  renderUnifiedFooter(2814, 240);
-}
-
-function drawTemplate3(){
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, 2160, 3054);
-
-  ctx.fillStyle = THEME.greenDeep;
-  ctx.fillRect(0, 0, 28, 3054);
-  ctx.fillStyle = THEME.gold;
-  ctx.fillRect(28, 0, 8, 3054);
-
-  const top = 50;
-  const logoSize = 230;
-  if(logo1Ready) contain(logo1, 75, top, logoSize, logoSize);
-
-  const dateStr = dateLabel($('date').value);
-  ctx.save();
-  ctx.font = "800 32px 'Plus Jakarta Sans', Arial";
-  const dateW = ctx.measureText(dateStr).width + 68;
-  const dateX = 2090 - dateW;
-  rr(dateX, top + 20, dateW, 86, 8);
-  ctx.fillStyle = THEME.greenDeep;
-  ctx.fill();
-
-  ctx.fillStyle = '#ffffff';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(dateStr, dateX + dateW/2, top + 63);
-  ctx.restore();
-
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'alphabetic';
-  ctx.fillStyle = THEME.navy;
-  ctx.font = "800 60px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('DINAS PERTANIAN & KETAHANAN PANGAN', 335, top + 80);
-
-  ctx.fillStyle = '#55695a';
-  ctx.font = "700 36px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('PROVINSI NUSA TENGGARA TIMUR • UPTD KEBUN DINAS', 335, top + 144);
-
-  ctx.fillStyle = THEME.goldLine;
-  ctx.fillRect(75, top + 240, 2015, 5);
-
-  const acts = getActivities();
-  const totalChars = acts.reduce((a, b) => a + b.length, 0);
-  let photoH = 1480;
-  if(acts.length > 2 || totalChars > 120) photoH = 1380;
-  if(acts.length > 4 || totalChars > 300) photoH = 1260;
-
-  const photoArea = { x: 75, y: 325, w: 2015, h: photoH };
-  const count = Math.max(photos.length, 1);
-  const rects = calculatePhotoLayout(photos, count, photoArea.x, photoArea.y, photoArea.w, photoArea.h, 24);
+  const rects = calculatePhotoLayout(photos, count, photoArea.x, photoArea.y, photoArea.w, photoArea.h, 20);
 
   rects.forEach((r, idx) => {
     renderPhotoCard(r, idx, photos[idx], 14, '#ffffff', 6);
   });
 
-  let cy = photoArea.y + photoArea.h + 38;
-  ctx.textAlign = 'left';
+  // INFO BAR (Nama Kebun Besar & Tanggal)
+  let cy = photoArea.y + photoArea.h + 22;
+  const infoBarH = 120;
+
+  ctx.save();
+  ctx.shadowColor = 'rgba(6, 26, 12, 0.08)';
+  ctx.shadowBlur = 18;
+  ctx.shadowOffsetY = 6;
+  rr(75, cy, 2010, infoBarH, 16);
+  const infoGrad = ctx.createLinearGradient(75, cy, 2085, cy);
+  infoGrad.addColorStop(0, '#ffffff');
+  infoGrad.addColorStop(1, '#f1f8f3');
+  ctx.fillStyle = infoGrad;
+  ctx.fill();
+  ctx.restore();
+
+  ctx.strokeStyle = '#cfe0d5';
+  ctx.lineWidth = 2;
+  rr(75, cy, 2010, infoBarH, 16);
+  ctx.stroke();
+
+  // Left green bar accent
+  ctx.fillStyle = THEME.greenDeep;
+  rr(75, cy, 12, infoBarH, 5);
+  ctx.fill();
+
+  // Subtitle badge
   ctx.fillStyle = THEME.gold;
+  ctx.font = "800 19px 'Plus Jakarta Sans', Arial";
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  ctx.fillText('LOKASI KEBUN DINAS', 110, cy + 18);
+
+  // Date badge at right
+  const dateStr = dateLabel($('date').value);
   ctx.font = "800 28px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('LAPORAN HARIAN FAST REPORT', 75, cy);
-  cy += 48;
+  const dateW = ctx.measureText(dateStr).width + 60;
+  const dateX = 2085 - dateW - 18;
 
-  ctx.fillStyle = '#0a1d10';
-  ctx.font = "800 54px 'Plus Jakarta Sans', Arial";
-  ctx.fillText($('gardenName').value, 75, cy);
-  cy += 24;
+  rr(dateX, cy + 26, dateW, 68, 12);
+  ctx.fillStyle = THEME.greenDeep;
+  ctx.fill();
+  ctx.fillStyle = '#ffffff';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(dateStr, dateX + dateW/2, cy + 60);
 
-  ctx.fillStyle = '#cbd8cf';
-  ctx.fillRect(75, cy, 2015, 2);
-  cy += 44;
+  // Garden name text auto-fit (DIPERBESAR NYATA)
+  const maxGardenW = dateX - 140;
+  let gardenFontSize = 56;
+  ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
+  while(ctx.measureText($('gardenName').value).width > maxGardenW && gardenFontSize > 28){
+    gardenFontSize -= 2;
+    ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
+  }
+  ctx.fillStyle = THEME.navy;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  ctx.fillText($('gardenName').value, 110, cy + 46);
 
-  const maxContentH = 2780 - cy;
-  renderDynamicActivities(acts, 75, cy, 2015, maxContentH);
+  // ACTIVITIES SECTION (SUSUN DARI ATAS KE BAWAH)
+  const actStartY = cy + infoBarH + 20;
+  const footerY = 2814;
+  const maxActH = footerY - actStartY - 16;
+  const acts = getActivities();
 
-  renderUnifiedFooter(2814, 240);
+  if(acts.length > 0){
+    renderCleanActivities(acts, 75, actStartY, 2010, maxActH, 1);
+  }
+
+  renderUnifiedFooter(footerY, 240);
+}
+
+// ==========================================
+// TEMPLATE 2: MODERN DYNAMIC (Card & High Contrast)
+// ==========================================
+function drawTemplate2(){
+  ctx.fillStyle = '#eef3ef';
+  ctx.fillRect(0, 0, 2160, 3054);
+
+  // Top header banner card - BESAR & LEGA
+  const topH = 265;
+  rr(45, 26, 2070, topH, 20);
+  const headGrad = ctx.createLinearGradient(45, 26, 2115, 291);
+  headGrad.addColorStop(0, '#072b16');
+  headGrad.addColorStop(0.65, '#12542c');
+  headGrad.addColorStop(1, '#1b6e3b');
+  ctx.fillStyle = headGrad;
+  ctx.fill();
+
+  // Gold accent strip on header
+  ctx.fillStyle = THEME.goldBright;
+  rr(45, 26 + topH - 6, 2070, 6, 3);
+  ctx.fill();
+
+  const logoSize = 220;
+  if(logo1Ready) contain(logo1, 75, 48, logoSize, logoSize);
+
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  
+  ctx.fillStyle = '#b7e0c4';
+  ctx.font = "800 32px 'Plus Jakarta Sans', Arial";
+  ctx.fillText('PEMERINTAH PROVINSI NUSA TENGGARA TIMUR', 320, 48);
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = "800 68px 'Plus Jakarta Sans', Arial";
+  ctx.fillText('DINAS PERTANIAN DAN KETAHANAN PANGAN', 320, 98);
+
+  ctx.fillStyle = '#fce4a6';
+  ctx.font = "600 40px 'Plus Jakarta Sans', Arial";
+  ctx.fillText('UPTD. Perbenihan Kebun Dinas & Laboratorium Hayati Perkebunan', 320, 188);
+
+  // FIXED PHOTO COLLAGE AREA
+  const photoArea = { x: 45, y: 315, w: 2070, h: 1600 };
+  const count = Math.max(photos.length, 1);
+  const rects = calculatePhotoLayout(photos, count, photoArea.x, photoArea.y, photoArea.w, photoArea.h, 20);
+
+  rects.forEach((r, idx) => {
+    renderPhotoCard(r, idx, photos[idx], 16, '#ffffff', 6);
+  });
+
+  // INFO BAR CARD (DIPERBESAR)
+  let cy = photoArea.y + photoArea.h + 20;
+  const infoH = 120;
+
+  ctx.save();
+  ctx.shadowColor = 'rgba(6, 26, 12, 0.09)';
+  ctx.shadowBlur = 16;
+  ctx.shadowOffsetY = 5;
+  rr(45, cy, 2070, infoH, 16);
+  ctx.fillStyle = '#ffffff';
+  ctx.fill();
+  ctx.restore();
+
+  ctx.strokeStyle = '#cbe0d2';
+  ctx.lineWidth = 2;
+  rr(45, cy, 2070, infoH, 16);
+  ctx.stroke();
+
+  // Left gold accent
+  ctx.fillStyle = THEME.gold;
+  rr(45, cy, 12, infoH, 5);
+  ctx.fill();
+
+  // Location label badge
+  rr(75, cy + 36, 220, 48, 10);
+  ctx.fillStyle = '#ebf5ee';
+  ctx.fill();
+  ctx.fillStyle = THEME.greenDeep;
+  ctx.font = "800 19px 'Plus Jakarta Sans', Arial";
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('KEBUN DINAS', 185, cy + 60);
+
+  // Date label
+  const dateStr = dateLabel($('date').value);
+  ctx.fillStyle = '#1e4a2c';
+  ctx.font = "800 30px 'Plus Jakarta Sans', Arial";
+  ctx.textAlign = 'right';
+  ctx.fillText(dateStr, 2065, cy + 60);
+
+  const dateAreaW = ctx.measureText(dateStr).width + 60;
+  const maxGardenW = 2070 - 340 - dateAreaW;
+
+  let gardenFontSize = 54;
+  ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
+  while(ctx.measureText($('gardenName').value).width > maxGardenW && gardenFontSize > 28){
+    gardenFontSize -= 2;
+    ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
+  }
+  ctx.fillStyle = '#061d0f';
+  ctx.textAlign = 'left';
+  ctx.fillText($('gardenName').value, 320, cy + 60);
+
+  // ACTIVITIES SECTION (SUSUN DARI ATAS)
+  const actStartY = cy + infoH + 20;
+  const footerY = 2814;
+  const maxActH = footerY - actStartY - 16;
+  const acts = getActivities();
+
+  if(acts.length > 0){
+    renderCleanActivities(acts, 45, actStartY, 2070, maxActH, 2);
+  }
+
+  renderUnifiedFooter(footerY, 240);
+}
+
+// ==========================================
+// TEMPLATE 3: EDITORIAL LUXE (Magazine Split & Elegant)
+// ==========================================
+function drawTemplate3(){
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, 2160, 3054);
+
+  // Left vertical elegant stripe
+  ctx.fillStyle = THEME.greenDeep;
+  ctx.fillRect(0, 0, 24, 3054);
+  ctx.fillStyle = THEME.gold;
+  ctx.fillRect(24, 0, 8, 3054);
+
+  const top = 36;
+  const logoSize = 230;
+  if(logo1Ready) contain(logo1, 70, top + 8, logoSize, logoSize);
+
+  // Date badge at top right
+  const dateStr = dateLabel($('date').value);
+  ctx.save();
+  ctx.font = "800 28px 'Plus Jakarta Sans', Arial";
+  const dateW = ctx.measureText(dateStr).width + 60;
+  const dateX = 2095 - dateW;
+  rr(dateX, top + 12, dateW, 68, 12);
+  ctx.fillStyle = THEME.greenDeep;
+  ctx.fill();
+
+  ctx.fillStyle = '#ffffff';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(dateStr, dateX + dateW/2, top + 46);
+  ctx.restore();
+
+  // Masthead text
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  
+  ctx.fillStyle = THEME.greenDeep;
+  ctx.font = "800 32px 'Plus Jakarta Sans', Arial";
+  ctx.fillText('PEMERINTAH PROVINSI NUSA TENGGARA TIMUR', 330, top + 10);
+
+  ctx.fillStyle = THEME.navy;
+  ctx.font = "800 68px 'Plus Jakarta Sans', Arial";
+  ctx.fillText('DINAS PERTANIAN & KETAHANAN PANGAN', 330, top + 64);
+
+  ctx.fillStyle = '#4e6654';
+  ctx.font = "700 40px 'Plus Jakarta Sans', Arial";
+  ctx.fillText('UPTD. Perbenihan Kebun Dinas & Laboratorium Hayati Perkebunan', 330, top + 158);
+
+  // Thin line
+  ctx.fillStyle = THEME.goldLine;
+  ctx.fillRect(70, top + 248, 2025, 5);
+
+  // FIXED PHOTO COLLAGE AREA
+  const photoArea = { x: 70, y: 315, w: 2025, h: 1600 };
+  const count = Math.max(photos.length, 1);
+  const rects = calculatePhotoLayout(photos, count, photoArea.x, photoArea.y, photoArea.w, photoArea.h, 20);
+
+  rects.forEach((r, idx) => {
+    renderPhotoCard(r, idx, photos[idx], 12, '#ffffff', 5);
+  });
+
+  // Headline garden bar (DIPERBESAR)
+  let cy = photoArea.y + photoArea.h + 22;
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  ctx.fillStyle = THEME.gold;
+  ctx.font = "800 22px 'Plus Jakarta Sans', Arial";
+  ctx.fillText('DOKUMENTASI LAPORAN HARIAN', 70, cy);
+
+  let gardenFontSize = 58;
+  ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
+  while(ctx.measureText($('gardenName').value).width > 2000 && gardenFontSize > 30){
+    gardenFontSize -= 2;
+    ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
+  }
+  ctx.fillStyle = '#0a2212';
+  ctx.fillText($('gardenName').value, 70, cy + 34);
+
+  ctx.fillStyle = '#cfe0d5';
+  ctx.fillRect(70, cy + 104, 2025, 2.5);
+
+  // ACTIVITIES SECTION (SUSUN DARI ATAS)
+  const actStartY = cy + 120;
+  const footerY = 2814;
+  const maxActH = footerY - actStartY - 16;
+  const acts = getActivities();
+
+  if(acts.length > 0){
+    renderCleanActivities(acts, 70, actStartY, 2025, maxActH, 3);
+  }
+
+  renderUnifiedFooter(footerY, 240);
 }
 
 function draw(){
