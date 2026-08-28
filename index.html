@@ -1,852 +1,292 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fast Report HD - Kolase Kebun Dinas</title>
+  <title>Fast Report HD - Sistem Kolase & Arsip Kebun Dinas NTT</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Space+Grotesk:wght@600;700;800&family=Cinzel:wght@700;800;900&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              200: '#bbf7d0',
+              500: '#16a34a',
+              600: '#11592f',
+              700: '#0d4725',
+              800: '#09361c',
+              900: '#052211',
+              navy: '#0b1f14',
+              gold: '#b3852b',
+              goldLight: '#f59e0b',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'serif'],
+            grotesk: ['"Space Grotesk"', 'sans-serif'],
+            cinzel: ['"Cinzel"', 'serif'],
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'slide-up': 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'scale-up': 'scaleUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            'pulse-subtle': 'pulseSubtle 2.5s infinite ease-in-out',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(8px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            scaleUp: {
+              '0%': { transform: 'scale(0.96)', opacity: '0' },
+              '100%': { transform: 'scale(1)', opacity: '1' },
+            },
+            pulseSubtle: {
+              '0%, 100%': { transform: 'scale(1)' },
+              '50%': { transform: 'scale(1.02)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
   <style>
-    :root {
-      --primary-navy: #0b1f14;
-      --primary-green: #11592f;
-      --primary-green-deep: #082d17;
-      --primary-green-light: #1c7c44;
-      --accent-gold: #b3852b;
-      --accent-gold-bright: #d4a742;
-      --accent-gold-light: #f7e8c3;
-      --bg-app: #eef3ef;
-      --panel-bg: #ffffff;
-      --card-bg: #f8faf8;
-      --card-border: #d7e3da;
-      --text-main: #122117;
-      --text-muted: #566c5d;
-      --line-color: #d1dfd4;
-      --danger-color: #c02b1d;
-      --success-color: #0e6b36;
-      --shadow-sm: 0 4px 14px rgba(8, 32, 16, 0.06);
-      --shadow-md: 0 8px 24px rgba(8, 32, 16, 0.10);
-      --shadow-lg: 0 16px 48px rgba(8, 32, 16, 0.16);
-      --shadow-xl: 0 24px 64px rgba(8, 32, 16, 0.22);
-      --radius: 16px;
-      --radius-sm: 10px;
-      --radius-lg: 24px;
-    }
+    /* Custom Scrollbars */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f2; }
+    ::-webkit-scrollbar-thumb { background: #16a34a; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #11592f; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      margin: 0;
-      background: radial-gradient(circle at 12% 15%, #deede1 0%, transparent 45%),
-                  radial-gradient(circle at 88% 85%, #d8e8dc 0%, transparent 45%),
-                  radial-gradient(circle at 50% 50%, #e9f2eb 0%, transparent 60%),
-                  var(--bg-app);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      color: var(--text-main);
-      -webkit-font-smoothing: antialiased;
-      min-height: 100vh;
-    }
-
-    /* ===== LOGIN ===== */
-    #loginOverlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(6, 23, 14, 0.80);
+    .glass-card {
+      background: rgba(255, 255, 255, 0.88);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
     }
 
-    .login-box {
-      background: rgba(255, 255, 255, 0.96);
-      backdrop-filter: blur(10px);
-      border-radius: 32px;
-      max-width: 480px;
-      width: 100%;
-      padding: 44px 36px 36px;
-      box-shadow: var(--shadow-xl), 0 0 0 1px rgba(255, 255, 255, 0.5);
+    .btn-press:active {
+      transform: scale(0.97);
+    }
+
+    /* Shimmer effect for buttons */
+    .btn-shimmer {
       position: relative;
-      animation: loginFade 0.45s ease-out;
-    }
-
-    @keyframes loginFade {
-      from { opacity: 0; transform: translateY(18px) scale(0.98); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .login-box::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: 0;
-      height: 6px;
-      border-radius: 32px 32px 0 0;
-      background: linear-gradient(90deg, var(--primary-green-deep), var(--primary-green) 50%, var(--accent-gold) 80%, var(--accent-gold-bright));
-    }
-
-    .login-logos {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 22px;
-      margin-bottom: 20px;
-    }
-
-    .login-logos img {
-      height: 64px;
-      width: auto;
-      object-fit: contain;
-      filter: drop-shadow(0 3px 8px rgba(0,0,0,0.1));
-      transition: transform 0.3s ease;
-    }
-
-    .login-head {
-      text-align: center;
-      margin-bottom: 26px;
-    }
-
-    .login-head .sub {
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 1.5px;
-      color: var(--primary-green);
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-
-    .login-head h2 {
-      margin: 2px 0 6px;
-      font-family: 'Fraunces', serif;
-      color: var(--primary-navy);
-      font-size: 30px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-    }
-
-    .login-head p {
-      margin: 0;
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    .role-tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
-      margin-bottom: 22px;
-      background: #e9f2eb;
-      padding: 4px;
-      border-radius: 14px;
-    }
-
-    .role-tab {
-      padding: 12px 0;
-      text-align: center;
-      font-size: 13px;
-      font-weight: 700;
-      border-radius: 10px;
-      cursor: pointer;
-      border: 0;
-      background: transparent;
-      color: var(--text-muted);
-      transition: all 0.3s ease;
-    }
-
-    .role-tab.active {
-      background: #ffffff;
-      color: var(--primary-green-deep);
-      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-    }
-
-    .login-btn {
-      width: 100%;
-      padding: 16px;
-      border: 0;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--primary-green), var(--primary-green-deep));
-      color: #ffffff;
-      font-weight: 700;
-      font-size: 15px;
-      cursor: pointer;
-      margin-top: 18px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 20px rgba(17, 89, 47, 0.35);
-    }
-
-    .login-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(17, 89, 47, 0.45);
-    }
-
-    .login-hint {
-      margin-top: 18px;
-      font-size: 12px;
-      color: #3b5742;
-      background: #f1f7f2;
-      padding: 14px 16px;
-      border-radius: 12px;
-      border-left: 4px solid var(--primary-green);
-      line-height: 1.6;
-    }
-
-    .login-hint code {
-      background: #d8e8dc;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-weight: 700;
-      color: var(--primary-navy);
-      font-size: 12px;
-    }
-
-    /* ===== APP LAYOUT ===== */
-    .app {
-      max-width: 1660px;
-      min-height: 100vh;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 470px 1fr;
-      background: transparent;
-    }
-
-    /* ===== PANEL ===== */
-    .panel {
-      padding: 28px 24px 36px;
-      background: var(--panel-bg);
-      border-right: 1px solid var(--line-color);
-      overflow-y: auto;
-      max-height: 100vh;
-      position: relative;
-      box-shadow: 4px 0 28px rgba(0,0,0,0.03);
-    }
-
-    .panel::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: 0;
-      height: 6px;
-      background: linear-gradient(90deg, var(--primary-green-deep), var(--primary-green) 50%, var(--accent-gold) 80%, var(--accent-gold-bright));
-    }
-
-    .panel::-webkit-scrollbar { width: 5px; }
-    .panel::-webkit-scrollbar-track { background: #eaf1ec; }
-    .panel::-webkit-scrollbar-thumb { background: var(--primary-green); border-radius: 4px; }
-
-    .panel-top-logos {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 16px;
-      background: linear-gradient(135deg, #f2f7f4, #e9f2eb);
-      border: 1px solid #d0e2d5;
-      border-radius: var(--radius-sm);
-      margin-bottom: 18px;
-    }
-
-    .panel-top-logos img {
-      height: 42px;
-      width: auto;
-      object-fit: contain;
-    }
-
-    .panel-top-logos .logo-divider {
-      width: 1px;
-      height: 32px;
-      background: #c3d6c7;
-    }
-
-    .panel-top-logos .org-text {
-      font-size: 11.5px;
-      font-weight: 800;
-      color: var(--primary-navy);
-      line-height: 1.3;
-    }
-    .panel-top-logos .org-text span {
-      display: block;
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--text-muted);
-    }
-
-    .brand-title {
-      margin: 0;
-      color: var(--primary-navy);
-      font-family: 'Fraunces', serif;
-      font-weight: 800;
-      font-size: 26px;
-      letter-spacing: -0.3px;
-      background: linear-gradient(135deg, var(--primary-green-deep), var(--primary-green));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .panel-desc {
-      margin: 4px 0 18px;
-      color: var(--text-muted);
-      font-size: 12.5px;
-      line-height: 1.55;
-      border-left: 3px solid var(--primary-green);
-      padding-left: 12px;
-      background: linear-gradient(90deg, rgba(17,89,47,0.05), transparent);
-    }
-
-    .user-badge {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: linear-gradient(135deg, #e9f4ec, #e0ede4);
-      padding: 12px 16px;
-      border-radius: var(--radius-sm);
-      margin-bottom: 22px;
-      border: 1px solid #c7decb;
-    }
-
-    .user-info {
-      font-size: 11.5px;
-      color: var(--primary-green-deep);
-    }
-    .user-info b {
-      display: block;
-      font-size: 13.5px;
-      color: var(--primary-navy);
-      margin-top: 2px;
-    }
-
-    .logout-btn {
-      background: #fae9e7;
-      color: var(--danger-color);
-      border: 1px solid #f2c0ba;
-      padding: 6px 14px;
-      font-size: 11.5px;
-      font-weight: 700;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-    }
-    .logout-btn:hover {
-      background: var(--danger-color);
-      color: #fff;
-    }
-
-    /* ===== FORM ===== */
-    .group { margin-bottom: 18px; }
-
-    label {
-      display: block;
-      margin-bottom: 6px;
-      font-size: 11.5px;
-      font-weight: 800;
-      letter-spacing: 0.6px;
-      text-transform: uppercase;
-      color: var(--primary-green-deep);
-    }
-
-    input, textarea, select {
-      width: 100%;
-      padding: 12px 15px;
-      border: 2px solid #ccd9cf;
-      border-radius: var(--radius-sm);
-      font: 13.5px 'Plus Jakarta Sans', sans-serif;
-      background: #ffffff;
-      color: var(--text-main);
-      transition: all 0.25s ease;
-    }
-
-    select:disabled {
-      background: #edf2ee;
-      color: #4f6456;
-      cursor: not-allowed;
-      font-weight: 600;
-    }
-
-    input:focus, textarea:focus, select:focus {
-      outline: none;
-      border-color: var(--primary-green);
-      box-shadow: 0 0 0 4px rgba(17, 89, 47, 0.12);
-    }
-
-    /* ===== TEMPLATE SELECTOR ===== */
-    .template-selector {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 4px;
-    }
-
-    .template-option {
-      cursor: pointer;
-      border: 2px solid #cbd9ce;
-      border-radius: var(--radius-sm);
-      padding: 12px 6px;
-      text-align: center;
-      background: #ffffff;
-      transition: all 0.25s ease;
-      position: relative;
-    }
-
-    .template-option:hover {
-      border-color: var(--primary-green);
-      background: #f4faf5;
-      transform: translateY(-2px);
-    }
-
-    .template-option.active {
-      border-color: var(--primary-green);
-      background: linear-gradient(135deg, #e5f4e8, #d4ebd9);
-      box-shadow: 0 0 0 2.5px var(--primary-green), var(--shadow-sm);
-    }
-
-    .template-option .title {
-      font-size: 12px;
-      font-weight: 800;
-      color: var(--primary-green-deep);
-    }
-    .template-option .desc {
-      font-size: 10px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    /* ===== ACTIVITY CARDS ===== */
-    .activity-card {
-      position: relative;
-      padding: 6px 36px 6px 12px;
-      margin-bottom: 8px;
-      border: 2px solid #ccd9cf;
-      border-radius: var(--radius-sm);
-      background: #ffffff;
-      transition: all 0.25s ease;
-    }
-    .activity-card:focus-within {
-      border-color: var(--primary-green);
-      box-shadow: 0 0 0 3px rgba(17, 89, 47, 0.10);
-    }
-    .activity-card textarea {
-      display: block;
-      min-height: 42px;
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-      outline: none;
-      font-size: 13px;
-      background: transparent;
-      box-shadow: none;
-      resize: vertical;
-    }
-    .remove-activity {
-      position: absolute;
-      right: 7px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 26px;
-      height: 26px;
-      padding: 0;
-      border: 0;
-      border-radius: 50%;
-      background: #fae9e7;
-      color: var(--danger-color);
-      cursor: pointer;
-      font-size: 16px;
-      line-height: 26px;
-      font-weight: bold;
-      transition: all 0.2s ease;
-    }
-    .remove-activity:hover {
-      background: var(--danger-color);
-      color: #fff;
-      transform: translateY(-50%) scale(1.1);
-    }
-
-    .add-activity {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      width: 100%;
-      padding: 11px;
-      border: 2px dashed #87af93;
-      border-radius: var(--radius-sm);
-      background: #ecf5ee;
-      color: var(--primary-green);
-      font-weight: 700;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-    }
-    .add-activity:hover {
-      background: #ddeee1;
-      border-color: var(--primary-green);
-      transform: translateY(-2px);
-    }
-
-    /* ===== UPLOAD ===== */
-    .upload {
-      display: block;
-      padding: 18px 12px;
-      border: 2px dashed #87af93;
-      border-radius: var(--radius-sm);
-      background: #ecf5ee;
-      color: var(--primary-green-deep);
-      text-align: center;
-      font-weight: 700;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-    }
-    .upload:hover {
-      background: #ddeee1;
-      border-color: var(--primary-green);
-      transform: translateY(-2px);
-    }
-    .upload small {
-      display: block;
-      margin-top: 4px;
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--text-muted);
-    }
-    #files { display: none; }
-
-    .thumbs {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
-      margin-top: 12px;
-    }
-    .thumb {
-      position: relative;
-      aspect-ratio: 1;
       overflow: hidden;
-      border-radius: var(--radius-sm);
-      background: #e2ede5;
-      border: 2px solid var(--line-color);
     }
-    .thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .thumb button {
+    .btn-shimmer::after {
+      content: '';
       position: absolute;
-      right: 3px;
-      top: 3px;
-      width: 20px;
-      height: 20px;
-      padding: 0;
-      border: 0;
-      border-radius: 50%;
-      background: rgba(192, 43, 29, 0.92);
-      color: #fff;
-      cursor: pointer;
-      font-size: 12px;
-      line-height: 20px;
-      font-weight: bold;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(60deg, transparent, rgba(255,255,255,0.25), transparent);
+      transform: rotate(30deg);
+      transition: all 0.75s ease;
+      opacity: 0;
     }
-
-    /* ===== BUTTONS ===== */
-    .actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 20px;
-    }
-
-    button {
-      padding: 13px;
-      border: 0;
-      border-radius: var(--radius-sm);
-      font-weight: 800;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-    }
-
-    .make {
-      background: linear-gradient(135deg, var(--primary-green), var(--primary-green-deep));
-      color: #fff;
-      box-shadow: 0 4px 14px rgba(17, 89, 47, 0.30);
-    }
-    .make:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(17, 89, 47, 0.40);
-    }
-
-    .down {
-      background: linear-gradient(135deg, #163d26, #0e2a1b);
-      color: #fff;
-      box-shadow: 0 4px 14px rgba(22, 61, 38, 0.25);
-    }
-    .down:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(22, 61, 38, 0.35);
-    }
-
-    /* ===== STATUS ===== */
-    .status-container { margin-top: 14px; min-height: 20px; }
-    .status-alert {
-      display: none;
-      padding: 12px 16px;
-      border-radius: var(--radius-sm);
-      font-size: 12.5px;
-      font-weight: 700;
-      line-height: 1.4;
-      border: 1.5px solid transparent;
-      animation: fadeIn 0.25s ease-in-out;
-    }
-    .status-alert.success {
-      display: block;
-      background: #e7f5ec;
-      color: #0c5328;
-      border-color: #abd4b9;
-    }
-    .status-alert.error {
-      display: block;
-      background: #fae9e7;
-      color: #9e2216;
-      border-color: #f0b2aa;
-    }
-    .status-alert.loading {
-      display: block;
-      background: #edf4f8;
-      color: #154a6b;
-      border-color: #bed6e6;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ===== ARCHIVE ===== */
-    .archive-box {
-      margin-top: 22px;
-      padding: 18px 16px;
-      border-radius: var(--radius);
-      background: var(--card-bg);
-      border: 1.5px solid var(--card-border);
-    }
-
-    .archive-label {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-      font-size: 11.5px;
-      font-weight: 800;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      color: var(--accent-gold);
-    }
-
-    .cloud-badge {
-      background: #11592f;
-      color: #ffffff;
-      padding: 3px 8px;
-      border-radius: 6px;
-      font-size: 10px;
-      text-transform: none;
-      font-weight: 700;
-    }
-
-    .archive-box select { margin-bottom: 8px; }
-
-    .archive-btn-group {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 4px;
-    }
-    .btn-archive {
-      padding: 10px;
-      font-size: 12px;
-      border-radius: var(--radius-sm);
-      border: 1.5px solid #cedcd2;
-      background: #ffffff;
-      color: var(--primary-navy);
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .btn-archive:hover { background: #ecf4ee; }
-    .btn-zip {
-      background: linear-gradient(135deg, var(--primary-green), var(--primary-green-deep));
-      color: #fff;
-      border-color: var(--primary-green-deep);
-    }
-
-    #archiveList {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-top: 14px;
-      max-height: 420px;
-      overflow-y: auto;
-      padding-right: 4px;
-    }
-
-    .archive-item {
-      padding: 14px;
-      border: 1px solid #d2dfd6;
-      border-radius: var(--radius-sm);
-      background: #ffffff;
-      font-size: 12px;
-      box-shadow: var(--shadow-sm);
-    }
-    .archive-item img {
-      width: 100%;
-      border-radius: 8px;
-      margin: 10px 0;
-      border: 1px solid #e0ebe2;
-    }
-    .archive-item .item-actions { 
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    .archive-item button {
-      padding: 9px 12px;
-      font-size: 11.5px;
-      border-radius: 8px;
-      border: 1.5px solid transparent;
-      cursor: pointer;
-      font-weight: 700;
-      transition: all 0.2s ease;
-      flex: 1;
-      min-width: 110px;
-    }
-    .archive-item button.down-file-btn {
-      background: linear-gradient(135deg, var(--primary-green), var(--primary-green-deep));
-      color: #ffffff;
-    }
-    .archive-item button.down-file-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 10px rgba(17, 89, 47, 0.25);
-    }
-    .archive-item button.view-file-btn {
-      background: #f0f7f2;
-      color: var(--primary-navy);
-      border-color: #bcdbc3;
-    }
-    .archive-item button.view-file-btn:hover {
-      background: #e1efe5;
-    }
-    .archive-item button.delete-file-btn {
-      background: #fae9e7;
-      color: var(--danger-color);
-      border-color: #f2c0ba;
-      flex: 0 0 100%;
-      margin-top: 4px;
-    }
-    .archive-item button.delete-file-btn:hover {
-      background: var(--danger-color);
-      color: #ffffff;
-    }
-
-    /* ===== WORKSPACE ===== */
-    .workspace {
-      padding: 28px 24px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background: radial-gradient(circle at 50% 0%, #f6faf7, #edf4ef);
-    }
-
-    .workspace-head {
-      width: 100%;
-      max-width: 870px;
-      margin-bottom: 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .workspace-head h2 {
-      margin: 0;
-      color: var(--primary-navy);
-      font-family: 'Fraunces', serif;
-      font-size: 24px;
-      font-weight: 700;
-    }
-
-    .badge-hd {
-      background: linear-gradient(135deg, var(--primary-navy), var(--primary-green-deep));
-      color: #ffffff;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 6px 14px;
-      border-radius: 20px;
-      letter-spacing: 1.2px;
-      box-shadow: 0 2px 10px rgba(8, 32, 16, 0.20);
-    }
-
-    .canvas-box {
-      padding: 16px;
-      border-radius: var(--radius);
-      background: linear-gradient(135deg, #e3ece5, #dae7dc);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.7), var(--shadow-lg);
-      max-width: 870px;
-      width: 100%;
-    }
-
-    canvas {
-      display: block;
-      width: 100%;
-      height: auto;
-      background: #ffffff;
-      border-radius: 6px;
-      box-shadow: 0 16px 48px -8px rgba(8,36,18,0.22);
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 980px) {
-      .app { grid-template-columns: 1fr; }
-      .panel { border-right: 0; border-bottom: 1px solid var(--line-color); max-height: none; }
-    }
-    @media (max-width: 600px) {
-      .login-box { padding: 26px 18px; }
-      .brand-title { font-size: 20px; }
-      .template-selector { grid-template-columns: 1fr 1fr; }
-      .thumbs { grid-template-columns: repeat(3, 1fr); }
-      .actions { grid-template-columns: 1fr; }
-      .archive-btn-group { grid-template-columns: 1fr; }
-      .archive-item .item-actions { grid-template-columns: 1fr; }
+    .btn-shimmer:hover::after {
+      left: 100%;
+      opacity: 1;
     }
   </style>
 </head>
-<body>
+<body class="bg-gradient-to-br from-emerald-50/70 via-slate-50 to-teal-50/50 font-sans text-slate-800 antialiased min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
 
-<!-- ===== LOGIN OVERLAY ===== -->
-<div id="loginOverlay">
-  <div class="login-box">
-    <div class="login-logos">
-      <img src="logofix.png" alt="Logo Pemprov NTT" onerror="this.style.display='none'">
-      <img src="bundinas.png.jpeg" alt="Logo UPTD Kebun Dinas" onerror="this.style.display='none'">
-    </div>
-    <div class="login-head">
-      <div class="sub">Pemerintah Provinsi Nusa Tenggara Timur</div>
-      <h2>FAST REPORT HD</h2>
-      <p>Sistem Pembuatan dan Arsip Kolase Kebun Dinas</p>
-    </div>
-    <div class="role-tabs">
-      <button class="role-tab active" id="tabPegawai" onclick="switchLoginTab('pegawai')">Petugas Kebun</button>
-      <button class="role-tab" id="tabAdmin" onclick="switchLoginTab('admin')">Admin Dinas</button>
+<!-- ========================================== -->
+<!-- 1. LOGIN MODAL OVERLAY (DYNAMIC GLASS)     -->
+<!-- ========================================== -->
+<div id="loginOverlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-900/75 backdrop-blur-md transition-all duration-500">
+  <div class="glass-card w-full max-w-lg p-8 sm:p-10 rounded-3xl shadow-2xl border border-white/60 relative overflow-hidden animate-scale-up">
+    <!-- Accent Line -->
+    <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-brand-700 via-brand-500 to-brand-gold"></div>
+
+    <!-- Logos -->
+    <div class="flex items-center justify-center gap-6 mb-6">
+      <img src="logofix.png" alt="Pemprov NTT" class="h-16 w-auto drop-shadow-md hover:scale-105 transition-transform duration-300" onerror="this.style.display='none'">
+      <div class="w-px h-10 bg-slate-200"></div>
+      <img src="bundinas.png.jpeg" alt="UPTD Kebun Dinas" class="h-16 w-auto drop-shadow-md hover:scale-105 transition-transform duration-300" onerror="this.style.display='none'">
     </div>
 
-    <div id="formPegawai">
-      <div class="group">
-        <label>Pilih Lokasi Kebun Dinas</label>
-        <select id="loginGarden">
+    <!-- Titles -->
+    <div class="text-center mb-6">
+      <span class="inline-block px-3 py-1 bg-brand-100 text-brand-700 text-xs font-bold tracking-wider uppercase rounded-full mb-2">Pemerintah Provinsi NTT</span>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-brand-900 tracking-tight">FAST REPORT HD</h2>
+      <p class="text-xs sm:text-sm text-slate-500 mt-1 font-medium">Sistem Pembuatan Kolase & Pengarsipan Google Drive Cloud</p>
+    </div>
+
+    <!-- Role Tabs -->
+    <div class="grid grid-cols-2 p-1.5 bg-slate-100/80 rounded-2xl mb-6 border border-slate-200/60">
+      <button id="tabPegawai" onclick="switchLoginTab('pegawai')" class="py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all duration-300 bg-white text-brand-800 shadow-sm">
+        Petugas Kebun
+      </button>
+      <button id="tabAdmin" onclick="switchLoginTab('admin')" class="py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all duration-300 text-slate-500 hover:text-brand-700">
+        Admin Dinas
+      </button>
+    </div>
+
+    <!-- Form Petugas -->
+    <div id="formPegawai" class="space-y-4">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-brand-800 mb-1.5">Pilih Kebun Dinas</label>
+        <div class="relative">
+          <select id="loginGarden" class="w-full px-4 py-3 bg-white/90 border border-slate-200 rounded-xl text-sm font-medium text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all appearance-none pr-10 cursor-pointer shadow-sm">
+            <option value="Kebun Induk Kelapa Tilong Kab. Kupang">Kebun Induk Kelapa Tilong Kab. Kupang</option>
+            <option value="Kebun Dinas Oeteta Kab. Kupang">Kebun Dinas Oeteta Kab. Kupang</option>
+            <option value="Kebun Dinas Eban Kab. TTU">Kebun Dinas Eban Kab. TTU</option>
+            <option value="Kebun Dinas Otvai Kab. Alor">Kebun Dinas Otvai Kab. Alor</option>
+            <option value="Kebun Dinas Mainang Kab. Alor">Kebun Dinas Mainang Kab. Alor</option>
+            <option value="Kebun Dinas Wairklau Kab. Sikka">Kebun Dinas Wairklau Kab. Sikka</option>
+            <option value="Kebun Dinas Detubapa Kab. Ende">Kebun Dinas Detubapa Kab. Ende</option>
+            <option value="Kebun Dinas Pinis Kab. Manggarai Timur">Kebun Dinas Pinis Kab. Manggarai Timur</option>
+            <option value="Kebun Dinas Roe Kab. Manggarai Barat">Kebun Dinas Roe Kab. Manggarai Barat</option>
+            <option value="Kebun Dinas Waikadada Kab. Sumba Barat Daya">Kebun Dinas Waikadada Kab. Sumba Barat Daya</option>
+            <option value="Kebun Dinas Hameli Kab. Sumba Barat Daya">Kebun Dinas Hameli Kab. Sumba Barat Daya</option>
+          </select>
+          <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-400">
+            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          </div>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-brand-800 mb-1.5">Kata Sandi Kebun</label>
+        <input type="password" id="passPegawai" placeholder="Masukkan kata sandi kebun" class="w-full px-4 py-3 bg-white/90 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all shadow-sm">
+      </div>
+    </div>
+
+    <!-- Form Admin -->
+    <div id="formAdmin" class="space-y-4 hidden">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-brand-800 mb-1.5">Username Admin</label>
+        <input type="text" id="userAdmin" placeholder="admin" class="w-full px-4 py-3 bg-white/90 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all shadow-sm">
+      </div>
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-brand-800 mb-1.5">Password Admin</label>
+        <input type="password" id="passAdmin" placeholder="admin123" class="w-full px-4 py-3 bg-white/90 border border-slate-200 rounded-xl text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all shadow-sm">
+      </div>
+    </div>
+
+    <!-- Login Button -->
+    <button onclick="processLogin()" class="btn-shimmer btn-press w-full mt-6 py-3.5 px-6 rounded-xl bg-gradient-to-r from-brand-700 to-brand-600 hover:from-brand-800 hover:to-brand-700 text-white font-bold text-sm tracking-wide shadow-lg shadow-brand-700/30 hover:shadow-xl hover:shadow-brand-700/40 transition-all duration-300 flex items-center justify-center gap-2">
+      <span>Masuk ke Aplikasi</span>
+      <i data-lucide="arrow-right" class="w-4 h-4"></i>
+    </button>
+
+    <div id="loginStatus" class="hidden mt-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold text-center animate-fade-in"></div>
+
+    <!-- Hint -->
+    <div class="mt-6 p-4 rounded-xl bg-emerald-50/60 border border-emerald-100 text-xs text-emerald-900/80 leading-relaxed flex items-start gap-2.5">
+      <i data-lucide="info" class="w-4 h-4 text-brand-600 flex-shrink-0 mt-0.5"></i>
+      <div>
+        <span class="font-bold text-brand-800">Petunjuk Masuk:</span><br>
+        • Admin: <code class="px-1.5 py-0.5 bg-emerald-100 rounded text-brand-900 font-mono">admin</code> / <code class="px-1.5 py-0.5 bg-emerald-100 rounded text-brand-900 font-mono">admin123</code><br>
+        • Petugas: Masukkan password resmi masing-masing kebun
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 2. MAIN APPLICATION WORKSPACE             -->
+<!-- ========================================== -->
+<div class="flex-1 flex flex-col lg:flex-row min-h-screen">
+
+  <!-- LEFT CONTROL SIDEBAR -->
+  <aside class="w-full lg:w-[480px] xl:w-[520px] bg-white/95 backdrop-blur-lg border-r border-slate-200/80 flex flex-col p-6 sm:p-8 lg:h-screen lg:overflow-y-auto shadow-sm">
+    
+    <!-- Top Identity Header -->
+    <div class="flex items-center gap-3.5 p-3.5 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50/60 border border-emerald-100 mb-6 shadow-sm">
+      <img src="logofix.png" alt="Pemprov NTT" class="h-10 w-auto" onerror="this.style.display='none'">
+      <div class="w-px h-8 bg-emerald-200"></div>
+      <img src="bundinas.png.jpeg" alt="Kebun Dinas" class="h-10 w-auto" onerror="this.style.display='none'">
+      <div class="text-[11px] font-bold text-brand-900 leading-tight">
+        DINAS PERTANIAN &amp; KETAHANAN PANGAN
+        <span class="block text-[10px] font-medium text-emerald-700">Provinsi Nusa Tenggara Timur</span>
+      </div>
+    </div>
+
+    <!-- Title & Status Badge -->
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h1 class="text-xl font-extrabold text-brand-900 tracking-tight flex items-center gap-2">
+          <span>FAST REPORT HD</span>
+          <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-100 text-brand-700 border border-brand-200">v3.0</span>
+        </h1>
+        <p class="text-xs text-slate-500 mt-0.5">Sistem Pembuat Kolase HD &amp; Google Drive</p>
+      </div>
+      <button onclick="logout()" title="Keluar Akun" class="btn-press p-2.5 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 border border-slate-200 transition-colors">
+        <i data-lucide="log-out" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- Active User Card -->
+    <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between mb-6">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-brand-600/30">
+          <i data-lucide="user-check" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <span id="roleLabel" class="text-[10px] font-bold uppercase tracking-wider text-brand-600">Admin Dinas</span>
+          <h4 id="activeGardenLabel" class="text-xs font-bold text-slate-800 truncate max-w-[200px]">Semua Kebun Dinas</h4>
+        </div>
+      </div>
+      <span class="flex h-2.5 w-2.5 relative">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+      </span>
+    </div>
+
+    <!-- 3 Tipe Desain Kolase Unik & Sangat Berbeda -->
+    <div class="mb-6">
+      <label class="block text-xs font-bold uppercase tracking-wider text-brand-900 mb-2.5 flex items-center gap-1.5">
+        <i data-lucide="palette" class="w-4 h-4 text-brand-600"></i>
+        <span>Pilihan Gaya Desain Kolase (3 Gaya Berbeda)</span>
+      </label>
+      <div class="grid grid-cols-3 gap-2.5">
+        <!-- Template 1: Classic Emerald -->
+        <div onclick="setTemplate(1)" id="tmpl1" class="template-card cursor-pointer p-3 rounded-2xl border-2 border-emerald-600 bg-emerald-50/80 shadow-sm transition-all duration-300 hover:scale-[1.02] text-center">
+          <div class="w-full h-1.5 rounded-full bg-gradient-to-r from-emerald-800 to-amber-500 mb-1.5"></div>
+          <div class="text-xs font-bold text-emerald-950">Emerald Formal</div>
+          <div class="text-[9.5px] text-emerald-700 font-semibold mt-0.5">Klasik Pemerintahan</div>
+        </div>
+        <!-- Template 2: Indigo Dark Modern -->
+        <div onclick="setTemplate(2)" id="tmpl2" class="template-card cursor-pointer p-3 rounded-2xl border-2 border-slate-200 bg-white shadow-sm transition-all duration-300 hover:scale-[1.02] text-center">
+          <div class="w-full h-1.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-400 mb-1.5"></div>
+          <div class="text-xs font-bold text-slate-800">Sapphire Modern</div>
+          <div class="text-[9.5px] text-slate-500 font-semibold mt-0.5">Dinamis & Kontemporer</div>
+        </div>
+        <!-- Template 3: Warm Sand Editorial -->
+        <div onclick="setTemplate(3)" id="tmpl3" class="template-card cursor-pointer p-3 rounded-2xl border-2 border-slate-200 bg-white shadow-sm transition-all duration-300 hover:scale-[1.02] text-center">
+          <div class="w-full h-1.5 rounded-full bg-gradient-to-r from-amber-700 to-amber-400 mb-1.5"></div>
+          <div class="text-xs font-bold text-slate-800">Warm Sand Luxe</div>
+          <div class="text-[9.5px] text-slate-500 font-semibold mt-0.5">Editorial Jurnalistik</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Garden & Date Inputs -->
+    <div class="space-y-4 mb-6">
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-brand-900 mb-1.5 flex items-center gap-1.5">
+          <i data-lucide="map-pin" class="w-4 h-4 text-brand-600"></i>
+          <span>Pilih Kebun Dinas</span>
+        </label>
+        <select id="gardenName" class="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:ring-2 focus:ring-brand-500 focus:outline-none transition-all shadow-sm">
           <option value="Kebun Induk Kelapa Tilong Kab. Kupang">Kebun Induk Kelapa Tilong Kab. Kupang</option>
           <option value="Kebun Dinas Oeteta Kab. Kupang">Kebun Dinas Oeteta Kab. Kupang</option>
           <option value="Kebun Dinas Eban Kab. TTU">Kebun Dinas Eban Kab. TTU</option>
@@ -860,188 +300,159 @@
           <option value="Kebun Dinas Hameli Kab. Sumba Barat Daya">Kebun Dinas Hameli Kab. Sumba Barat Daya</option>
         </select>
       </div>
-      <div class="group">
-        <label>Kata Sandi Petugas</label>
-        <input type="password" id="passPegawai" placeholder="Masukkan kata sandi kebun">
+
+      <div>
+        <label class="block text-xs font-bold uppercase tracking-wider text-brand-900 mb-1.5 flex items-center gap-1.5">
+          <i data-lucide="calendar" class="w-4 h-4 text-brand-600"></i>
+          <span>Tanggal Kegiatan</span>
+        </label>
+        <input type="date" id="date" class="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 focus:ring-2 focus:ring-brand-500 focus:outline-none transition-all shadow-sm">
       </div>
     </div>
 
-    <div id="formAdmin" style="display:none">
-      <div class="group">
-        <label>Nama Pengguna Admin</label>
-        <input type="text" id="userAdmin" placeholder="admin">
+    <!-- Activities Section -->
+    <div class="mb-6">
+      <div class="flex items-center justify-between mb-2">
+        <label class="block text-xs font-bold uppercase tracking-wider text-brand-900 flex items-center gap-1.5">
+          <i data-lucide="list-checks" class="w-4 h-4 text-brand-600"></i>
+          <span>Rincian Kegiatan</span>
+        </label>
+        <span class="text-[11px] text-slate-400 font-medium">Otomatis Terformat</span>
       </div>
-      <div class="group">
-        <label>Kata Sandi Admin</label>
-        <input type="password" id="passAdmin" placeholder="admin123">
-      </div>
+      
+      <div id="activityList" class="space-y-2.5 mb-2.5"></div>
+
+      <button id="addActivity" type="button" class="btn-press w-full py-2.5 px-4 rounded-xl border border-dashed border-brand-500 bg-brand-50/50 hover:bg-brand-50 text-brand-700 font-bold text-xs flex items-center justify-center gap-1.5 transition-all duration-200">
+        <i data-lucide="plus" class="w-4 h-4"></i>
+        <span>Tambah Rincian Kegiatan</span>
+      </button>
     </div>
 
-    <button class="login-btn" id="btnLogin" onclick="processLogin()">Masuk ke Aplikasi</button>
-    <div class="status-alert error" id="loginStatus" style="margin-top:12px;text-align:center;display:none;"></div>
-
-    <div class="login-hint">
-      <b>Petunjuk Masuk:</b><br>
-      • <b>Admin:</b> Username <code>admin</code> | Password <code>admin123</code><br>
-      • <b>Petugas:</b> Pilih kebun dan gunakan password masing-masing kebun
-    </div>
-  </div>
-</div>
-
-<!-- ===== APP ===== -->
-<div class="app">
-  <!-- PANEL KIRI -->
-  <section class="panel">
-
-    <div class="panel-top-logos">
-      <img src="logofix.png" alt="Logo Pemprov NTT" onerror="this.style.display='none'">
-      <div class="logo-divider"></div>
-      <img src="bundinas.png.jpeg" alt="Logo Kebun Dinas" onerror="this.style.display='none'">
-      <div class="org-text">
-        DINAS PERTANIAN &amp; KETAHANAN PANGAN
-        <span>Provinsi Nusa Tenggara Timur</span>
-      </div>
-    </div>
-
-    <div class="brand-header">
-      <h1 class="brand-title">FAST REPORT HD</h1>
-    </div>
-    <div class="panel-desc">Sistem Pembuatan &amp; Arsip Dokumentasi Kegiatan Kebun Dinas Resolusi Tinggi</div>
-
-    <div class="user-badge" id="userBadge">
-      <div class="user-info">
-        <span id="roleLabel">Admin Dinas</span>
-        <b id="activeGardenLabel">Semua Kebun Dinas</b>
-      </div>
-      <button class="logout-btn" onclick="logout()">Keluar</button>
-    </div>
-
-    <div class="group">
-      <label>Pilihan Gaya Desain Kolase</label>
-      <div class="template-selector">
-        <div class="template-option active" data-template="1" onclick="setTemplate(1)">
-          <div class="title">Emerald Formal</div>
-          <div class="desc">Elegan &amp; Proporsional</div>
-        </div>
-        <div class="template-option" data-template="2" onclick="setTemplate(2)">
-          <div class="title">Modern Dynamic</div>
-          <div class="desc">Aksen Dinamis Kontemporer</div>
-        </div>
-        <div class="template-option" data-template="3" onclick="setTemplate(3)">
-          <div class="title">Editorial Luxe</div>
-          <div class="desc">Visual Dominan Jurnalistik</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="group">
-      <label for="gardenName">Pilih Kebun Dinas</label>
-      <select id="gardenName">
-        <option value="Kebun Induk Kelapa Tilong Kab. Kupang">Kebun Induk Kelapa Tilong Kab. Kupang</option>
-        <option value="Kebun Dinas Oeteta Kab. Kupang">Kebun Dinas Oeteta Kab. Kupang</option>
-        <option value="Kebun Dinas Eban Kab. TTU">Kebun Dinas Eban Kab. TTU</option>
-        <option value="Kebun Dinas Otvai Kab. Alor">Kebun Dinas Otvai Kab. Alor</option>
-        <option value="Kebun Dinas Mainang Kab. Alor">Kebun Dinas Mainang Kab. Alor</option>
-        <option value="Kebun Dinas Wairklau Kab. Sikka">Kebun Dinas Wairklau Kab. Sikka</option>
-        <option value="Kebun Dinas Detubapa Kab. Ende">Kebun Dinas Detubapa Kab. Ende</option>
-        <option value="Kebun Dinas Pinis Kab. Manggarai Timur">Kebun Dinas Pinis Kab. Manggarai Timur</option>
-        <option value="Kebun Dinas Roe Kab. Manggarai Barat">Kebun Dinas Roe Kab. Manggarai Barat</option>
-        <option value="Kebun Dinas Waikadada Kab. Sumba Barat Daya">Kebun Dinas Waikadada Kab. Sumba Barat Daya</option>
-        <option value="Kebun Dinas Hameli Kab. Sumba Barat Daya">Kebun Dinas Hameli Kab. Sumba Barat Daya</option>
-      </select>
-    </div>
-
-    <div class="group">
-      <label for="date">Tanggal Kegiatan</label>
-      <input id="date" type="date">
-    </div>
-
-    <div class="group">
-      <label>Rincian Kegiatan</label>
-      <div id="activityList"></div>
-      <button class="add-activity" id="addActivity" type="button">+ Tambah rincian kegiatan</button>
-    </div>
-
-    <div class="group">
-      <label>Foto Kegiatan</label>
-      <label class="upload" for="files">
-        Pilih foto kegiatan
-        <small>Mendukung 1 s/d 10 foto (otomatis adaptif &amp; proporsional)</small>
+    <!-- Upload Photos Section -->
+    <div class="mb-6">
+      <label class="block text-xs font-bold uppercase tracking-wider text-brand-900 mb-2 flex items-center gap-1.5">
+        <i data-lucide="image-plus" class="w-4 h-4 text-brand-600"></i>
+        <span>Foto Kegiatan Lapangan (1 - 10 Foto)</span>
       </label>
-      <input id="files" type="file" accept="image/*" multiple>
-      <div class="thumbs" id="thumbs"></div>
+      
+      <label for="files" class="btn-press group cursor-pointer flex flex-col items-center justify-center p-6 border-2 border-dashed border-slate-300 hover:border-brand-500 rounded-2xl bg-slate-50/70 hover:bg-emerald-50/40 transition-all duration-300">
+        <div class="p-3 rounded-full bg-white shadow-sm group-hover:scale-110 text-brand-600 transition-transform">
+          <i data-lucide="upload-cloud" class="w-6 h-6"></i>
+        </div>
+        <span class="text-xs font-bold text-slate-700 mt-2">Klik untuk Pilih Foto</span>
+        <span class="text-[10px] text-slate-400 mt-0.5 font-medium">Format JPG/PNG, Maksimal 10 Foto</span>
+      </label>
+      <input type="file" id="files" accept="image/*" multiple class="hidden">
+
+      <div id="thumbs" class="grid grid-cols-5 gap-2 mt-3"></div>
     </div>
 
-    <div class="actions">
-      <button class="make" id="generate" type="button">Simpan ke Google Drive &amp; Arsip</button>
-      <button class="down" id="download" type="button">Unduh PNG HD</button>
+    <!-- Action Buttons -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+      <button id="generate" type="button" class="btn-shimmer btn-press py-3.5 px-4 rounded-xl bg-gradient-to-r from-brand-700 to-brand-600 hover:from-brand-800 hover:to-brand-700 text-white font-bold text-xs tracking-wide shadow-lg shadow-brand-700/25 flex items-center justify-center gap-2 transition-all">
+        <i data-lucide="cloud-upload" class="w-4 h-4"></i>
+        <span>Simpan ke G-Drive</span>
+      </button>
+      <button id="download" type="button" class="btn-press py-3.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs tracking-wide shadow-md flex items-center justify-center gap-2 transition-all">
+        <i data-lucide="download" class="w-4 h-4"></i>
+        <span>Unduh PNG HD</span>
+      </button>
     </div>
 
-    <div class="status-container">
-      <div class="status-alert" id="statusAlert"></div>
-    </div>
+    <!-- Status Alert Container -->
+    <div id="statusAlert" class="hidden p-3.5 rounded-xl text-xs font-semibold mb-6 animate-fade-in"></div>
 
-    <div class="group archive-box">
-      <div class="archive-label">
-        <span>📂 Arsip Kegiatan Bulanan</span>
-        <span class="cloud-badge">📁 Google Drive Cloud</span>
-      </div>
-      <select id="archiveGarden">
-        <option value="all">Semua Kebun</option>
-        <option value="Kebun Induk Kelapa Tilong Kab. Kupang">Kebun Induk Kelapa Tilong Kab. Kupang</option>
-        <option value="Kebun Dinas Oeteta Kab. Kupang">Kebun Dinas Oeteta Kab. Kupang</option>
-        <option value="Kebun Dinas Eban Kab. TTU">Kebun Dinas Eban Kab. TTU</option>
-        <option value="Kebun Dinas Otvai Kab. Alor">Kebun Dinas Otvai Kab. Alor</option>
-        <option value="Kebun Dinas Mainang Kab. Alor">Kebun Dinas Mainang Kab. Alor</option>
-        <option value="Kebun Dinas Wairklau Kab. Sikka">Kebun Dinas Wairklau Kab. Sikka</option>
-        <option value="Kebun Dinas Detubapa Kab. Ende">Kebun Dinas Detubapa Kab. Ende</option>
-        <option value="Kebun Dinas Pinis Kab. Manggarai Timur">Kebun Dinas Pinis Kab. Manggarai Timur</option>
-        <option value="Kebun Dinas Roe Kab. Manggarai Barat">Kebun Dinas Roe Kab. Manggarai Barat</option>
-        <option value="Kebun Dinas Waikadada Kab. Sumba Barat Daya">Kebun Dinas Waikadada Kab. Sumba Barat Daya</option>
-        <option value="Kebun Dinas Hameli Kab. Sumba Barat Daya">Kebun Dinas Hameli Kab. Sumba Barat Daya</option>
-      </select>
-      <select id="archiveYear"></select>
-      <select id="archiveMonth">
-        <option value="1">Januari</option>
-        <option value="2">Februari</option>
-        <option value="3">Maret</option>
-        <option value="4">April</option>
-        <option value="5">Mei</option>
-        <option value="6">Juni</option>
-        <option value="7">Juli</option>
-        <option value="8">Agustus</option>
-        <option value="9">September</option>
-        <option value="10">Oktober</option>
-        <option value="11">November</option>
-        <option value="12">Desember</option>
-      </select>
-
-      <div class="archive-btn-group">
-        <button class="btn-archive" id="showArchive" type="button">Buka Arsip</button>
-        <button class="btn-archive btn-zip" id="downloadZip" type="button">⬇ Panduan Unduh Arsip</button>
+    <!-- G-Drive Archive Box -->
+    <div class="p-5 rounded-3xl bg-slate-50 border border-slate-200/80 shadow-sm mt-auto">
+      <div class="flex items-center justify-between mb-3">
+        <span class="text-xs font-extrabold uppercase tracking-wider text-brand-gold flex items-center gap-1.5">
+          <i data-lucide="folder-archive" class="w-4 h-4 text-brand-gold"></i>
+          <span>Arsip Google Drive</span>
+        </span>
+        <span class="px-2 py-0.5 rounded-md bg-brand-600 text-white text-[10px] font-bold">Cloud Sync</span>
       </div>
 
-      <div id="archiveList"></div>
-    </div>
-  </section>
+      <div class="grid grid-cols-2 gap-2 mb-2.5">
+        <select id="archiveGarden" class="col-span-2 px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-700">
+          <option value="all">Semua Kebun Dinas</option>
+          <option value="Kebun Induk Kelapa Tilong Kab. Kupang">Tilong Kab. Kupang</option>
+          <option value="Kebun Dinas Oeteta Kab. Kupang">Oeteta Kab. Kupang</option>
+          <option value="Kebun Dinas Eban Kab. TTU">Eban Kab. TTU</option>
+          <option value="Kebun Dinas Otvai Kab. Alor">Otvai Kab. Alor</option>
+          <option value="Kebun Dinas Mainang Kab. Alor">Mainang Kab. Alor</option>
+          <option value="Kebun Dinas Wairklau Kab. Sikka">Wairklau Kab. Sikka</option>
+          <option value="Kebun Dinas Detubapa Kab. Ende">Detubapa Kab. Ende</option>
+          <option value="Kebun Dinas Pinis Kab. Manggarai Timur">Pinis Kab. Manggarai Timur</option>
+          <option value="Kebun Dinas Roe Kab. Manggarai Barat">Roe Kab. Manggarai Barat</option>
+          <option value="Kebun Dinas Waikadada Kab. Sumba Barat Daya">Waikadada SBD</option>
+          <option value="Kebun Dinas Hameli Kab. Sumba Barat Daya">Hameli SBD</option>
+        </select>
+        <select id="archiveYear" class="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-700"></select>
+        <select id="archiveMonth" class="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-700">
+          <option value="1">Januari</option>
+          <option value="2">Februari</option>
+          <option value="3">Maret</option>
+          <option value="4">April</option>
+          <option value="5">Mei</option>
+          <option value="6">Juni</option>
+          <option value="7">Juli</option>
+          <option value="8">Agustus</option>
+          <option value="9">September</option>
+          <option value="10">Oktober</option>
+          <option value="11">November</option>
+          <option value="12">Desember</option>
+        </select>
+      </div>
 
-  <!-- WORKSPACE KANAN -->
-  <main class="workspace">
-    <div class="workspace-head">
-      <h2>Pratinjau Kolase</h2>
-      <span class="badge-hd">2160 × 3054 ULTRA HD</span>
+      <div class="mt-2">
+        <button id="showArchive" type="button" class="btn-press w-full py-2.5 px-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+          <span>Buka / Segarkan Arsip</span>
+        </button>
+      </div>
+
+      <!-- Archive Output List -->
+      <div id="archiveList" class="mt-3.5 max-h-96 overflow-y-auto space-y-3 pr-1"></div>
     </div>
-    <div class="canvas-box">
-      <canvas id="canvas" width="2160" height="3054"></canvas>
+  </aside>
+
+  <!-- RIGHT PREVIEW CANVAS WORKSPACE -->
+  <main class="flex-1 p-6 sm:p-10 flex flex-col items-center justify-start overflow-y-auto">
+    <!-- Header Bar -->
+    <div class="w-full max-w-4xl flex items-center justify-between mb-6 pb-4 border-b border-slate-200">
+      <div class="flex items-center gap-3">
+        <div class="p-2.5 rounded-2xl bg-white shadow-sm border border-slate-200 text-brand-600">
+          <i data-lucide="eye" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h2 class="text-lg sm:text-xl font-extrabold text-slate-800 tracking-tight">Pratinjau Kolase HD</h2>
+          <p class="text-xs text-slate-500">Render Realtime Standar Laporan Resmi Pemerintah</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="px-3.5 py-1.5 rounded-full bg-brand-900 text-emerald-300 text-[11px] font-black tracking-wider shadow-sm flex items-center gap-1.5">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-brand-gold"></i>
+          <span>2160 × 3054 ULTRA HD</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- Canvas Frame Container -->
+    <div class="w-full max-w-4xl p-4 sm:p-6 rounded-3xl bg-slate-200/60 border border-white/60 shadow-2xl backdrop-blur-sm transition-all duration-300 hover:shadow-brand-900/10">
+      <canvas id="canvas" width="2160" height="3054" class="w-full h-auto rounded-xl shadow-xl bg-white block"></canvas>
     </div>
   </main>
 </div>
 
+<!-- ========================================== -->
+<!-- 3. JAVASCRIPT LOGIC & CANVAS ENGINE        -->
+<!-- ========================================== -->
 <script>
+// Initialize Lucide Icons
+if(window.lucide) { lucide.createIcons(); }
+
 const GDRIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNiur-HREkRrYdqmctzL4bPdRd66cUIOhbutNm1HXQG4JXaT9ODhBHjVPprHrdD4yt/exec";
-
 const ADMIN_ACCOUNT = { username: "admin", password: "admin123" };
-
 const KEBUN_ACCOUNTS = {
   "Kebun Induk Kelapa Tilong Kab. Kupang": "tilong123",
   "Kebun Dinas Oeteta Kab. Kupang": "oeteta123",
@@ -1061,12 +472,23 @@ let activeLoginTab = 'pegawai';
 
 function switchLoginTab(tab){
   activeLoginTab = tab;
-  document.getElementById('tabPegawai').classList.toggle('active', tab === 'pegawai');
-  document.getElementById('tabAdmin').classList.toggle('active', tab === 'admin');
-  document.getElementById('formPegawai').style.display = tab === 'pegawai' ? 'block' : 'none';
-  document.getElementById('formAdmin').style.display = tab === 'admin' ? 'block' : 'none';
-  const st = document.getElementById('loginStatus');
-  st.style.display = 'none';
+  const tabP = document.getElementById('tabPegawai');
+  const tabA = document.getElementById('tabAdmin');
+  const formP = document.getElementById('formPegawai');
+  const formA = document.getElementById('formAdmin');
+
+  if(tab === 'pegawai'){
+    tabP.className = "py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all duration-300 bg-white text-brand-800 shadow-sm";
+    tabA.className = "py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all duration-300 text-slate-500 hover:text-brand-700";
+    formP.classList.remove('hidden');
+    formA.classList.add('hidden');
+  } else {
+    tabA.className = "py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all duration-300 bg-white text-brand-800 shadow-sm";
+    tabP.className = "py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all duration-300 text-slate-500 hover:text-brand-700";
+    formA.classList.remove('hidden');
+    formP.classList.add('hidden');
+  }
+  document.getElementById('loginStatus').classList.add('hidden');
 }
 
 function processLogin(){
@@ -1079,7 +501,7 @@ function processLogin(){
       loginSuccess();
     } else {
       statusEl.textContent = 'Nama pengguna atau kata sandi Admin tidak tepat.';
-      statusEl.style.display = 'block';
+      statusEl.classList.remove('hidden');
     }
   } else {
     const garden = document.getElementById('loginGarden').value;
@@ -1090,14 +512,15 @@ function processLogin(){
       loginSuccess();
     } else {
       statusEl.textContent = 'Kata sandi untuk ' + garden + ' tidak tepat.';
-      statusEl.style.display = 'block';
+      statusEl.classList.remove('hidden');
     }
   }
 }
 
 function loginSuccess(){
   sessionStorage.setItem('kolase_auth', JSON.stringify(currentUser));
-  document.getElementById('loginOverlay').style.display = 'none';
+  document.getElementById('loginOverlay').classList.add('opacity-0', 'pointer-events-none');
+  setTimeout(() => { document.getElementById('loginOverlay').style.display = 'none'; }, 400);
   applyUserPermissions();
   draw();
   loadArchive();
@@ -1106,10 +529,12 @@ function loginSuccess(){
 function logout(){
   sessionStorage.removeItem('kolase_auth');
   currentUser = null;
-  document.getElementById('loginOverlay').style.display = 'flex';
+  const overlay = document.getElementById('loginOverlay');
+  overlay.style.display = 'flex';
+  setTimeout(() => { overlay.classList.remove('opacity-0', 'pointer-events-none'); }, 10);
   document.getElementById('passPegawai').value = '';
   document.getElementById('passAdmin').value = '';
-  document.getElementById('loginStatus').style.display = 'none';
+  document.getElementById('loginStatus').classList.add('hidden');
 }
 
 function applyUserPermissions(){
@@ -1146,31 +571,26 @@ function checkSavedSession(){
 
 function showStatusAlert(msg, type = 'success', autoHide = 4500){
   const el = document.getElementById('statusAlert');
-  el.className = 'status-alert ' + type;
+  el.className = 'p-3.5 rounded-xl text-xs font-semibold mb-6 animate-fade-in';
+  if(type === 'success'){
+    el.className += ' bg-emerald-100 text-emerald-800 border border-emerald-200';
+  } else if(type === 'error'){
+    el.className += ' bg-rose-100 text-rose-800 border border-rose-200';
+  } else {
+    el.className += ' bg-sky-100 text-sky-800 border border-sky-200';
+  }
   el.textContent = msg;
-  el.style.display = 'block';
+  el.classList.remove('hidden');
   if(autoHide > 0){
-    setTimeout(() => { el.style.display = 'none'; }, autoHide);
+    setTimeout(() => { el.classList.add('hidden'); }, autoHide);
   }
 }
 
+// ===== CANVAS & THEME ENGINE =====
 let currentTemplate = 1;
-const THEME = {
-  green: '#11592f',
-  greenDeep: '#082d17',
-  navy: '#0b1f14',
-  leaf: '#207843',
-  leafSoft: '#edf5ef',
-  gold: '#b3852b',
-  goldBright: '#cca148',
-  goldLine: '#e2d3ab',
-  footerBg: '#f2f7f4',
-  footerBorder: '#cadcd0'
-};
-
 const LOGO1_SRC = "logofix.png";
 const LOGO2_SRC = "bundinas.png.jpeg";
-const LOGO_BERAKHLAK_SRC = "Berakhlak.png";
+const LOGO_BERAKHLAK_SRC = "berakhlak.png";
 
 const logo1 = new Image(); let logo1Ready = false; logo1.onload = () => { logo1Ready = true; draw(); }; logo1.src = LOGO1_SRC;
 const logo2 = new Image(); let logo2Ready = false; logo2.onload = () => { logo2Ready = true; draw(); }; logo2.src = LOGO2_SRC;
@@ -1183,22 +603,45 @@ $('date').value = new Date().toISOString().slice(0,10);
 
 function setTemplate(num){
   currentTemplate = num;
-  document.querySelectorAll('.template-option').forEach(el => {
-    el.classList.toggle('active', parseInt(el.dataset.template) === num);
+  [1, 2, 3].forEach(i => {
+    const el = $('tmpl' + i);
+    if(i === num){
+      if(i === 1) {
+        el.className = "template-card cursor-pointer p-3 rounded-2xl border-2 border-emerald-600 bg-emerald-50/80 shadow-sm transition-all duration-300 hover:scale-[1.02] text-center";
+      } else if(i === 2) {
+        el.className = "template-card cursor-pointer p-3 rounded-2xl border-2 border-blue-600 bg-blue-50/80 shadow-sm transition-all duration-300 hover:scale-[1.02] text-center";
+      } else {
+        el.className = "template-card cursor-pointer p-3 rounded-2xl border-2 border-amber-600 bg-amber-50/80 shadow-sm transition-all duration-300 hover:scale-[1.02] text-center";
+      }
+    } else {
+      el.className = "template-card cursor-pointer p-3 rounded-2xl border-2 border-slate-200 bg-white shadow-sm transition-all duration-300 hover:scale-[1.02] text-center";
+    }
   });
   draw();
 }
 
 function addActivityItem(value=''){
-  const card = document.createElement('div'); card.className = 'activity-card';
-  const text = document.createElement('textarea'); text.className = 'activity-item';
-  text.placeholder = 'Tulis rincian kegiatan...'; text.value = value;
+  const card = document.createElement('div'); 
+  card.className = 'relative flex items-center bg-white border border-slate-200 rounded-xl p-2.5 shadow-sm transition-all duration-200 focus-within:ring-2 focus-within:ring-brand-500 focus-within:border-brand-500';
+  
+  const text = document.createElement('textarea'); 
+  text.className = 'activity-item w-full pr-8 text-xs font-medium text-slate-700 bg-transparent border-0 outline-none resize-none min-h-[38px]';
+  text.placeholder = 'Tulis rincian kegiatan...'; 
+  text.value = value;
   text.addEventListener('input', draw);
-  const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'remove-activity';
-  remove.textContent = '×'; remove.addEventListener('click', () => { card.remove(); draw(); });
-  card.appendChild(text); card.appendChild(remove);
+  
+  const remove = document.createElement('button'); 
+  remove.type = 'button'; 
+  remove.className = 'btn-press absolute right-2 top-2 p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors';
+  remove.innerHTML = '<i data-lucide="x" class="w-4 h-4"></i>';
+  remove.addEventListener('click', () => { card.remove(); draw(); });
+  
+  card.appendChild(text); 
+  card.appendChild(remove);
   $('activityList').appendChild(card);
-  text.focus(); draw();
+  if(window.lucide) { lucide.createIcons(); }
+  text.focus(); 
+  draw();
 }
 $('addActivity').addEventListener('click', () => addActivityItem(''));
 function getActivities(){ return Array.from(document.querySelectorAll('.activity-item')).map(i => i.value.trim()).filter(Boolean); }
@@ -1224,15 +667,24 @@ $('files').addEventListener('change', event => {
 function renderThumbs(){
   const box = $('thumbs'); box.innerHTML = '';
   photos.forEach((img, idx) => {
-    const item = document.createElement('div'); item.className = 'thumb';
-    const preview = document.createElement('img'); preview.src = img.src;
-    const remove = document.createElement('button'); remove.textContent = '×';
+    const item = document.createElement('div'); 
+    item.className = 'relative aspect-square rounded-xl overflow-hidden border-2 border-slate-200 shadow-sm group';
+    const preview = document.createElement('img'); 
+    preview.src = img.src; 
+    preview.className = 'w-full h-full object-cover';
+    const remove = document.createElement('button'); 
+    remove.type = 'button';
+    remove.className = 'absolute top-1 right-1 p-1 rounded-full bg-rose-600 text-white opacity-0 group-hover:opacity-100 transition-opacity shadow-md';
+    remove.innerHTML = '<i data-lucide="x" class="w-3 h-3"></i>';
     remove.addEventListener('click', () => { photos.splice(idx, 1); renderThumbs(); draw(); });
-    item.appendChild(preview); item.appendChild(remove);
+    item.appendChild(preview); 
+    item.appendChild(remove);
     box.appendChild(item);
   });
+  if(window.lucide) { lucide.createIcons(); }
 }
 
+// Canvas Shapes & Math Helpers
 function rr(x, y, w, h, r){
   if(w < 2*r) r = w/2;
   if(h < 2*r) r = h/2;
@@ -1259,8 +711,8 @@ function contain(image, x, y, w, h){
   ctx.drawImage(image, x + (w - nw) / 2, y + (h - nh) / 2, nw, nh);
 }
 
-function splitText(text, maxWidth, size, bold=false){
-  ctx.font = (bold ? '700 ' : '600 ') + size + "px 'Plus Jakarta Sans', Arial";
+function splitText(text, maxWidth, size, fontName="'Plus Jakarta Sans', Arial", bold=false){
+  ctx.font = (bold ? '700 ' : '600 ') + size + "px " + fontName;
   const words = (text || '').trim().split(/\s+/), lines = [];
   let line = '';
   words.forEach(w => {
@@ -1285,32 +737,27 @@ function dateLabel(value){
 // ===== STRUKTUR TATA LETAK FOTO KOLASE PRESISI (1 - 10 FOTO) =====
 function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap = 20){
   const rects = [];
-
   if (count <= 1) {
     rects.push({ x: areaX, y: areaY, w: areaW, h: areaH });
-  } 
-  else if (count === 2) {
+  } else if (count === 2) {
     const w = (areaW - gap) / 2;
     rects.push({ x: areaX, y: areaY, w: w, h: areaH });
     rects.push({ x: areaX + w + gap, y: areaY, w: w, h: areaH });
-  } 
-  else if (count === 3) {
+  } else if (count === 3) {
     const wLeft = Math.round((areaW - gap) * 0.58);
     const wRight = areaW - gap - wLeft;
     const hHalf = (areaH - gap) / 2;
     rects.push({ x: areaX, y: areaY, w: wLeft, h: areaH });
     rects.push({ x: areaX + wLeft + gap, y: areaY, w: wRight, h: hHalf });
     rects.push({ x: areaX + wLeft + gap, y: areaY + hHalf + gap, w: wRight, h: hHalf });
-  } 
-  else if (count === 4) {
+  } else if (count === 4) {
     const w = (areaW - gap) / 2;
     const h = (areaH - gap) / 2;
     rects.push({ x: areaX,           y: areaY,           w: w, h: h });
     rects.push({ x: areaX + w + gap, y: areaY,           w: w, h: h });
     rects.push({ x: areaX,           y: areaY + h + gap, w: w, h: h });
     rects.push({ x: areaX + w + gap, y: areaY + h + gap, w: w, h: h });
-  } 
-  else if (count === 5) {
+  } else if (count === 5) {
     const h = (areaH - gap) / 2;
     const wTop = (areaW - gap) / 2;
     const wBot = (areaW - gap * 2) / 3;
@@ -1319,33 +766,25 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
     rects.push({ x: areaX,               y: areaY + h + gap, w: wBot, h: h });
     rects.push({ x: areaX + wBot + gap,   y: areaY + h + gap, w: wBot, h: h });
     rects.push({ x: areaX + (wBot+gap)*2, y: areaY + h + gap, w: wBot, h: h });
-  } 
-  else if (count === 6) {
+  } else if (count === 6) {
     const w = (areaW - gap * 2) / 3;
     const h = (areaH - gap) / 2;
     for (let r = 0; r < 2; r++) {
-      for (let c = 0; c < 3; c++) {
-        rects.push({ x: areaX + c * (w + gap), y: areaY + r * (h + gap), w: w, h: h });
-      }
+      for (let c = 0; c < 3; c++) rects.push({ x: areaX + c * (w + gap), y: areaY + r * (h + gap), w: w, h: h });
     }
-  } 
-  else if (count === 7) {
+  } else if (count === 7) {
     const h = (areaH - gap) / 2;
     const wTop = (areaW - gap * 2) / 3;
     const wBot = (areaW - gap * 3) / 4;
     for (let i = 0; i < 3; i++) rects.push({ x: areaX + i * (wTop + gap), y: areaY, w: wTop, h: h });
     for (let i = 0; i < 4; i++) rects.push({ x: areaX + i * (wBot + gap), y: areaY + h + gap, w: wBot, h: h });
-  } 
-  else if (count === 8) {
+  } else if (count === 8) {
     const w = (areaW - gap * 3) / 4;
     const h = (areaH - gap) / 2;
     for (let r = 0; r < 2; r++) {
-      for (let c = 0; c < 4; c++) {
-        rects.push({ x: areaX + c * (w + gap), y: areaY + r * (h + gap), w: w, h: h });
-      }
+      for (let c = 0; c < 4; c++) rects.push({ x: areaX + c * (w + gap), y: areaY + r * (h + gap), w: w, h: h });
     }
-  } 
-  else {
+  } else {
     const cols = 5;
     const rows = 2;
     const w = (areaW - gap * (cols - 1)) / cols;
@@ -1356,14 +795,13 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
       rects.push({ x: areaX + c * (w + gap), y: areaY + r * (h + gap), w: w, h: h });
     }
   }
-
   return rects;
 }
 
-function renderPhotoCard(r, idx, photo, radius = 16, borderColor = '#ffffff', borderWidth = 6){
+function renderPhotoCard(r, idx, photo, radius = 16, borderColor = '#ffffff', borderWidth = 6, shadowColor = 'rgba(0,0,0,0.15)'){
   ctx.save();
-  ctx.shadowColor = 'rgba(6, 26, 13, 0.14)';
-  ctx.shadowBlur = 16;
+  ctx.shadowColor = shadowColor;
+  ctx.shadowBlur = 18;
   ctx.shadowOffsetY = 6;
   rr(r.x, r.y, r.w, r.h, radius);
   ctx.fillStyle = '#ffffff';
@@ -1400,97 +838,107 @@ function renderPhotoCard(r, idx, photo, radius = 16, borderColor = '#ffffff', bo
   }
 }
 
-// ===== LOGO BERAKHLAK DIPERBESAR DENGAN OPASITAS LEMBUT (LOW OPACITY) =====
+// ===== LOGO BERAKHLAK DIPERBESAR TANPA KOTAK & POSISI LEBIH KE ATAS =====
 function renderFloatingBerakhlak(photoArea){
   if(!logoBerakhlakReady) return;
-  const badgeW = 360;
-  const badgeH = 185;
-  const badgeX = photoArea.x + photoArea.w - badgeW - 16;
-  const badgeY = photoArea.y + 16;
+  const logoW = 600;
+  const logoH = 290;
+  const logoX = photoArea.x + photoArea.w - logoW - 10;
+  const logoY = photoArea.y - 10; // Dinaikkan lebih ke atas
 
   ctx.save();
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.12)';
-  ctx.shadowBlur = 14;
-  ctx.shadowOffsetY = 4;
-  rr(badgeX, badgeY, badgeW, badgeH, 18);
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
-  ctx.fill();
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
+  ctx.shadowBlur = 16;
+  ctx.shadowOffsetY = 5;
+  contain(logoBerakhlak, logoX, logoY, logoW, logoH);
   ctx.restore();
-
-  ctx.save();
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.50)';
-  ctx.lineWidth = 2;
-  rr(badgeX, badgeY, badgeW, badgeH, 18);
-  ctx.stroke();
-  ctx.restore();
-
-  contain(logoBerakhlak, badgeX + 16, badgeY + 12, badgeW - 32, badgeH - 24);
 }
 
-// ===== HASHTAG #AYO BANGUN NTT DENGAN TIPOGRAFI MENARIK =====
-function renderAyoBangunNTT(x, y, w, h = 60){
+// ===== HASHTAG #AYO BANGUN NTT DENGAN BERBAGAI GAYA =====
+function renderAyoBangunNTT(x, y, w, h = 60, styleType = 1){
   ctx.save();
-  const badgeH = 48;
+  const badgeH = 50;
   const badgeY = y + (h - badgeH)/2;
-  
-  // Teks Hashtag
   const tagText = "#AYO BANGUN NTT";
-  ctx.font = "900 32px 'Plus Jakarta Sans', Arial";
-  const tagW = ctx.measureText(tagText).width + 80;
-  const badgeX = x + (w - tagW) / 2;
+  
+  if(styleType === 1) {
+    // Style 1: Emerald Gold Elegant Pill
+    ctx.font = "900 34px 'Plus Jakarta Sans', Arial";
+    const tagW = ctx.measureText(tagText).width + 80;
+    const badgeX = x + (w - tagW) / 2;
 
-  // Garis Aksen Kiri & Kanan
-  const lineY = y + h/2;
-  const lineGradLeft = ctx.createLinearGradient(x + 40, lineY, badgeX - 24, lineY);
-  lineGradLeft.addColorStop(0, 'rgba(17, 89, 47, 0)');
-  lineGradLeft.addColorStop(1, 'rgba(17, 89, 47, 0.45)');
-  ctx.strokeStyle = lineGradLeft;
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.moveTo(x + 40, lineY);
-  ctx.lineTo(badgeX - 24, lineY);
-  ctx.stroke();
+    const lineY = y + h/2;
+    const lineGradLeft = ctx.createLinearGradient(x + 40, lineY, badgeX - 24, lineY);
+    lineGradLeft.addColorStop(0, 'rgba(17, 89, 47, 0)');
+    lineGradLeft.addColorStop(1, 'rgba(17, 89, 47, 0.5)');
+    ctx.strokeStyle = lineGradLeft;
+    ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(x + 40, lineY); ctx.lineTo(badgeX - 24, lineY); ctx.stroke();
 
-  const lineGradRight = ctx.createLinearGradient(badgeX + tagW + 24, lineY, x + w - 40, lineY);
-  lineGradRight.addColorStop(0, 'rgba(17, 89, 47, 0.45)');
-  lineGradRight.addColorStop(1, 'rgba(17, 89, 47, 0)');
-  ctx.strokeStyle = lineGradRight;
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.moveTo(badgeX + tagW + 24, lineY);
-  ctx.lineTo(x + w - 40, lineY);
-  ctx.stroke();
+    const lineGradRight = ctx.createLinearGradient(badgeX + tagW + 24, lineY, x + w - 40, lineY);
+    lineGradRight.addColorStop(0, 'rgba(17, 89, 47, 0.5)');
+    lineGradRight.addColorStop(1, 'rgba(17, 89, 47, 0)');
+    ctx.strokeStyle = lineGradRight;
+    ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(badgeX + tagW + 24, lineY); ctx.lineTo(x + w - 40, lineY); ctx.stroke();
 
-  // Badge Container
-  ctx.shadowColor = 'rgba(17, 89, 47, 0.12)';
-  ctx.shadowBlur = 10;
-  ctx.shadowOffsetY = 3;
-  rr(badgeX, badgeY, tagW, badgeH, 24);
-  const bgGrad = ctx.createLinearGradient(badgeX, badgeY, badgeX + tagW, badgeY + badgeH);
-  bgGrad.addColorStop(0, '#ffffff');
-  bgGrad.addColorStop(1, '#f1f8f3');
-  ctx.fillStyle = bgGrad;
-  ctx.fill();
+    ctx.shadowColor = 'rgba(17, 89, 47, 0.12)';
+    ctx.shadowBlur = 12; ctx.shadowOffsetY = 4;
+    rr(badgeX, badgeY, tagW, badgeH, 25);
+    const bgGrad = ctx.createLinearGradient(badgeX, badgeY, badgeX + tagW, badgeY + badgeH);
+    bgGrad.addColorStop(0, '#ffffff'); bgGrad.addColorStop(1, '#f0f7f2');
+    ctx.fillStyle = bgGrad; ctx.fill();
 
-  ctx.strokeStyle = '#c4decb';
-  ctx.lineWidth = 2;
-  rr(badgeX, badgeY, tagW, badgeH, 24);
-  ctx.stroke();
+    ctx.strokeStyle = '#c4decb'; ctx.lineWidth = 2;
+    rr(badgeX, badgeY, tagW, badgeH, 25); ctx.stroke();
 
-  // Teks Gradasi Emas-Hijau
-  const textGrad = ctx.createLinearGradient(badgeX + 20, badgeY, badgeX + tagW - 20, badgeY);
-  textGrad.addColorStop(0, '#0c4d26');
-  textGrad.addColorStop(0.5, '#156b37');
-  textGrad.addColorStop(1, '#b3852b');
-  ctx.fillStyle = textGrad;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(tagText, badgeX + tagW/2, badgeY + badgeH/2 + 1);
+    const textGrad = ctx.createLinearGradient(badgeX + 20, badgeY, badgeX + tagW - 20, badgeY);
+    textGrad.addColorStop(0, '#0c4d26'); textGrad.addColorStop(0.5, '#156b37'); textGrad.addColorStop(1, '#b3852b');
+    ctx.fillStyle = textGrad; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(tagText, badgeX + tagW/2, badgeY + badgeH/2 + 2);
 
+  } else if(styleType === 2) {
+    // Style 2: Cyan & Deep Sapphire Futuristic Glow
+    ctx.font = "900 34px 'Space Grotesk', Arial";
+    const tagW = ctx.measureText(tagText).width + 90;
+    const badgeX = x + (w - tagW) / 2;
+
+    ctx.shadowColor = 'rgba(6, 182, 212, 0.35)';
+    ctx.shadowBlur = 16; ctx.shadowOffsetY = 2;
+    rr(badgeX, badgeY, tagW, badgeH, 12);
+    ctx.fillStyle = '#0f172a'; ctx.fill();
+
+    ctx.strokeStyle = '#06b6d4'; ctx.lineWidth = 2.5;
+    rr(badgeX, badgeY, tagW, badgeH, 12); ctx.stroke();
+
+    const textGrad = ctx.createLinearGradient(badgeX, badgeY, badgeX + tagW, badgeY);
+    textGrad.addColorStop(0, '#38bdf8'); textGrad.addColorStop(1, '#a855f7');
+    ctx.fillStyle = textGrad; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(tagText, badgeX + tagW/2, badgeY + badgeH/2 + 2);
+
+  } else {
+    // Style 3: Warm Terracotta & Sand Editorial Badge
+    ctx.font = "900 32px 'Cinzel', serif";
+    const tagW = ctx.measureText(tagText).width + 90;
+    const badgeX = x + (w - tagW) / 2;
+
+    const lineY = y + h/2;
+    ctx.strokeStyle = '#c5a880'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(x + 50, lineY); ctx.lineTo(badgeX - 24, lineY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(badgeX + tagW + 24, lineY); ctx.lineTo(x + w - 50, lineY); ctx.stroke();
+
+    rr(badgeX, badgeY, tagW, badgeH, 6);
+    ctx.fillStyle = '#f5efe6'; ctx.fill();
+    ctx.strokeStyle = '#8c5828'; ctx.lineWidth = 2;
+    rr(badgeX, badgeY, tagW, badgeH, 6); ctx.stroke();
+
+    ctx.fillStyle = '#6e3f16'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(tagText, badgeX + tagW/2, badgeY + badgeH/2 + 2);
+  }
   ctx.restore();
 }
 
-// ===== SOCIAL ICONS & BRANDING =====
+// ===== REALISTIC ICONS & BRANDING =====
 function drawIconBadge(x, y, size, radius, fillStyle){
   ctx.save();
   rr(x, y, size, size, radius);
@@ -1513,180 +961,204 @@ function drawFacebookIcon(x, y, size){
 function drawInstagramIcon(x, y, size){
   const r = size * 0.28;
   const grad = ctx.createLinearGradient(x, y + size, x + size, y);
-  grad.addColorStop(0, '#FEDA77');
-  grad.addColorStop(0.35, '#F58529');
-  grad.addColorStop(0.65, '#DD2A7B');
-  grad.addColorStop(1, '#8134AF');
+  grad.addColorStop(0, '#FEDA77'); grad.addColorStop(0.35, '#F58529');
+  grad.addColorStop(0.65, '#DD2A7B'); grad.addColorStop(1, '#8134AF');
   ctx.save();
   rr(x, y, size, size, r);
-  ctx.fillStyle = grad;
-  ctx.fill();
-  ctx.strokeStyle = '#fff';
-  ctx.lineWidth = Math.max(3, size * 0.08);
+  ctx.fillStyle = grad; ctx.fill();
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = Math.max(3, size * 0.08);
   rr(x + size*0.2, y + size*0.2, size*0.6, size*0.6, size*0.16);
   ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(x + size/2, y + size/2, size*0.16, 0, Math.PI*2);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.arc(x + size*0.72, y + size*0.28, size*0.038, 0, Math.PI*2);
-  ctx.fillStyle = '#fff';
-  ctx.fill();
+  ctx.beginPath(); ctx.arc(x + size/2, y + size/2, size*0.16, 0, Math.PI*2); ctx.stroke();
+  ctx.beginPath(); ctx.arc(x + size*0.72, y + size*0.28, size*0.038, 0, Math.PI*2);
+  ctx.fillStyle = '#fff'; ctx.fill();
   ctx.restore();
 }
 
 function drawYoutubeIcon(x, y, size){
   drawIconBadge(x, y, size, size*0.28, '#FF0000');
   ctx.save();
-  ctx.fillStyle = '#fff';
-  ctx.beginPath();
+  ctx.fillStyle = '#fff'; ctx.beginPath();
   const cx = x + size/2, cy = y + size/2, s = size * 0.24;
-  ctx.moveTo(cx - s*0.6, cy - s);
-  ctx.lineTo(cx - s*0.6, cy + s);
-  ctx.lineTo(cx + s*0.9, cy);
-  ctx.closePath();
-  ctx.fill();
+  ctx.moveTo(cx - s*0.6, cy - s); ctx.lineTo(cx - s*0.6, cy + s); ctx.lineTo(cx + s*0.9, cy);
+  ctx.closePath(); ctx.fill();
   ctx.restore();
 }
 
+// ===== REALISTIC TIKTOK LOGO VECTOR =====
 function drawTikTokIcon(x, y, size){
   ctx.save();
   const r = size * 0.28;
   rr(x, y, size, size, r);
-  ctx.fillStyle = '#010101';
+  ctx.fillStyle = '#000000';
   ctx.fill();
-  
-  const cx = x + size * 0.48;
-  const cy = y + size * 0.52;
-  const s = size * 0.42;
 
-  ctx.lineWidth = Math.max(4, size * 0.09);
-  ctx.lineCap = 'round';
-  ctx.lineJoin = 'round';
+  const cx = x + size * 0.50;
+  const cy = y + size * 0.50;
+  const s = size * 0.48;
 
-  ctx.strokeStyle = '#00F2FE';
-  ctx.beginPath();
-  ctx.arc(cx - s*0.18, cy + s*0.14, s*0.34, Math.PI * 0.45, Math.PI * 1.55, false);
-  ctx.lineTo(cx - s*0.18, cy - s*0.48);
-  ctx.stroke();
+  function drawMusicalNote(offsetX, offsetY, color){
+    ctx.save();
+    ctx.translate(offsetX, offsetY);
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    
+    const stemX = cx + s * 0.05;
+    const stemYTop = cy - s * 0.52;
+    const stemW = s * 0.18;
+    const stemH = s * 0.65;
+    
+    ctx.fillRect(stemX, stemYTop, stemW, stemH);
+    
+    const bulbCX = cx - s * 0.16;
+    const bulbCY = cy + s * 0.24;
+    const bulbRX = s * 0.26;
+    const bulbRY = s * 0.20;
+    
+    ctx.beginPath();
+    ctx.ellipse(bulbCX, bulbCY, bulbRX, bulbRY, -0.25, 0, Math.PI * 2);
+    ctx.fill();
 
-  ctx.strokeStyle = '#FE2C55';
-  ctx.beginPath();
-  ctx.arc(cx + s*0.02, cy + s*0.24, s*0.34, Math.PI * 0.45, Math.PI * 1.55, false);
-  ctx.lineTo(cx + s*0.02, cy - s*0.38);
-  ctx.bezierCurveTo(cx + s*0.12, cy - s*0.22, cx + s*0.32, cy - s*0.22, cx + s*0.42, cy - s*0.22);
-  ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(stemX + stemW, stemYTop);
+    ctx.bezierCurveTo(stemX + stemW + s*0.22, stemYTop, stemX + stemW + s*0.42, stemYTop + s*0.22, stemX + stemW + s*0.44, stemYTop + s*0.38);
+    ctx.lineTo(stemX + stemW + s*0.26, stemYTop + s*0.38);
+    ctx.bezierCurveTo(stemX + stemW + s*0.24, stemYTop + s*0.22, stemX + stemW + s*0.14, stemYTop + s*0.14, stemX + stemW, stemYTop + s*0.14);
+    ctx.closePath();
+    ctx.fill();
 
-  ctx.strokeStyle = '#FFFFFF';
-  ctx.beginPath();
-  ctx.arc(cx - s*0.08, cy + s*0.18, s*0.34, Math.PI * 0.45, Math.PI * 1.55, false);
-  ctx.lineTo(cx - s*0.08, cy - s*0.44);
-  ctx.bezierCurveTo(cx + s*0.02, cy - s*0.28, cx + s*0.22, cy - s*0.28, cx + s*0.34, cy - s*0.28);
-  ctx.stroke();
+    ctx.restore();
+  }
+
+  // Cyan Layer
+  drawMusicalNote(-size*0.025, size*0.02, '#25F4EE');
+  // Red Layer
+  drawMusicalNote(size*0.025, -size*0.02, '#FE2C55');
+  // White Layer
+  drawMusicalNote(0, 0, '#FFFFFF');
 
   ctx.restore();
 }
 
 function drawGlobeIcon(cx, cy, r, color){
   ctx.save();
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 4;
-  ctx.beginPath();
-  ctx.arc(cx, cy, r, 0, Math.PI*2);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.ellipse(cx, cy, r*0.44, r, 0, 0, Math.PI*2);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(cx - r, cy);
-  ctx.lineTo(cx + r, cy);
-  ctx.stroke();
+  ctx.strokeStyle = color; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(cx, cy, r*0.44, r, 0, 0, Math.PI*2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx - r, cy); ctx.lineTo(cx + r, cy); ctx.stroke();
   ctx.restore();
 }
 
-function renderUnifiedFooter(yPos, height = 240){
+function renderUnifiedFooter(yPos, height = 240, themeType = 1){
   ctx.save();
-  ctx.fillStyle = THEME.footerBg;
-  ctx.fillRect(0, yPos, 2160, height);
+  let footerBg = '#f4f9f5';
+  let titleColor = '#082d17';
+  let subColor = '#476350';
+  let brandColor = '#16a34a';
+  let dividerColor = '#c8ddd0';
+  let barGrad = ctx.createLinearGradient(0, 0, 2160, 0);
 
-  const fGrad = ctx.createLinearGradient(0, 0, 2160, 0);
-  fGrad.addColorStop(0, THEME.greenDeep);
-  fGrad.addColorStop(0.5, THEME.leaf);
-  fGrad.addColorStop(1, THEME.gold);
-  ctx.fillStyle = fGrad;
-  ctx.fillRect(0, yPos, 2160, 7);
-
-  if (logo2Ready) {
-    contain(logo2, 60, yPos + 18, 300, height - 36);
+  if(themeType === 1) {
+    footerBg = '#f4f9f5'; titleColor = '#082d17'; subColor = '#476350'; brandColor = '#16a34a'; dividerColor = '#c8ddd0';
+    barGrad.addColorStop(0, '#082d17'); barGrad.addColorStop(0.5, '#16a34a'); barGrad.addColorStop(1, '#b3852b');
+  } else if(themeType === 2) {
+    footerBg = '#0b1329'; titleColor = '#f8fafc'; subColor = '#94a3b8'; brandColor = '#38bdf8'; dividerColor = '#253556';
+    barGrad.addColorStop(0, '#2563eb'); barGrad.addColorStop(0.5, '#06b6d4'); barGrad.addColorStop(1, '#a855f7');
+  } else {
+    footerBg = '#faf5ee'; titleColor = '#451a03'; subColor = '#78350f'; brandColor = '#b45309'; dividerColor = '#d9cbbb';
+    barGrad.addColorStop(0, '#78350f'); barGrad.addColorStop(0.5, '#b45309'); barGrad.addColorStop(1, '#d97706');
   }
 
-  const midX = 380;
-  const cy = yPos + height / 2;
-  drawGlobeIcon(midX + 24, cy - 24, 24, THEME.green);
+  // 1. Background Footer & Top Glowing Accent Line
+  ctx.fillStyle = footerBg;
+  ctx.fillRect(0, yPos, 2160, height);
+
+  ctx.fillStyle = barGrad;
+  ctx.fillRect(0, yPos, 2160, 8);
+
+  // 2. LOGO UPTD KEBUN DINAS DI SISI KIRI (75px -> 335px)
+  const logoX = 75;
+  const logoW = 260;
+  if (logo2Ready) {
+    contain(logo2, logoX, yPos + 18, logoW, height - 36);
+  }
+
+  // 3. GARIS PEMISAH VERTIKAL 1 (Setelah Logo)
+  const div1X = logoX + logoW + 35; // 370px
+  ctx.fillStyle = dividerColor;
+  ctx.fillRect(div1X, yPos + 30, 2.5, height - 60);
+
+  // 4. BAGIAN TENGAH: WEBSITE RESMI & DESKRIPSI PORTAL (395px -> 1220px)
+  const midX = div1X + 35; // 405px
+  const globeR = 28;
+  const row1Y = yPos + 75;
+
+  drawGlobeIcon(midX + globeR, row1Y, globeR, brandColor);
 
   ctx.textAlign = 'left';
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = '#0b2413';
-  ctx.font = "800 36px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('www.distankp.nttprov.go.id', midX + 62, cy - 24);
+  ctx.fillStyle = titleColor;
+  ctx.font = "800 42px 'Plus Jakarta Sans', Arial";
+  ctx.fillText('www.distankp.nttprov.go.id', midX + (globeR * 2) + 16, row1Y);
 
-  ctx.fillStyle = '#4c6252';
-  ctx.font = "600 23px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('Portal Informasi & Dokumentasi Kebun Dinas Pertanian & Ketahanan Pangan NTT', midX + 62, cy + 28);
+  const row2Y = yPos + 152;
+  ctx.fillStyle = subColor;
+  ctx.font = "700 27px 'Plus Jakarta Sans', Arial";
+  ctx.fillText('Portal Resmi Informasi & Dokumentasi', midX, row2Y - 15);
+  ctx.fillText('Dinas Pertanian & Ketahanan Pangan NTT', midX, row2Y + 17);
 
-  const iconSize = 60;
-  const gap = 16;
-  const totalIconsWidth = (iconSize * 4) + (gap * 3);
-  const startX = 2160 - 70 - totalIconsWidth;
-  const iconY = yPos + (height - iconSize) / 2;
+  // 5. GARIS PEMISAH VERTIKAL 2 (Sebelum Medsos)
+  const div2X = 1250;
+  ctx.fillStyle = dividerColor;
+  ctx.fillRect(div2X, yPos + 30, 2.5, height - 60);
 
-  ctx.fillStyle = '#1e3c25';
-  ctx.font = "800 21px 'Plus Jakarta Sans', Arial";
-  ctx.textAlign = 'right';
-  ctx.fillText('IKUTI KAMI:', startX - 20, iconY + iconSize/2 + 3);
+  // 6. BAGIAN KANAN: IKUTI KAMI, 4 IKON MEDSOS & NAMA AKUN LENGKAP
+  const rightX = div2X + 35;
+  const iconSize = 50;
+  const gap = 14;
 
-  let curX = startX;
-  drawFacebookIcon(curX, iconY, iconSize); curX += iconSize + gap;
-  drawInstagramIcon(curX, iconY, iconSize); curX += iconSize + gap;
-  drawYoutubeIcon(curX, iconY, iconSize); curX += iconSize + gap;
-  drawTikTokIcon(curX, iconY, iconSize);
+  // Baris 1 Kanan: "IKUTI KAMI :" + 4 Ikon Medsos (Facebook, Instagram, YouTube, TikTok)
+  ctx.fillStyle = (themeType === 2 ? '#38bdf8' : (themeType === 3 ? '#9a3412' : '#082d17'));
+  ctx.font = "800 26px 'Plus Jakarta Sans', Arial";
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('IKUTI KAMI :', rightX, row1Y);
+
+  let iconStartX = rightX + 170;
+  drawFacebookIcon(iconStartX, row1Y - iconSize/2, iconSize); iconStartX += iconSize + gap;
+  drawInstagramIcon(iconStartX, row1Y - iconSize/2, iconSize); iconStartX += iconSize + gap;
+  drawYoutubeIcon(iconStartX, row1Y - iconSize/2, iconSize); iconStartX += iconSize + gap;
+  drawTikTokIcon(iconStartX, row1Y - iconSize/2, iconSize);
+
+  // Baris 2 Kanan: Label "Akun Resmi :" + Nama Akun Resmi Lengkap (Font Diperbesar Sedikit)
+  ctx.fillStyle = subColor;
+  ctx.font = "700 23px 'Plus Jakarta Sans', Arial";
+  ctx.fillText('Akun Resmi :', rightX, row2Y - 15);
+
+  ctx.fillStyle = titleColor;
+  ctx.font = "800 27px 'Plus Jakarta Sans', Arial";
+  ctx.fillText('@Dinas Pertanian dan Ketahanan Pangan Provinsi NTT', rightX, row2Y + 17);
 
   ctx.restore();
 }
 
-// ===== BAR KEGIATAN DENGAN BACKGROUND SOFT HARMONIS =====
-function renderCleanActivities(acts, startX, startY, maxW, maxH, styleType = 1){
-  ctx.save();
-  rr(startX, startY, maxW, maxH, 18);
-  const bgGrad = ctx.createLinearGradient(startX, startY, startX, startY + maxH);
-  bgGrad.addColorStop(0, '#f1f7f3');
-  bgGrad.addColorStop(1, '#e5efe7');
-  ctx.fillStyle = bgGrad;
-  ctx.fill();
+// =========================================================================
+// 3 DESAIN KOLASE DENGAN AREA FOTO ADAPTIF & KEGIATAN DINAMIS
+// =========================================================================
 
-  ctx.strokeStyle = '#cce0d2';
-  ctx.lineWidth = 2;
-  rr(startX, startY, maxW, maxH, 18);
-  ctx.stroke();
-  ctx.restore();
-
-  if(!acts || acts.length === 0) return;
-
+function calculateDynamicActivityLayout(acts, maxW, availableMaxH, fontName="'Plus Jakarta Sans', Arial", countDefaultSize=62){
+  if(!acts || acts.length === 0){
+    return { count: 0, optimalFont: 36, lineHeight: 48, cardHeights: [], totalNeededH: 0, paddingLeft: 36, paddingRight: 36 };
+  }
   const count = acts.length;
-  const innerPadX = 18;
-  const innerPadY = 18;
+  const innerPadX = 18, innerPadY = 18;
   const usableW = maxW - (innerPadX * 2);
-  const usableH = maxH - (innerPadY * 2);
-
-  const paddingLeft = (styleType === 2) ? 46 : 36;
-  const paddingRight = 36;
+  const paddingLeft = 36, paddingRight = 36;
   const maxTextW = usableW - paddingLeft - paddingRight;
-  
   const itemGap = count === 1 ? 0 : (count <= 2 ? 18 : (count <= 4 ? 14 : 10));
-  const totalGap = (count - 1) * itemGap;
-  const availableH = usableH - totalGap;
+  const availableH = availableMaxH - (innerPadY * 2) - ((count - 1) * itemGap);
 
-  let startFont = (count === 1) ? 62 : (count <= 3 ? 56 : (count <= 5 ? 46 : 36));
+  let startFont = (count === 1) ? 58 : (count <= 3 ? 50 : (count <= 5 ? 42 : 34));
   const minFont = 24;
   let optimalFont = minFont;
   let computedCardHeights = [];
@@ -1694,127 +1166,49 @@ function renderCleanActivities(acts, startX, startY, maxW, maxH, styleType = 1){
   for(let size = startFont; size >= minFont; size -= 2){
     const lHeight = Math.round(size * 1.38);
     const cardHeights = [];
-    let totalNeededH = 0;
-
+    let totalH = 0;
     for(let i = 0; i < count; i++){
-      const lines = splitText(acts[i], maxTextW, size, false);
-      const textH = lines.length * lHeight;
-      const cardH = Math.max(86, textH + 38);
+      const lines = splitText(acts[i], maxTextW, size, fontName, false);
+      const cardH = Math.max(82, lines.length * lHeight + 36);
       cardHeights.push(cardH);
-      totalNeededH += cardH;
+      totalH += cardH;
     }
-
-    if(totalNeededH <= availableH || size === minFont){
+    if(totalH <= availableH || size === minFont){
       optimalFont = size;
       computedCardHeights = cardHeights;
       break;
     }
   }
 
-  let totalCalculatedH = computedCardHeights.reduce((a, b) => a + b, 0);
-  let extraSpacePerItem = (availableH - totalCalculatedH) / count;
-  extraSpacePerItem = Math.min(extraSpacePerItem, (count <= 2 ? 70 : 36));
+  const totalCardH = computedCardHeights.reduce((a, b) => a + b, 0);
+  const totalNeededH = totalCardH + (innerPadY * 2) + ((count - 1) * itemGap);
 
-  const lineHeight = Math.round(optimalFont * 1.38);
-  let currentY = startY + innerPadY;
-
-  for(let i = 0; i < count; i++){
-    const itemX = startX + innerPadX;
-    const baseH = computedCardHeights[i] || Math.max(86, lineHeight + 38);
-    const curItemH = baseH + Math.max(0, extraSpacePerItem);
-    const itemY = currentY;
-    const itemW = usableW;
-    const text = acts[i];
-
-    ctx.save();
-    if(styleType === 1){
-      ctx.shadowColor = 'rgba(6, 26, 12, 0.05)';
-      ctx.shadowBlur = 10;
-      ctx.shadowOffsetY = 4;
-      rr(itemX, itemY, itemW, curItemH, 14);
-      ctx.fillStyle = '#ffffff';
-      ctx.fill();
-      ctx.restore();
-
-      ctx.save();
-      ctx.strokeStyle = '#d0e2d5';
-      ctx.lineWidth = 1.8;
-      rr(itemX, itemY, itemW, curItemH, 14);
-      ctx.stroke();
-
-      const barGrad = ctx.createLinearGradient(itemX, itemY, itemX, itemY + curItemH);
-      barGrad.addColorStop(0, THEME.greenDeep);
-      barGrad.addColorStop(0.7, THEME.leaf);
-      barGrad.addColorStop(1, THEME.gold);
-      ctx.fillStyle = barGrad;
-      rr(itemX, itemY, 11, curItemH, 5);
-      ctx.fill();
-
-    } else if(styleType === 2){
-      ctx.shadowColor = 'rgba(6, 26, 12, 0.06)';
-      ctx.shadowBlur = 12;
-      ctx.shadowOffsetY = 4;
-      rr(itemX, itemY, itemW, curItemH, 16);
-      ctx.fillStyle = '#ffffff';
-      ctx.fill();
-      ctx.restore();
-
-      ctx.save();
-      ctx.strokeStyle = '#c4dbcb';
-      ctx.lineWidth = 2;
-      rr(itemX, itemY, itemW, curItemH, 16);
-      ctx.stroke();
-
-      ctx.fillStyle = THEME.gold;
-      const tagH = Math.min(34, Math.max(20, curItemH * 0.42));
-      rr(itemX + 16, itemY + (curItemH - tagH)/2, 8, tagH, 4);
-      ctx.fill();
-
-    } else {
-      rr(itemX, itemY, itemW, curItemH, 12);
-      ctx.fillStyle = '#ffffff';
-      ctx.fill();
-      ctx.strokeStyle = '#c9ded0';
-      ctx.lineWidth = 1.8;
-      rr(itemX, itemY, itemW, curItemH, 12);
-      ctx.stroke();
-
-      ctx.fillStyle = THEME.green;
-      rr(itemX, itemY, 9, curItemH, 4);
-      ctx.fill();
-    }
-    ctx.restore();
-
-    const lines = splitText(text, maxTextW, optimalFont, false);
-    const totalTextH = lines.length * lineHeight;
-    let textStartY = itemY + (curItemH - totalTextH) / 2;
-
-    ctx.save();
-    ctx.fillStyle = '#0f2416';
-    ctx.font = "600 " + optimalFont + "px 'Plus Jakarta Sans', Arial";
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'top';
-
-    lines.forEach((l, lIdx) => {
-      ctx.fillText(l, itemX + paddingLeft, textStartY + lIdx * lineHeight);
-    });
-    ctx.restore();
-
-    currentY += curItemH + itemGap;
-  }
+  return {
+    count,
+    optimalFont,
+    lineHeight: Math.round(optimalFont * 1.38),
+    cardHeights: computedCardHeights,
+    totalNeededH: Math.min(totalNeededH, availableMaxH),
+    paddingLeft,
+    paddingRight,
+    innerPadX,
+    innerPadY,
+    itemGap,
+    maxTextW
+  };
 }
 
-// ==========================================
-// TEMPLATES (EMERALD, DYNAMIC, EDITORIAL)
-// ==========================================
+/* -------------------------------------------------- */
+/* TEMPLATE 1: EMERALD FORMAL (Klasik Pemerintah NTT) */
+/* -------------------------------------------------- */
 function drawTemplate1(){
   ctx.fillStyle = '#f8faf9';
   ctx.fillRect(0, 0, 2160, 3054);
 
   const topGrad = ctx.createLinearGradient(0, 0, 2160, 0);
-  topGrad.addColorStop(0, THEME.greenDeep);
-  topGrad.addColorStop(0.55, THEME.leaf);
-  topGrad.addColorStop(1, THEME.gold);
+  topGrad.addColorStop(0, '#082d17');
+  topGrad.addColorStop(0.55, '#16a34a');
+  topGrad.addColorStop(1, '#b3852b');
   ctx.fillStyle = topGrad;
   ctx.fillRect(0, 0, 2160, 16);
 
@@ -1824,80 +1218,82 @@ function drawTemplate1(){
 
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
-  
-  ctx.fillStyle = THEME.greenDeep;
+  ctx.fillStyle = '#082d17';
   ctx.font = "800 34px 'Plus Jakarta Sans', Arial";
   ctx.fillText('PEMERINTAH PROVINSI NUSA TENGGARA TIMUR', 335, top + 10);
 
-  ctx.fillStyle = THEME.navy;
+  ctx.fillStyle = '#0b1f14';
   ctx.font = "800 70px 'Plus Jakarta Sans', Arial";
   ctx.fillText('DINAS PERTANIAN DAN KETAHANAN PANGAN', 335, top + 64);
 
-  ctx.fillStyle = THEME.gold;
+  ctx.fillStyle = '#b3852b';
   ctx.font = "700 42px 'Plus Jakarta Sans', Arial";
   ctx.fillText('UPTD. Perbenihan Kebun Dinas & Laboratorium Hayati Perkebunan', 335, top + 158);
 
-  ctx.fillStyle = THEME.goldLine;
+  ctx.fillStyle = '#e2d3ab';
   ctx.fillRect(75, top + 248, 2010, 5);
-  ctx.fillStyle = THEME.greenDeep;
+  ctx.fillStyle = '#082d17';
   ctx.fillRect(75, top + 253, 560, 5);
 
-  const photoArea = { x: 75, y: 315, w: 2010, h: 1570 };
+  const acts = getActivities();
+  const infoBarH = 155;
+  const hashtagH = 65;
+  const footerY = 2814;
+  const maxAllowableActH = 920;
+
+  // Hitung tinggi kegiatan secara dinamis
+  const actLayout = calculateDynamicActivityLayout(acts, 2010, maxAllowableActH, "'Plus Jakarta Sans', Arial");
+  const actualActH = acts.length > 0 ? actLayout.totalNeededH : 0;
+  const actGap = acts.length > 0 ? 20 : 0;
+
+  // Tinggi foto dinamis menyesuaikan ke bawah jika tanpa kegiatan
+  const photoStartY = 315;
+  const photoBottomLimit = footerY - hashtagH - 15 - actualActH - actGap - infoBarH - 20;
+  const dynamicPhotoH = Math.max(700, photoBottomLimit - photoStartY);
+
+  const photoArea = { x: 75, y: photoStartY, w: 2010, h: dynamicPhotoH };
   const count = Math.max(photos.length, 1);
   const rects = calculatePhotoLayout(photos, count, photoArea.x, photoArea.y, photoArea.w, photoArea.h, 20);
 
   rects.forEach((r, idx) => {
-    renderPhotoCard(r, idx, photos[idx], 14, '#ffffff', 6);
+    renderPhotoCard(r, idx, photos[idx], 16, '#ffffff', 6, 'rgba(8,36,18,0.14)');
   });
 
-  // LOGO BERAKHLAK BESAR DENGAN OPASITAS LEMBUT
   renderFloatingBerakhlak(photoArea);
 
   let cy = photoArea.y + photoArea.h + 20;
-  const infoBarH = 155;
 
+  // Bar Kebun & Tanggal
   ctx.save();
   ctx.shadowColor = 'rgba(6, 26, 12, 0.08)';
-  ctx.shadowBlur = 18;
-  ctx.shadowOffsetY = 6;
-  rr(75, cy, 2010, infoBarH, 16);
+  ctx.shadowBlur = 18; ctx.shadowOffsetY = 6;
+  rr(75, cy, 2010, infoBarH, 18);
   const infoGrad = ctx.createLinearGradient(75, cy, 2085, cy);
-  infoGrad.addColorStop(0, '#ffffff');
-  infoGrad.addColorStop(1, '#f1f8f3');
-  ctx.fillStyle = infoGrad;
-  ctx.fill();
+  infoGrad.addColorStop(0, '#ffffff'); infoGrad.addColorStop(1, '#f1f8f3');
+  ctx.fillStyle = infoGrad; ctx.fill();
   ctx.restore();
 
-  ctx.strokeStyle = '#cfe0d5';
-  ctx.lineWidth = 2;
-  rr(75, cy, 2010, infoBarH, 16);
-  ctx.stroke();
+  ctx.strokeStyle = '#cfe0d5'; ctx.lineWidth = 2;
+  rr(75, cy, 2010, infoBarH, 18); ctx.stroke();
 
-  ctx.fillStyle = THEME.greenDeep;
-  rr(75, cy, 14, infoBarH, 5);
-  ctx.fill();
+  ctx.fillStyle = '#082d17';
+  rr(75, cy, 14, infoBarH, 6); ctx.fill();
 
-  ctx.fillStyle = THEME.gold;
+  ctx.fillStyle = '#b3852b';
   ctx.font = "800 24px 'Plus Jakarta Sans', Arial";
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'top';
+  ctx.textAlign = 'left'; ctx.textBaseline = 'top';
   ctx.fillText('LOKASI KEBUN DINAS', 110, cy + 20);
 
-  // TANGGAL BADGE BESAR
   const dateStr = dateLabel($('date').value);
   ctx.font = "800 38px 'Plus Jakarta Sans', Arial";
   const dateW = ctx.measureText(dateStr).width + 64;
   const dateX = 2085 - dateW - 20;
 
   rr(dateX, cy + 32, dateW, 90, 16);
-  ctx.fillStyle = THEME.greenDeep;
-  ctx.fill();
-  ctx.fillStyle = '#ffffff';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#082d17'; ctx.fill();
+  ctx.fillStyle = '#ffffff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   ctx.fillText(dateStr, dateX + dateW/2, cy + 77);
 
-  // NAMA KEBUN SANGAT BESAR & BEBAS TABRAKAN (Hingga 82px)
   const maxGardenW = dateX - 140;
   let gardenFontSize = 82;
   ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
@@ -1905,229 +1301,368 @@ function drawTemplate1(){
     gardenFontSize -= 2;
     ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
   }
-  ctx.fillStyle = THEME.navy;
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'top';
+  ctx.fillStyle = '#0b1f14'; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
   ctx.fillText($('gardenName').value, 110, cy + 54);
 
-  const actStartY = cy + infoBarH + 20;
-  const hashtagH = 65;
-  const footerY = 2814;
-  const maxActH = footerY - actStartY - hashtagH - 12;
-  const acts = getActivities();
+  // Render Kegiatan jika ada
+  let nextContentY = cy + infoBarH;
+  if(acts.length > 0){
+    const actStartY = cy + infoBarH + 20;
+    renderActivitiesEmerald(acts, 75, actStartY, 2010, actualActH, actLayout);
+    nextContentY = actStartY + actualActH;
+  }
 
-  renderCleanActivities(acts, 75, actStartY, 2010, maxActH, 1);
-  
-  // HASHTAG #AYO BANGUN NTT
-  renderAyoBangunNTT(75, actStartY + maxActH + 8, 2010, hashtagH);
-
-  renderUnifiedFooter(footerY, 240);
+  // Hashtag & Footer
+  renderAyoBangunNTT(75, nextContentY + 10, 2010, hashtagH, 1);
+  renderUnifiedFooter(footerY, 240, 1);
 }
 
-function drawTemplate2(){
-  ctx.fillStyle = '#eef3ef';
-  ctx.fillRect(0, 0, 2160, 3054);
-
-  const topH = 265;
-  rr(45, 26, 2070, topH, 20);
-  const headGrad = ctx.createLinearGradient(45, 26, 2115, 291);
-  headGrad.addColorStop(0, '#072b16');
-  headGrad.addColorStop(0.65, '#12542c');
-  headGrad.addColorStop(1, '#1b6e3b');
-  ctx.fillStyle = headGrad;
-  ctx.fill();
-
-  ctx.fillStyle = THEME.goldBright;
-  rr(45, 26 + topH - 6, 2070, 6, 3);
-  ctx.fill();
-
-  const logoSize = 220;
-  if(logo1Ready) contain(logo1, 75, 48, logoSize, logoSize);
-
-  ctx.textAlign = 'left';
-  ctx.textBaseline = 'top';
-  
-  ctx.fillStyle = '#b7e0c4';
-  ctx.font = "800 32px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('PEMERINTAH PROVINSI NUSA TENGGARA TIMUR', 320, 48);
-
-  ctx.fillStyle = '#ffffff';
-  ctx.font = "800 68px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('DINAS PERTANIAN DAN KETAHANAN PANGAN', 320, 98);
-
-  ctx.fillStyle = '#fce4a6';
-  ctx.font = "600 40px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('UPTD. Perbenihan Kebun Dinas & Laboratorium Hayati Perkebunan', 320, 188);
-
-  const photoArea = { x: 45, y: 315, w: 2070, h: 1570 };
-  const count = Math.max(photos.length, 1);
-  const rects = calculatePhotoLayout(photos, count, photoArea.x, photoArea.y, photoArea.w, photoArea.h, 20);
-
-  rects.forEach((r, idx) => {
-    renderPhotoCard(r, idx, photos[idx], 16, '#ffffff', 6);
-  });
-
-  // LOGO BERAKHLAK BESAR DENGAN OPASITAS LEMBUT
-  renderFloatingBerakhlak(photoArea);
-
-  let cy = photoArea.y + photoArea.h + 20;
-  const infoH = 155;
-
+function renderActivitiesEmerald(acts, startX, startY, maxW, maxH, layout){
   ctx.save();
-  ctx.shadowColor = 'rgba(6, 26, 12, 0.09)';
-  ctx.shadowBlur = 16;
-  ctx.shadowOffsetY = 5;
-  rr(45, cy, 2070, infoH, 16);
-  ctx.fillStyle = '#ffffff';
-  ctx.fill();
+  rr(startX, startY, maxW, maxH, 18);
+  const bgGrad = ctx.createLinearGradient(startX, startY, startX, startY + maxH);
+  bgGrad.addColorStop(0, '#f1f7f3'); bgGrad.addColorStop(1, '#e5efe7');
+  ctx.fillStyle = bgGrad; ctx.fill();
+  ctx.strokeStyle = '#cce0d2'; ctx.lineWidth = 2;
+  rr(startX, startY, maxW, maxH, 18); ctx.stroke();
   ctx.restore();
 
-  ctx.strokeStyle = '#cbe0d2';
-  ctx.lineWidth = 2;
-  rr(45, cy, 2070, infoH, 16);
+  if(!acts || acts.length === 0) return;
+  const count = acts.length;
+  const innerPadX = layout.innerPadX, innerPadY = layout.innerPadY;
+  const usableW = maxW - (innerPadX * 2);
+  const paddingLeft = layout.paddingLeft;
+  const optimalFont = layout.optimalFont;
+  const lineHeight = layout.lineHeight;
+  const itemGap = layout.itemGap;
+
+  let currentY = startY + innerPadY;
+
+  for(let i = 0; i < count; i++){
+    const itemX = startX + innerPadX;
+    const curItemH = layout.cardHeights[i] || Math.max(82, lineHeight + 36);
+    const itemY = currentY;
+    const itemW = usableW;
+
+    ctx.save();
+    ctx.shadowColor = 'rgba(6, 26, 12, 0.05)'; ctx.shadowBlur = 10; ctx.shadowOffsetY = 4;
+    rr(itemX, itemY, itemW, curItemH, 14); ctx.fillStyle = '#ffffff'; ctx.fill();
+    ctx.restore();
+
+    ctx.save();
+    ctx.strokeStyle = '#d0e2d5'; ctx.lineWidth = 1.8;
+    rr(itemX, itemY, itemW, curItemH, 14); ctx.stroke();
+    const barGrad = ctx.createLinearGradient(itemX, itemY, itemX, itemY + curItemH);
+    barGrad.addColorStop(0, '#082d17'); barGrad.addColorStop(0.7, '#16a34a'); barGrad.addColorStop(1, '#b3852b');
+    ctx.fillStyle = barGrad; rr(itemX, itemY, 11, curItemH, 5); ctx.fill();
+    ctx.restore();
+
+    const lines = splitText(acts[i], layout.maxTextW, optimalFont, "'Plus Jakarta Sans', Arial", false);
+    let textStartY = itemY + (curItemH - lines.length * lineHeight) / 2;
+    ctx.save();
+    ctx.fillStyle = '#0f2416'; ctx.font = "600 " + optimalFont + "px 'Plus Jakarta Sans', Arial";
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    lines.forEach((l, lIdx) => ctx.fillText(l, itemX + paddingLeft, textStartY + lIdx * lineHeight));
+    ctx.restore();
+    currentY += curItemH + itemGap;
+  }
+}
+
+/* -------------------------------------------------- */
+/* TEMPLATE 2: SAPPHIRE MODERN (Dinamis & Kontemporer)*/
+/* -------------------------------------------------- */
+function drawTemplate2(){
+  ctx.fillStyle = '#090d16';
+  ctx.fillRect(0, 0, 2160, 3054);
+
+  const headerGrad = ctx.createLinearGradient(0, 0, 2160, 320);
+  headerGrad.addColorStop(0, '#1e1b4b');
+  headerGrad.addColorStop(0.5, '#0f172a');
+  headerGrad.addColorStop(1, '#0284c7');
+  ctx.fillStyle = headerGrad;
+  rr(50, 40, 2060, 260, 24);
+  ctx.fill();
+
+  ctx.strokeStyle = '#38bdf8';
+  ctx.lineWidth = 3;
+  rr(50, 40, 2060, 260, 24);
   ctx.stroke();
 
-  ctx.fillStyle = THEME.gold;
-  rr(45, cy, 14, infoH, 5);
-  ctx.fill();
-
-  rr(75, cy + 44, 250, 68, 14);
-  ctx.fillStyle = '#ebf5ee';
-  ctx.fill();
-  ctx.fillStyle = THEME.greenDeep;
-  ctx.font = "800 25px 'Plus Jakarta Sans', Arial";
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('KEBUN DINAS', 200, cy + 78);
-
-  // TANGGAL BESAR (40px)
-  const dateStr = dateLabel($('date').value);
-  ctx.fillStyle = '#1e4a2c';
-  ctx.font = "800 40px 'Plus Jakarta Sans', Arial";
-  ctx.textAlign = 'right';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(dateStr, 2065, cy + 78);
-
-  const dateAreaW = ctx.measureText(dateStr).width + 60;
-  const maxGardenW = 2070 - 370 - dateAreaW;
-
-  // NAMA KEBUN BESAR (82px)
-  let gardenFontSize = 82;
-  ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
-  while(ctx.measureText($('gardenName').value).width > maxGardenW && gardenFontSize > 36){
-    gardenFontSize -= 2;
-    ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
-  }
-  ctx.fillStyle = '#061d0f';
-  ctx.textAlign = 'left';
-  ctx.fillText($('gardenName').value, 350, cy + 78);
-
-  const actStartY = cy + infoH + 20;
-  const hashtagH = 65;
-  const footerY = 2814;
-  const maxActH = footerY - actStartY - hashtagH - 12;
-  const acts = getActivities();
-
-  renderCleanActivities(acts, 45, actStartY, 2070, maxActH, 2);
-
-  // HASHTAG #AYO BANGUN NTT
-  renderAyoBangunNTT(45, actStartY + maxActH + 8, 2070, hashtagH);
-
-  renderUnifiedFooter(footerY, 240);
-}
-
-function drawTemplate3(){
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, 2160, 3054);
-
-  ctx.fillStyle = THEME.greenDeep;
-  ctx.fillRect(0, 0, 24, 3054);
-  ctx.fillStyle = THEME.gold;
-  ctx.fillRect(24, 0, 8, 3054);
-
-  const top = 36;
-  const logoSize = 230;
-  if(logo1Ready) contain(logo1, 70, top + 8, logoSize, logoSize);
+  const logoSize = 210;
+  if(logo1Ready) contain(logo1, 85, 65, logoSize, logoSize);
 
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
-  
-  ctx.fillStyle = THEME.greenDeep;
-  ctx.font = "800 32px 'Plus Jakarta Sans', Arial";
+  ctx.fillStyle = '#38bdf8';
+  ctx.font = "800 32px 'Space Grotesk', Arial";
+  ctx.fillText('PEMERINTAH PROVINSI NUSA TENGGARA TIMUR', 325, 65);
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = "800 68px 'Space Grotesk', Arial";
+  ctx.fillText('DINAS PERTANIAN & KETAHANAN PANGAN', 325, 114);
+
+  ctx.fillStyle = '#cbd5e1';
+  ctx.font = "600 38px 'Space Grotesk', Arial";
+  ctx.fillText('UPTD. Perbenihan Kebun Dinas & Laboratorium Hayati Perkebunan', 325, 204);
+
+  const acts = getActivities();
+  const infoBarH = 150;
+  const hashtagH = 65;
+  const footerY = 2814;
+  const maxAllowableActH = 920;
+
+  const actLayout = calculateDynamicActivityLayout(acts, 2060, maxAllowableActH, "'Space Grotesk', Arial");
+  const actualActH = acts.length > 0 ? actLayout.totalNeededH : 0;
+  const actGap = acts.length > 0 ? 20 : 0;
+
+  const photoStartY = 330;
+  const photoBottomLimit = footerY - hashtagH - 15 - actualActH - actGap - infoBarH - 24;
+  const dynamicPhotoH = Math.max(700, photoBottomLimit - photoStartY);
+
+  const photoArea = { x: 50, y: photoStartY, w: 2060, h: dynamicPhotoH };
+  const count = Math.max(photos.length, 1);
+  const rects = calculatePhotoLayout(photos, count, photoArea.x, photoArea.y, photoArea.w, photoArea.h, 24);
+
+  rects.forEach((r, idx) => {
+    renderPhotoCard(r, idx, photos[idx], 20, '#38bdf8', 4, 'rgba(56, 189, 248, 0.25)');
+  });
+
+  renderFloatingBerakhlak(photoArea);
+
+  let cy = photoArea.y + photoArea.h + 24;
+
+  rr(50, cy, 2060, infoBarH, 20);
+  ctx.fillStyle = '#1e293b'; ctx.fill();
+  ctx.strokeStyle = '#334155'; ctx.lineWidth = 2.5;
+  rr(50, cy, 2060, infoBarH, 20); ctx.stroke();
+
+  const neonGrad = ctx.createLinearGradient(50, cy, 50, cy + infoBarH);
+  neonGrad.addColorStop(0, '#38bdf8'); neonGrad.addColorStop(1, '#a855f7');
+  ctx.fillStyle = neonGrad; rr(50, cy, 14, infoBarH, 6); ctx.fill();
+
+  const dateStr = dateLabel($('date').value);
+  ctx.font = "800 38px 'Space Grotesk', Arial";
+  const dateW = ctx.measureText(dateStr).width + 60;
+  const dateX = 2110 - dateW - 20;
+
+  rr(dateX, cy + 30, dateW, 90, 16);
+  ctx.fillStyle = '#0f172a'; ctx.fill();
+  ctx.strokeStyle = '#06b6d4'; ctx.lineWidth = 2;
+  rr(dateX, cy + 30, dateW, 90, 16); ctx.stroke();
+
+  ctx.fillStyle = '#38bdf8'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(dateStr, dateX + dateW/2, cy + 75);
+
+  const maxGardenW = dateX - 120;
+  let gardenFontSize = 80;
+  ctx.font = "800 " + gardenFontSize + "px 'Space Grotesk', Arial";
+  while(ctx.measureText($('gardenName').value).width > maxGardenW && gardenFontSize > 36){
+    gardenFontSize -= 2;
+    ctx.font = "800 " + gardenFontSize + "px 'Space Grotesk', Arial";
+  }
+  ctx.fillStyle = '#f8fafc'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.fillText($('gardenName').value, 95, cy + 75);
+
+  let nextContentY = cy + infoBarH;
+  if(acts.length > 0){
+    const actStartY = cy + infoBarH + 20;
+    renderActivitiesSapphire(acts, 50, actStartY, 2060, actualActH, actLayout);
+    nextContentY = actStartY + actualActH;
+  }
+
+  renderAyoBangunNTT(50, nextContentY + 10, 2060, hashtagH, 2);
+  renderUnifiedFooter(footerY, 240, 2);
+}
+
+function renderActivitiesSapphire(acts, startX, startY, maxW, maxH, layout){
+  ctx.save();
+  rr(startX, startY, maxW, maxH, 20);
+  ctx.fillStyle = '#111827'; ctx.fill();
+  ctx.strokeStyle = '#1f2937'; ctx.lineWidth = 2;
+  rr(startX, startY, maxW, maxH, 20); ctx.stroke();
+  ctx.restore();
+
+  if(!acts || acts.length === 0) return;
+  const count = acts.length;
+  const innerPadX = layout.innerPadX, innerPadY = layout.innerPadY;
+  const usableW = maxW - (innerPadX * 2);
+  const paddingLeft = 44;
+  const optimalFont = layout.optimalFont;
+  const lineHeight = layout.lineHeight;
+  const itemGap = layout.itemGap;
+
+  let currentY = startY + innerPadY;
+
+  for(let i = 0; i < count; i++){
+    const itemX = startX + innerPadX;
+    const curItemH = layout.cardHeights[i] || Math.max(82, lineHeight + 36);
+    const itemY = currentY; const itemW = usableW;
+
+    ctx.save();
+    rr(itemX, itemY, itemW, curItemH, 16); ctx.fillStyle = '#1e293b'; ctx.fill();
+    ctx.strokeStyle = '#334155'; ctx.lineWidth = 2;
+    rr(itemX, itemY, itemW, curItemH, 16); ctx.stroke();
+
+    ctx.fillStyle = '#38bdf8';
+    rr(itemX + 16, itemY + (curItemH - 24)/2, 8, 24, 4); ctx.fill();
+    ctx.restore();
+
+    const lines = splitText(acts[i], layout.maxTextW, optimalFont, "'Space Grotesk', Arial", false);
+    let textStartY = itemY + (curItemH - lines.length * lineHeight) / 2;
+    ctx.save();
+    ctx.fillStyle = '#f1f5f9'; ctx.font = "600 " + optimalFont + "px 'Space Grotesk', Arial";
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    lines.forEach((l, lIdx) => ctx.fillText(l, itemX + paddingLeft, textStartY + lIdx * lineHeight));
+    ctx.restore();
+    currentY += curItemH + itemGap;
+  }
+}
+
+/* -------------------------------------------------- */
+/* TEMPLATE 3: WARM SAND LUXE (Editorial Jurnalistik) */
+/* -------------------------------------------------- */
+function drawTemplate3(){
+  ctx.fillStyle = '#faf6f0';
+  ctx.fillRect(0, 0, 2160, 3054);
+
+  ctx.strokeStyle = '#8c5828';
+  ctx.lineWidth = 6;
+  ctx.strokeRect(40, 40, 2080, 2974);
+  ctx.strokeStyle = '#d4b996';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(52, 52, 2056, 2950);
+
+  const top = 70;
+  const logoSize = 220;
+  if(logo1Ready) contain(logo1, 80, top + 10, logoSize, logoSize);
+
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'top';
+  ctx.fillStyle = '#78350f';
+  ctx.font = "800 32px 'Cinzel', serif";
   ctx.fillText('PEMERINTAH PROVINSI NUSA TENGGARA TIMUR', 330, top + 10);
 
-  ctx.fillStyle = THEME.navy;
-  ctx.font = "800 68px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('DINAS PERTANIAN & KETAHANAN PANGAN', 330, top + 64);
+  ctx.fillStyle = '#451a03';
+  ctx.font = "900 68px 'Playfair Display', serif";
+  ctx.fillText('Dinas Pertanian & Ketahanan Pangan', 330, top + 56);
 
-  ctx.fillStyle = '#4e6654';
-  ctx.font = "700 40px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('UPTD. Perbenihan Kebun Dinas & Laboratorium Hayati Perkebunan', 330, top + 158);
+  ctx.fillStyle = '#854d0e';
+  ctx.font = "600 38px 'Playfair Display', serif";
+  ctx.fillText('UPTD. Perbenihan Kebun Dinas & Laboratorium Hayati Perkebunan', 330, top + 148);
 
-  ctx.fillStyle = THEME.goldLine;
-  ctx.fillRect(70, top + 248, 2025, 5);
+  ctx.fillStyle = '#b45309';
+  ctx.fillRect(80, top + 225, 2000, 4);
+  ctx.fillStyle = '#78350f';
+  ctx.fillRect(80, top + 233, 2000, 1.5);
 
-  const photoArea = { x: 70, y: 315, w: 2025, h: 1570 };
+  const acts = getActivities();
+  const hashtagH = 65;
+  const footerY = 2814;
+  const maxAllowableActH = 920;
+
+  const actLayout = calculateDynamicActivityLayout(acts, 2000, maxAllowableActH, "'Playfair Display', serif");
+  const actualActH = acts.length > 0 ? actLayout.totalNeededH : 0;
+  const actGap = acts.length > 0 ? 20 : 0;
+
+  const photoStartY = 340;
+  const infoHeaderH = 140;
+  const photoBottomLimit = footerY - hashtagH - 15 - actualActH - actGap - infoHeaderH - 20;
+  const dynamicPhotoH = Math.max(700, photoBottomLimit - photoStartY);
+
+  const photoArea = { x: 80, y: photoStartY, w: 2000, h: dynamicPhotoH };
   const count = Math.max(photos.length, 1);
   const rects = calculatePhotoLayout(photos, count, photoArea.x, photoArea.y, photoArea.w, photoArea.h, 20);
 
   rects.forEach((r, idx) => {
-    renderPhotoCard(r, idx, photos[idx], 12, '#ffffff', 5);
+    renderPhotoCard(r, idx, photos[idx], 8, '#ffffff', 8, 'rgba(120, 53, 15, 0.18)');
   });
 
-  // LOGO BERAKHLAK BESAR DENGAN OPASITAS LEMBUT
   renderFloatingBerakhlak(photoArea);
 
   let cy = photoArea.y + photoArea.h + 20;
 
-  // TANGGAL BADGE KANAN ATAS BAR KEGIATAN
   const dateStr = dateLabel($('date').value);
   ctx.save();
-  ctx.font = "800 38px 'Plus Jakarta Sans', Arial";
-  const dateW = ctx.measureText(dateStr).width + 64;
-  const dateX = 2095 - dateW;
-  rr(dateX, cy + 12, dateW, 86, 16);
-  ctx.fillStyle = THEME.greenDeep;
-  ctx.fill();
-
-  ctx.fillStyle = '#ffffff';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(dateStr, dateX + dateW/2, cy + 55);
+  ctx.font = "800 36px 'Playfair Display', serif";
+  const dateW = ctx.measureText(dateStr).width + 60;
+  const dateX = 2080 - dateW;
+  rr(dateX, cy + 10, dateW, 80, 8);
+  ctx.fillStyle = '#78350f'; ctx.fill();
+  ctx.fillStyle = '#ffffff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(dateStr, dateX + dateW/2, cy + 50);
   ctx.restore();
 
   ctx.textAlign = 'left';
   ctx.textBaseline = 'top';
-  ctx.fillStyle = THEME.gold;
-  ctx.font = "800 24px 'Plus Jakarta Sans', Arial";
-  ctx.fillText('DOKUMENTASI LAPORAN HARIAN', 70, cy);
+  ctx.fillStyle = '#9a3412';
+  ctx.font = "800 24px 'Cinzel', serif";
+  ctx.fillText('LOKASI KEBUN DINAS TERDAFTAR', 80, cy);
 
-  // NAMA KEBUN BESAR (82px)
-  const maxGardenW = dateX - 100;
-  let gardenFontSize = 82;
-  ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
+  const maxGardenW = dateX - 120;
+  let gardenFontSize = 80;
+  ctx.font = "900 " + gardenFontSize + "px 'Playfair Display', serif";
   while(ctx.measureText($('gardenName').value).width > maxGardenW && gardenFontSize > 36){
     gardenFontSize -= 2;
-    ctx.font = "800 " + gardenFontSize + "px 'Plus Jakarta Sans', Arial";
+    ctx.font = "900 " + gardenFontSize + "px 'Playfair Display', serif";
   }
-  ctx.fillStyle = '#0a2212';
-  ctx.fillText($('gardenName').value, 70, cy + 42);
+  ctx.fillStyle = '#431407';
+  ctx.fillText($('gardenName').value, 80, cy + 34);
 
-  ctx.fillStyle = '#cfe0d5';
-  ctx.fillRect(70, cy + 130, 2025, 3);
+  ctx.fillStyle = '#d4b996';
+  ctx.fillRect(80, cy + 120, 2000, 3);
 
-  const actStartY = cy + 148;
-  const hashtagH = 65;
-  const footerY = 2814;
-  const maxActH = footerY - actStartY - hashtagH - 12;
-  const acts = getActivities();
+  let nextContentY = cy + 138;
+  if(acts.length > 0){
+    renderActivitiesWarmSand(acts, 80, nextContentY, 2000, actualActH, actLayout);
+    nextContentY = nextContentY + actualActH;
+  }
 
-  renderCleanActivities(acts, 70, actStartY, 2025, maxActH, 3);
+  renderAyoBangunNTT(80, nextContentY + 10, 2000, hashtagH, 3);
+  renderUnifiedFooter(footerY, 240, 3);
+}
 
-  // HASHTAG #AYO BANGUN NTT
-  renderAyoBangunNTT(70, actStartY + maxActH + 8, 2025, hashtagH);
+function renderActivitiesWarmSand(acts, startX, startY, maxW, maxH, layout){
+  ctx.save();
+  rr(startX, startY, maxW, maxH, 12);
+  ctx.fillStyle = '#f3ebe0'; ctx.fill();
+  ctx.strokeStyle = '#dbcabb'; ctx.lineWidth = 2;
+  rr(startX, startY, maxW, maxH, 12); ctx.stroke();
+  ctx.restore();
 
-  renderUnifiedFooter(footerY, 240);
+  if(!acts || acts.length === 0) return;
+  const count = acts.length;
+  const innerPadX = layout.innerPadX, innerPadY = layout.innerPadY;
+  const usableW = maxW - (innerPadX * 2);
+  const paddingLeft = layout.paddingLeft;
+  const optimalFont = layout.optimalFont;
+  const lineHeight = layout.lineHeight;
+  const itemGap = layout.itemGap;
+
+  let currentY = startY + innerPadY;
+
+  for(let i = 0; i < count; i++){
+    const itemX = startX + innerPadX;
+    const curItemH = layout.cardHeights[i] || Math.max(82, lineHeight + 36);
+    const itemY = currentY; const itemW = usableW;
+
+    ctx.save();
+    rr(itemX, itemY, itemW, curItemH, 8); ctx.fillStyle = '#ffffff'; ctx.fill();
+    ctx.strokeStyle = '#dfd2c4'; ctx.lineWidth = 1.8;
+    rr(itemX, itemY, itemW, curItemH, 8); ctx.stroke();
+
+    ctx.fillStyle = '#b45309';
+    rr(itemX, itemY, 8, curItemH, 3); ctx.fill();
+    ctx.restore();
+
+    const lines = splitText(acts[i], layout.maxTextW, optimalFont, "'Playfair Display', serif", false);
+    let textStartY = itemY + (curItemH - lines.length * lineHeight) / 2;
+    ctx.save();
+    ctx.fillStyle = '#451a03'; ctx.font = "600 " + optimalFont + "px 'Playfair Display', serif";
+    ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+    lines.forEach((l, lIdx) => ctx.fillText(l, itemX + paddingLeft, textStartY + lIdx * lineHeight));
+    ctx.restore();
+    currentY += curItemH + itemGap;
+  }
 }
 
 function draw(){
@@ -2177,7 +1712,8 @@ function saveArchive(){
 
 function loadArchive(){
   let box = $('archiveList'); 
-  box.innerHTML = '<div style="font-size:12px;color:#11592f;text-align:center;padding:16px;">🔄 Memuat arsip dari Google Drive...</div>';
+  box.innerHTML = '<div class="text-xs text-brand-700 text-center py-4 font-semibold flex items-center justify-center gap-2"><i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Memuat arsip dari Google Drive...</span></div>';
+  if(window.lucide) { lucide.createIcons(); }
 
   let year = Number($('archiveYear').value);
   let month = Number($('archiveMonth').value);
@@ -2188,7 +1724,7 @@ function loadArchive(){
   }).then(res => res.json()).then(data => {
     box.innerHTML = '';
     if(!data || !data.archives || data.archives.length === 0){
-      box.innerHTML = '<div style="font-size:12px;color:#6d8073;padding:16px;text-align:center;background:#f5f8f6;border-radius:8px;">Belum ada arsip di Google Drive untuk filter ini.</div>';
+      box.innerHTML = '<div class="text-xs text-slate-500 p-4 text-center bg-white rounded-2xl border border-slate-200">Belum ada arsip di Google Drive untuk filter ini.</div>';
       return;
     }
 
@@ -2199,7 +1735,7 @@ function loadArchive(){
     );
 
     if(list.length === 0){
-      box.innerHTML = '<div style="font-size:12px;color:#6d8073;padding:16px;text-align:center;background:#f5f8f6;border-radius:8px;">Tidak ada arsip untuk bulan yang dipilih di Google Drive.</div>';
+      box.innerHTML = '<div class="text-xs text-slate-500 p-4 text-center bg-white rounded-2xl border border-slate-200">Tidak ada arsip untuk bulan yang dipilih di Google Drive.</div>';
       return;
     }
 
@@ -2207,26 +1743,38 @@ function loadArchive(){
 
     list.forEach(item => {
       let div = document.createElement('div'); 
-      div.className = 'archive-item';
+      div.className = 'p-3.5 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200';
       
       let deleteButtonHtml = isAdmin 
-        ? `<button type="button" class="delete-file-btn" onclick="deleteArchiveItem('${item.id}', '${item.garden}', '${item.date}')">🗑️ Hapus Arsip (Admin)</button>` 
+        ? `<button type="button" class="btn-press col-span-2 py-2 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-[11px] font-bold border border-rose-200 flex items-center justify-center gap-1.5 transition-colors" onclick="deleteArchiveItem('${item.id}', '${item.garden}', '${item.date}')"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i><span>Hapus Arsip (Admin)</span></button>` 
         : '';
 
       div.innerHTML = `
-        <b>${item.garden || 'Kebun Dinas'}</b><br>
-        <small style="color:#5a6e60">Tanggal: ${item.date}</small>
-        <img src="${item.image}" alt="Pratinjau Arsip">
-        <div class="item-actions">
-          <button type="button" class="down-file-btn" onclick="directDownloadArchive('${item.image}', '${item.garden}', '${item.date}')">📥 Unduh Gambar HD</button>
-          <button type="button" class="view-file-btn" onclick="window.open('${item.image}', '_blank')">👁️ Lihat Full HD</button>
+        <div class="flex items-start justify-between gap-2 mb-2">
+          <div>
+            <h5 class="text-xs font-bold text-slate-800">${item.garden || 'Kebun Dinas'}</h5>
+            <span class="text-[10px] font-medium text-slate-400">Tanggal: ${item.date}</span>
+          </div>
+          <span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[9px] font-bold border border-emerald-200">Drive</span>
+        </div>
+        <img src="${item.image}" alt="Pratinjau Arsip" class="w-full h-auto rounded-xl border border-slate-200 mb-3 object-cover max-h-48">
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" class="btn-press py-2 px-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-[11px] font-bold flex items-center justify-center gap-1.5 shadow-sm transition-all" onclick="directDownloadArchive('${item.image}', '${item.garden}', '${item.date}')">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Unduh HD</span>
+          </button>
+          <button type="button" class="btn-press py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold flex items-center justify-center gap-1.5 transition-all" onclick="window.open('${item.image}', '_blank')">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            <span>Lihat Foto</span>
+          </button>
           ${deleteButtonHtml}
         </div>
       `;
       box.appendChild(div);
     });
+    if(window.lucide) { lucide.createIcons(); }
   }).catch(() => {
-    box.innerHTML = '<div style="font-size:12px;color:#6d8073;padding:16px;text-align:center;background:#f5f8f6;border-radius:8px;">Klik tombol "Buka Arsip" untuk menyegarkan daftar Google Drive.</div>';
+    box.innerHTML = '<div class="text-xs text-slate-500 p-4 text-center bg-white rounded-2xl border border-slate-200">Klik tombol "Buka Arsip" untuk menyegarkan daftar Google Drive.</div>';
   });
 }
 
@@ -2311,14 +1859,22 @@ $('download').addEventListener('click', () => {
 $('gardenName').addEventListener('change', draw);
 $('date').addEventListener('input', draw);
 $('showArchive').addEventListener('click', loadArchive);
-$('downloadZip').addEventListener('click', () => {
-  showStatusAlert('Tips: Buka Google Drive Anda ➔ klik kanan folder "Arsip Kolase Kebun Dinas" ➔ Download untuk mengunduh semua arsip sekaligus.', 'loading', 7000);
+
+// Safe Initalization
+window.addEventListener('DOMContentLoaded', () => {
+  fillYears();
+  addActivityItem();
+  checkSavedSession();
+  draw();
 });
 
-fillYears();
-addActivityItem();
-checkSavedSession();
-draw();
+// Immediate render if DOM ready
+if (document.readyState === "complete" || document.readyState === "interactive") {
+  fillYears();
+  addActivityItem();
+  checkSavedSession();
+  draw();
+}
 </script>
 </body>
 </html>
