@@ -83,7 +83,6 @@
       transform: scale(0.97);
     }
 
-    /* Shimmer effect for buttons */
     .btn-shimmer {
       position: relative;
       overflow: hidden;
@@ -109,28 +108,24 @@
 <body class="bg-gradient-to-br from-emerald-50/70 via-slate-50 to-teal-50/50 font-sans text-slate-800 antialiased min-h-screen flex flex-col selection:bg-brand-500 selection:text-white">
 
 <!-- ========================================== -->
-<!-- 1. LOGIN MODAL OVERLAY (DYNAMIC GLASS)     -->
+<!-- 1. LOGIN MODAL OVERLAY                     -->
 <!-- ========================================== -->
 <div id="loginOverlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-900/75 backdrop-blur-md transition-all duration-500">
   <div class="glass-card w-full max-w-lg p-8 sm:p-10 rounded-3xl shadow-2xl border border-white/60 relative overflow-hidden animate-scale-up">
-    <!-- Accent Line -->
     <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-brand-700 via-brand-500 to-brand-gold"></div>
 
-    <!-- Logos -->
     <div class="flex items-center justify-center gap-6 mb-6">
       <img src="logofix.png" alt="Pemprov NTT" class="h-16 w-auto drop-shadow-md hover:scale-105 transition-transform duration-300" onerror="this.style.display='none'">
       <div class="w-px h-10 bg-slate-200"></div>
       <img src="bundinas.png.jpeg" alt="UPTD Kebun Dinas" class="h-16 w-auto drop-shadow-md hover:scale-105 transition-transform duration-300" onerror="this.style.display='none'">
     </div>
 
-    <!-- Titles -->
     <div class="text-center mb-6">
       <span class="inline-block px-3 py-1 bg-brand-100 text-brand-700 text-xs font-bold tracking-wider uppercase rounded-full mb-2">Pemerintah Provinsi NTT</span>
       <h2 class="text-2xl sm:text-3xl font-extrabold text-brand-900 tracking-tight">FAST REPORT HD</h2>
       <p class="text-xs sm:text-sm text-slate-500 mt-1 font-medium">Sistem Pembuatan Kolase & Pengarsipan Google Drive Cloud</p>
     </div>
 
-    <!-- Role Tabs -->
     <div class="grid grid-cols-2 p-1.5 bg-slate-100/80 rounded-2xl mb-6 border border-slate-200/60">
       <button id="tabPegawai" onclick="switchLoginTab('pegawai')" class="py-2.5 text-xs sm:text-sm font-bold rounded-xl transition-all duration-300 bg-white text-brand-800 shadow-sm">
         Petugas Kebun
@@ -140,7 +135,6 @@
       </button>
     </div>
 
-    <!-- Form Petugas -->
     <div id="formPegawai" class="space-y-4">
       <div>
         <label class="block text-xs font-bold uppercase tracking-wider text-brand-800 mb-1.5">Pilih Kebun Dinas</label>
@@ -170,7 +164,6 @@
       </div>
     </div>
 
-    <!-- Form Admin -->
     <div id="formAdmin" class="space-y-4 hidden">
       <div>
         <label class="block text-xs font-bold uppercase tracking-wider text-brand-800 mb-1.5">Username Admin</label>
@@ -182,7 +175,6 @@
       </div>
     </div>
 
-    <!-- Login Button -->
     <button onclick="processLogin()" class="btn-shimmer btn-press w-full mt-6 py-3.5 px-6 rounded-xl bg-gradient-to-r from-brand-700 to-brand-600 hover:from-brand-800 hover:to-brand-700 text-white font-bold text-sm tracking-wide shadow-lg shadow-brand-700/30 hover:shadow-xl hover:shadow-brand-700/40 transition-all duration-300 flex items-center justify-center gap-2">
       <span>Masuk ke Aplikasi</span>
       <i data-lucide="arrow-right" class="w-4 h-4"></i>
@@ -190,7 +182,6 @@
 
     <div id="loginStatus" class="hidden mt-4 p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold text-center animate-fade-in"></div>
 
-    <!-- Hint -->
     <div class="mt-6 p-4 rounded-xl bg-emerald-50/60 border border-emerald-100 text-xs text-emerald-900/80 leading-relaxed flex items-start gap-2.5">
       <i data-lucide="info" class="w-4 h-4 text-brand-600 flex-shrink-0 mt-0.5"></i>
       <div>
@@ -210,7 +201,6 @@
   <!-- LEFT CONTROL SIDEBAR -->
   <aside class="w-full lg:w-[480px] xl:w-[520px] bg-white/95 backdrop-blur-lg border-r border-slate-200/80 flex flex-col p-6 sm:p-8 lg:h-screen lg:overflow-y-auto shadow-sm">
     
-    <!-- Top Identity Header -->
     <div class="flex items-center gap-3.5 p-3.5 rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50/60 border border-emerald-100 mb-6 shadow-sm">
       <img src="logofix.png" alt="Pemprov NTT" class="h-10 w-auto" onerror="this.style.display='none'">
       <div class="w-px h-8 bg-emerald-200"></div>
@@ -221,7 +211,6 @@
       </div>
     </div>
 
-    <!-- Title & Status Badge -->
     <div class="flex items-center justify-between mb-4">
       <div>
         <h1 class="text-xl font-extrabold text-brand-900 tracking-tight flex items-center gap-2">
@@ -252,26 +241,23 @@
       </span>
     </div>
 
-    <!-- 3 Tipe Desain Kolase Unik & Sangat Berbeda -->
+    <!-- Pilihan Tema Kolase -->
     <div class="mb-6">
       <label class="block text-xs font-bold uppercase tracking-wider text-brand-900 mb-2.5 flex items-center gap-1.5">
         <i data-lucide="palette" class="w-4 h-4 text-brand-600"></i>
         <span>Pilihan Gaya Desain Kolase (3 Gaya Berbeda)</span>
       </label>
       <div class="grid grid-cols-3 gap-2.5">
-        <!-- Template 1: Classic Emerald -->
         <div onclick="setTemplate(1)" id="tmpl1" class="template-card cursor-pointer p-3 rounded-2xl border-2 border-emerald-600 bg-emerald-50/80 shadow-sm transition-all duration-300 hover:scale-[1.02] text-center">
           <div class="w-full h-1.5 rounded-full bg-gradient-to-r from-emerald-800 to-amber-500 mb-1.5"></div>
           <div class="text-xs font-bold text-emerald-950">Emerald Formal</div>
           <div class="text-[9.5px] text-emerald-700 font-semibold mt-0.5">Klasik Pemerintahan</div>
         </div>
-        <!-- Template 2: Indigo Dark Modern -->
         <div onclick="setTemplate(2)" id="tmpl2" class="template-card cursor-pointer p-3 rounded-2xl border-2 border-slate-200 bg-white shadow-sm transition-all duration-300 hover:scale-[1.02] text-center">
           <div class="w-full h-1.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-400 mb-1.5"></div>
           <div class="text-xs font-bold text-slate-800">Sapphire Modern</div>
           <div class="text-[9.5px] text-slate-500 font-semibold mt-0.5">Dinamis & Kontemporer</div>
         </div>
-        <!-- Template 3: Warm Sand Editorial -->
         <div onclick="setTemplate(3)" id="tmpl3" class="template-card cursor-pointer p-3 rounded-2xl border-2 border-slate-200 bg-white shadow-sm transition-all duration-300 hover:scale-[1.02] text-center">
           <div class="w-full h-1.5 rounded-full bg-gradient-to-r from-amber-700 to-amber-400 mb-1.5"></div>
           <div class="text-xs font-bold text-slate-800">Warm Sand Luxe</div>
@@ -280,7 +266,7 @@
       </div>
     </div>
 
-    <!-- Garden & Date Inputs -->
+    <!-- Inputs -->
     <div class="space-y-4 mb-6">
       <div>
         <label class="block text-xs font-bold uppercase tracking-wider text-brand-900 mb-1.5 flex items-center gap-1.5">
@@ -312,7 +298,7 @@
       </div>
     </div>
 
-    <!-- Activities Section -->
+    <!-- Activities -->
     <div class="mb-6">
       <div class="flex items-center justify-between mb-2">
         <label class="block text-xs font-bold uppercase tracking-wider text-brand-900 flex items-center gap-1.5">
@@ -330,7 +316,7 @@
       </button>
     </div>
 
-    <!-- Upload Photos Section -->
+    <!-- Upload Photos -->
     <div class="mb-6">
       <label class="block text-xs font-bold uppercase tracking-wider text-brand-900 mb-2 flex items-center gap-1.5">
         <i data-lucide="image-plus" class="w-4 h-4 text-brand-600"></i>
@@ -392,6 +378,7 @@
         </select>
         <select id="archiveYear" class="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-700"></select>
         <select id="archiveMonth" class="px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-700">
+          <option value="all">Semua Bulan</option>
           <option value="1">Januari</option>
           <option value="2">Februari</option>
           <option value="3">Maret</option>
@@ -419,9 +406,8 @@
     </div>
   </aside>
 
-  <!-- RIGHT PREVIEW CANVAS WORKSPACE -->
+  <!-- RIGHT PREVIEW CANVAS -->
   <main class="flex-1 p-6 sm:p-10 flex flex-col items-center justify-start overflow-y-auto">
-    <!-- Header Bar -->
     <div class="w-full max-w-4xl flex items-center justify-between mb-6 pb-4 border-b border-slate-200">
       <div class="flex items-center gap-3">
         <div class="p-2.5 rounded-2xl bg-white shadow-sm border border-slate-200 text-brand-600">
@@ -440,7 +426,6 @@
       </div>
     </div>
 
-    <!-- Canvas Frame Container -->
     <div class="w-full max-w-4xl p-4 sm:p-6 rounded-3xl bg-slate-200/60 border border-white/60 shadow-2xl backdrop-blur-sm transition-all duration-300 hover:shadow-brand-900/10">
       <canvas id="canvas" width="2160" height="3054" class="w-full h-auto rounded-xl shadow-xl bg-white block"></canvas>
     </div>
@@ -448,13 +433,12 @@
 </div>
 
 <!-- ========================================== -->
-<!-- 3. JAVASCRIPT LOGIC & CANVAS ENGINE        -->
+<!-- 3. JAVASCRIPT LOGIC                        -->
 <!-- ========================================== -->
 <script>
-// Initialize Lucide Icons
 if(window.lucide) { lucide.createIcons(); }
 
-const GDRIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxNiur-HREkRrYdqmctzL4bPdRd66cUIOhbutNm1HXQG4JXaT9ODhBHjVPprHrdD4yt/exec";
+const GDRIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz1UVX6Lp_lJ0Fgpzb6jjJmVHZai3AEv0i9pcqpxR1h9dcaXt_6Jy4u7U1H49xXWheXCw/exec";
 const ADMIN_ACCOUNT = { username: "admin", password: "admin123" };
 const KEBUN_ACCOUNTS = {
   "UPTD PKDLHP Sie Pengelolaan Kebun Dinas": "pkdlhp",
@@ -473,6 +457,7 @@ const KEBUN_ACCOUNTS = {
 
 let currentUser = null;
 let activeLoginTab = 'pegawai';
+let cachedArchives = [];
 
 function switchLoginTab(tab){
   activeLoginTab = tab;
@@ -688,7 +673,7 @@ function renderThumbs(){
   if(window.lucide) { lucide.createIcons(); }
 }
 
-// Canvas Shapes & Math Helpers
+// Canvas Helpers
 function rr(x, y, w, h, r){
   if(w < 2*r) r = w/2;
   if(h < 2*r) r = h/2;
@@ -738,7 +723,6 @@ function dateLabel(value){
   return days[d.getDay()] + ', ' + day + ' ' + months[+month-1] + ' ' + year;
 }
 
-// ===== STRUKTUR TATA LETAK FOTO KOLASE PRESISI (1 - 10 FOTO) =====
 function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap = 20){
   const rects = [];
   if (count <= 1) {
@@ -842,13 +826,12 @@ function renderPhotoCard(r, idx, photo, radius = 16, borderColor = '#ffffff', bo
   }
 }
 
-// ===== LOGO BERAKHLAK DIPERBESAR TANPA KOTAK & POSISI LEBIH KE ATAS =====
 function renderFloatingBerakhlak(photoArea){
   if(!logoBerakhlakReady) return;
   const logoW = 600;
   const logoH = 290;
   const logoX = photoArea.x + photoArea.w - logoW - 10;
-  const logoY = photoArea.y - 10; // Dinaikkan lebih ke atas
+  const logoY = photoArea.y - 10;
 
   ctx.save();
   ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
@@ -858,7 +841,6 @@ function renderFloatingBerakhlak(photoArea){
   ctx.restore();
 }
 
-// ===== HASHTAG #AYO BANGUN NTT DENGAN BERBAGAI GAYA =====
 function renderAyoBangunNTT(x, y, w, h = 60, styleType = 1){
   ctx.save();
   const badgeH = 50;
@@ -866,7 +848,6 @@ function renderAyoBangunNTT(x, y, w, h = 60, styleType = 1){
   const tagText = "#AYO BANGUN NTT";
   
   if(styleType === 1) {
-    // Style 1: Emerald Gold Elegant Pill
     ctx.font = "900 34px 'Plus Jakarta Sans', Arial";
     const tagW = ctx.measureText(tagText).width + 80;
     const badgeX = x + (w - tagW) / 2;
@@ -902,7 +883,6 @@ function renderAyoBangunNTT(x, y, w, h = 60, styleType = 1){
     ctx.fillText(tagText, badgeX + tagW/2, badgeY + badgeH/2 + 2);
 
   } else if(styleType === 2) {
-    // Style 2: Cyan & Deep Sapphire Futuristic Glow
     ctx.font = "900 34px 'Space Grotesk', Arial";
     const tagW = ctx.measureText(tagText).width + 90;
     const badgeX = x + (w - tagW) / 2;
@@ -921,7 +901,6 @@ function renderAyoBangunNTT(x, y, w, h = 60, styleType = 1){
     ctx.fillText(tagText, badgeX + tagW/2, badgeY + badgeH/2 + 2);
 
   } else {
-    // Style 3: Warm Terracotta & Sand Editorial Badge
     ctx.font = "900 32px 'Cinzel', serif";
     const tagW = ctx.measureText(tagText).width + 90;
     const badgeX = x + (w - tagW) / 2;
@@ -942,7 +921,6 @@ function renderAyoBangunNTT(x, y, w, h = 60, styleType = 1){
   ctx.restore();
 }
 
-// ===== REALISTIC ICONS & BRANDING =====
 function drawIconBadge(x, y, size, radius, fillStyle){
   ctx.save();
   rr(x, y, size, size, radius);
@@ -989,7 +967,6 @@ function drawYoutubeIcon(x, y, size){
   ctx.restore();
 }
 
-// ===== REALISTIC TIKTOK LOGO VECTOR =====
 function drawTikTokIcon(x, y, size){
   ctx.save();
   const r = size * 0.28;
@@ -1034,11 +1011,8 @@ function drawTikTokIcon(x, y, size){
     ctx.restore();
   }
 
-  // Cyan Layer
   drawMusicalNote(-size*0.025, size*0.02, '#25F4EE');
-  // Red Layer
   drawMusicalNote(size*0.025, -size*0.02, '#FE2C55');
-  // White Layer
   drawMusicalNote(0, 0, '#FFFFFF');
 
   ctx.restore();
@@ -1073,27 +1047,23 @@ function renderUnifiedFooter(yPos, height = 240, themeType = 1){
     barGrad.addColorStop(0, '#78350f'); barGrad.addColorStop(0.5, '#b45309'); barGrad.addColorStop(1, '#d97706');
   }
 
-  // 1. Background Footer & Top Glowing Accent Line
   ctx.fillStyle = footerBg;
   ctx.fillRect(0, yPos, 2160, height);
 
   ctx.fillStyle = barGrad;
   ctx.fillRect(0, yPos, 2160, 8);
 
-  // 2. LOGO UPTD KEBUN DINAS DI SISI KIRI (75px -> 335px)
   const logoX = 75;
   const logoW = 260;
   if (logo2Ready) {
     contain(logo2, logoX, yPos + 18, logoW, height - 36);
   }
 
-  // 3. GARIS PEMISAH VERTIKAL 1 (Setelah Logo)
-  const div1X = logoX + logoW + 35; // 370px
+  const div1X = logoX + logoW + 35;
   ctx.fillStyle = dividerColor;
   ctx.fillRect(div1X, yPos + 30, 2.5, height - 60);
 
-  // 4. BAGIAN TENGAH: WEBSITE RESMI & DESKRIPSI PORTAL (395px -> 1220px)
-  const midX = div1X + 35; // 405px
+  const midX = div1X + 35;
   const globeR = 28;
   const row1Y = yPos + 75;
 
@@ -1111,17 +1081,14 @@ function renderUnifiedFooter(yPos, height = 240, themeType = 1){
   ctx.fillText('Portal Resmi Informasi & Dokumentasi', midX, row2Y - 15);
   ctx.fillText('Dinas Pertanian & Ketahanan Pangan NTT', midX, row2Y + 17);
 
-  // 5. GARIS PEMISAH VERTIKAL 2 (Sebelum Medsos)
   const div2X = 1250;
   ctx.fillStyle = dividerColor;
   ctx.fillRect(div2X, yPos + 30, 2.5, height - 60);
 
-  // 6. BAGIAN KANAN: IKUTI KAMI, 4 IKON MEDSOS & NAMA AKUN LENGKAP
   const rightX = div2X + 35;
   const iconSize = 50;
   const gap = 14;
 
-  // Baris 1 Kanan: "IKUTI KAMI :" + 4 Ikon Medsos (Facebook, Instagram, YouTube, TikTok)
   ctx.fillStyle = (themeType === 2 ? '#38bdf8' : (themeType === 3 ? '#9a3412' : '#082d17'));
   ctx.font = "800 26px 'Plus Jakarta Sans', Arial";
   ctx.textAlign = 'left';
@@ -1134,7 +1101,6 @@ function renderUnifiedFooter(yPos, height = 240, themeType = 1){
   drawYoutubeIcon(iconStartX, row1Y - iconSize/2, iconSize); iconStartX += iconSize + gap;
   drawTikTokIcon(iconStartX, row1Y - iconSize/2, iconSize);
 
-  // Baris 2 Kanan: Label "Akun Resmi :" + Nama Akun Resmi Lengkap (Font Diperbesar Sedikit)
   ctx.fillStyle = subColor;
   ctx.font = "700 23px 'Plus Jakarta Sans', Arial";
   ctx.fillText('Akun Resmi :', rightX, row2Y - 15);
@@ -1146,11 +1112,7 @@ function renderUnifiedFooter(yPos, height = 240, themeType = 1){
   ctx.restore();
 }
 
-// =========================================================================
-// 3 DESAIN KOLASE DENGAN AREA FOTO ADAPTIF & KEGIATAN DINAMIS
-// =========================================================================
-
-function calculateDynamicActivityLayout(acts, maxW, availableMaxH, fontName="'Plus Jakarta Sans', Arial", countDefaultSize=62){
+function calculateDynamicActivityLayout(acts, maxW, availableMaxH, fontName="'Plus Jakarta Sans', Arial"){
   if(!acts || acts.length === 0){
     return { count: 0, optimalFont: 36, lineHeight: 48, cardHeights: [], totalNeededH: 0, paddingLeft: 36, paddingRight: 36 };
   }
@@ -1202,9 +1164,7 @@ function calculateDynamicActivityLayout(acts, maxW, availableMaxH, fontName="'Pl
   };
 }
 
-/* -------------------------------------------------- */
-/* TEMPLATE 1: EMERALD FORMAL (Klasik Pemerintah NTT) */
-/* -------------------------------------------------- */
+// TEMPLATE 1
 function drawTemplate1(){
   ctx.fillStyle = '#f8faf9';
   ctx.fillRect(0, 0, 2160, 3054);
@@ -1245,12 +1205,10 @@ function drawTemplate1(){
   const footerY = 2814;
   const maxAllowableActH = 920;
 
-  // Hitung tinggi kegiatan secara dinamis
   const actLayout = calculateDynamicActivityLayout(acts, 2010, maxAllowableActH, "'Plus Jakarta Sans', Arial");
   const actualActH = acts.length > 0 ? actLayout.totalNeededH : 0;
   const actGap = acts.length > 0 ? 20 : 0;
 
-  // Tinggi foto dinamis menyesuaikan ke bawah jika tanpa kegiatan
   const photoStartY = 315;
   const photoBottomLimit = footerY - hashtagH - 15 - actualActH - actGap - infoBarH - 20;
   const dynamicPhotoH = Math.max(700, photoBottomLimit - photoStartY);
@@ -1267,7 +1225,6 @@ function drawTemplate1(){
 
   let cy = photoArea.y + photoArea.h + 20;
 
-  // Bar Kebun & Tanggal
   ctx.save();
   ctx.shadowColor = 'rgba(6, 26, 12, 0.08)';
   ctx.shadowBlur = 18; ctx.shadowOffsetY = 6;
@@ -1308,7 +1265,6 @@ function drawTemplate1(){
   ctx.fillStyle = '#0b1f14'; ctx.textAlign = 'left'; ctx.textBaseline = 'top';
   ctx.fillText($('gardenName').value, 110, cy + 54);
 
-  // Render Kegiatan jika ada
   let nextContentY = cy + infoBarH;
   if(acts.length > 0){
     const actStartY = cy + infoBarH + 20;
@@ -1316,7 +1272,6 @@ function drawTemplate1(){
     nextContentY = actStartY + actualActH;
   }
 
-  // Hashtag & Footer
   renderAyoBangunNTT(75, nextContentY + 10, 2010, hashtagH, 1);
   renderUnifiedFooter(footerY, 240, 1);
 }
@@ -1372,9 +1327,7 @@ function renderActivitiesEmerald(acts, startX, startY, maxW, maxH, layout){
   }
 }
 
-/* -------------------------------------------------- */
-/* TEMPLATE 2: SAPPHIRE MODERN (Dinamis & Kontemporer)*/
-/* -------------------------------------------------- */
+// TEMPLATE 2
 function drawTemplate2(){
   ctx.fillStyle = '#090d16';
   ctx.fillRect(0, 0, 2160, 3054);
@@ -1522,9 +1475,7 @@ function renderActivitiesSapphire(acts, startX, startY, maxW, maxH, layout){
   }
 }
 
-/* -------------------------------------------------- */
-/* TEMPLATE 3: WARM SAND LUXE (Editorial Jurnalistik) */
-/* -------------------------------------------------- */
+// TEMPLATE 3
 function drawTemplate3(){
   ctx.fillStyle = '#faf6f0';
   ctx.fillRect(0, 0, 2160, 3054);
@@ -1677,7 +1628,7 @@ function draw(){
 }
 
 // =========================================================================
-// SINKRONISASI GOOGLE DRIVE (SIMPAN, BACA, UNDUH & HAPUS OLEH ADMIN)
+// SINKRONISASI GOOGLE DRIVE
 // =========================================================================
 function getOptimizedJpeg(){
   const tempCanvas = document.createElement('canvas');
@@ -1689,14 +1640,20 @@ function getOptimizedJpeg(){
 }
 
 function saveArchive(){
-  showStatusAlert('⏳ Sedang mengunggah kolase ke Google Drive Dinas...', 'loading', 0);
+  const gardenVal = $('gardenName').value;
   const dateVal = $('date').value || new Date().toISOString().slice(0,10);
+  const [yearVal, monthVal, dayVal] = dateVal.split('-');
+
+  showStatusAlert(`⏳ Sedang mengarsipkan ke G-Drive (${gardenVal} - ${dateVal})...`, 'loading', 0);
   const imageBase64 = getOptimizedJpeg();
 
   const payload = {
     action: "save",
-    garden: $('gardenName').value,
+    garden: gardenVal,
     date: dateVal,
+    year: yearVal,
+    month: monthVal,
+    day: dayVal,
     image: imageBase64,
     author: (currentUser && currentUser.name) ? currentUser.name : 'Petugas'
   };
@@ -1707,20 +1664,20 @@ function saveArchive(){
     headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify(payload)
   }).then(() => {
-    showStatusAlert('✅ Kolase BERHASIL tersimpan ke Google Drive & Cloud!', 'success', 6000);
+    showStatusAlert(`✅ Kolase BERHASIL diarsipkan di Google Drive dalam folder: ${gardenVal} > ${yearVal} > Bulan ${monthVal}!`, 'success', 6000);
     setTimeout(loadArchive, 3000);
   }).catch((err) => {
     showStatusAlert('Gagal mengunggah: ' + err.message, 'error');
   });
 }
 
-function loadArchive(){
+function loadArchive(forceShowAll = false){
   let box = $('archiveList'); 
   box.innerHTML = '<div class="text-xs text-brand-700 text-center py-4 font-semibold flex items-center justify-center gap-2"><i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Memuat arsip dari Google Drive...</span></div>';
   if(window.lucide) { lucide.createIcons(); }
 
   let year = Number($('archiveYear').value);
-  let month = Number($('archiveMonth').value);
+  let monthStr = $('archiveMonth').value;
   let gardenFilter = (currentUser && currentUser.role === 'pegawai') ? currentUser.garden : $('archiveGarden').value;
 
   fetch(GDRIVE_SCRIPT_URL, {
@@ -1728,18 +1685,31 @@ function loadArchive(){
   }).then(res => res.json()).then(data => {
     box.innerHTML = '';
     if(!data || !data.archives || data.archives.length === 0){
-      box.innerHTML = '<div class="text-xs text-slate-500 p-4 text-center bg-white rounded-2xl border border-slate-200">Belum ada arsip di Google Drive untuk filter ini.</div>';
+      box.innerHTML = '<div class="text-xs text-slate-500 p-4 text-center bg-white rounded-2xl border border-slate-200">Belum ada file arsip ditemukan di Google Drive.</div>';
       return;
     }
 
-    const list = data.archives.filter(x => 
-      Number(x.month) === month && 
-      Number(x.year) === year && 
-      (gardenFilter === 'all' || x.garden === gardenFilter)
-    );
+    cachedArchives = data.archives;
+
+    let list = data.archives;
+    if(!forceShowAll){
+      list = data.archives.filter(x => {
+        const matchMonth = (monthStr === 'all') || (Number(x.month) === Number(monthStr));
+        const matchYear = !year || (Number(x.year) === year);
+        const matchGarden = (gardenFilter === 'all') || (x.garden && x.garden.toLowerCase().includes(gardenFilter.toLowerCase().replace(/kab\.|kabupaten/g, '').trim())) || (x.garden === gardenFilter);
+        return matchMonth && matchYear && matchGarden;
+      });
+    }
 
     if(list.length === 0){
-      box.innerHTML = '<div class="text-xs text-slate-500 p-4 text-center bg-white rounded-2xl border border-slate-200">Tidak ada arsip untuk bulan yang dipilih di Google Drive.</div>';
+      box.innerHTML = `
+        <div class="p-4 bg-white rounded-2xl border border-slate-200 text-center space-y-2">
+          <div class="text-xs text-slate-600 font-medium">Tidak ada arsip untuk filter yang dipilih (${data.archives.length} file total di Drive).</div>
+          <button type="button" onclick="loadArchive(true)" class="btn-press px-3 py-1.5 rounded-xl bg-brand-50 hover:bg-brand-100 text-brand-700 text-xs font-bold border border-brand-200">
+            Tampilkan Semua (${data.archives.length} Kolase)
+          </button>
+        </div>
+      `;
       return;
     }
 
@@ -1757,19 +1727,19 @@ function loadArchive(){
         <div class="flex items-start justify-between gap-2 mb-2">
           <div>
             <h5 class="text-xs font-bold text-slate-800">${item.garden || 'Kebun Dinas'}</h5>
-            <span class="text-[10px] font-medium text-slate-400">Tanggal: ${item.date}</span>
+            <span class="text-[10px] font-medium text-slate-400">Tanggal: ${item.date} (${item.year})</span>
           </div>
           <span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[9px] font-bold border border-emerald-200">Drive</span>
         </div>
-        <img src="${item.image}" alt="Pratinjau Arsip" class="w-full h-auto rounded-xl border border-slate-200 mb-3 object-cover max-h-48">
+        <img src="${item.image}" alt="Pratinjau Arsip" class="w-full h-auto rounded-xl border border-slate-200 mb-3 object-cover max-h-48 bg-slate-100" onerror="this.src='${item.viewUrl}'; this.className='hidden';">
         <div class="grid grid-cols-2 gap-2">
           <button type="button" class="btn-press py-2 px-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-[11px] font-bold flex items-center justify-center gap-1.5 shadow-sm transition-all" onclick="directDownloadArchive('${item.image}', '${item.garden}', '${item.date}')">
             <i data-lucide="download" class="w-3.5 h-3.5"></i>
             <span>Unduh HD</span>
           </button>
-          <button type="button" class="btn-press py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold flex items-center justify-center gap-1.5 transition-all" onclick="window.open('${item.image}', '_blank')">
+          <button type="button" class="btn-press py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold flex items-center justify-center gap-1.5 transition-all" onclick="window.open('${item.viewUrl}', '_blank')">
             <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-            <span>Lihat Foto</span>
+            <span>Buka di Drive</span>
           </button>
           ${deleteButtonHtml}
         </div>
@@ -1777,8 +1747,16 @@ function loadArchive(){
       box.appendChild(div);
     });
     if(window.lucide) { lucide.createIcons(); }
-  }).catch(() => {
-    box.innerHTML = '<div class="text-xs text-slate-500 p-4 text-center bg-white rounded-2xl border border-slate-200">Klik tombol "Buka Arsip" untuk menyegarkan daftar Google Drive.</div>';
+  }).catch(err => {
+    box.innerHTML = `
+      <div class="p-4 bg-rose-50 rounded-2xl border border-rose-200 text-center space-y-2">
+        <div class="text-xs text-rose-700 font-semibold">Gagal memuat arsip: ${err.message || 'Koneksi ke script terhalang'}</div>
+        <div class="text-[10px] text-rose-600">Pastikan Deploy Google Apps Script diatur ke <b>Siapa Saja (Anyone)</b>.</div>
+        <button type="button" onclick="loadArchive()" class="btn-press px-3 py-1.5 rounded-xl bg-rose-600 text-white text-xs font-bold shadow-sm">
+          Coba Lagi
+        </button>
+      </div>
+    `;
   });
 }
 
@@ -1841,7 +1819,7 @@ function fillYears(){
     y.appendChild(o);
   }
   y.value = now;
-  $('archiveMonth').value = new Date().getMonth() + 1;
+  $('archiveMonth').value = 'all'; // Default tampilkan semua bulan agar langsung terlihat
 }
 
 $('generate').addEventListener('click', () => {
@@ -1862,9 +1840,8 @@ $('download').addEventListener('click', () => {
 
 $('gardenName').addEventListener('change', draw);
 $('date').addEventListener('input', draw);
-$('showArchive').addEventListener('click', loadArchive);
+$('showArchive').addEventListener('click', () => loadArchive(false));
 
-// Safe Initalization
 window.addEventListener('DOMContentLoaded', () => {
   fillYears();
   addActivityItem();
@@ -1872,7 +1849,6 @@ window.addEventListener('DOMContentLoaded', () => {
   draw();
 });
 
-// Immediate render if DOM ready
 if (document.readyState === "complete" || document.readyState === "interactive") {
   fillYears();
   addActivityItem();
