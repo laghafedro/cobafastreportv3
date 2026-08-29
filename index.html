@@ -581,9 +581,90 @@ const LOGO1_SRC = "logofix.png";
 const LOGO2_SRC = "bundinas.png.jpeg";
 const LOGO_BERAKHLAK_SRC = "berakhlak.png";
 
+// SVG Vector Resmi BerAKHLAK & Bangga Melayani Bangsa (Ultra HD Standar KemenPAN-RB)
+const BERAKHLAK_FALLBACK_SVG = "data:image/svg+xml;utf8," + encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 220" width="820" height="220">
+  <defs>
+    <filter id="cardShadow" x="-10%" y="-10%" width="125%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.28"/>
+    </filter>
+    <linearGradient id="flagGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#b91c1c"/>
+      <stop offset="50%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#ef4444"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#b45309"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Container Box -->
+  <rect x="12" y="12" width="796" height="196" rx="24" fill="#ffffff" filter="url(#cardShadow)"/>
+  <rect x="12" y="12" width="796" height="196" rx="24" fill="none" stroke="#e2e8f0" stroke-width="2"/>
+
+  <!-- Left Side: Logo BerAKHLAK -->
+  <g transform="translate(36, 30)">
+    <!-- Teks BerAKHLAK -->
+    <text x="0" y="58" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="56" font-weight="900" fill="#0f172a">
+      Ber<tspan fill="#b91c1c">AKHLAK</tspan>
+    </text>
+    
+    <!-- Accent Line -->
+    <rect x="2" y="74" width="385" height="4" rx="2" fill="url(#flagGrad)"/>
+    
+    <!-- Tagline 7 Nilai Dasar -->
+    <text x="2" y="98" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="14" font-weight="800" fill="#1e293b" letter-spacing="0.5">
+      Berorientasi Pelayanan <tspan fill="#b91c1c">•</tspan> Akuntabel <tspan fill="#b91c1c">•</tspan> Kompeten
+    </text>
+    <text x="2" y="120" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="14" font-weight="800" fill="#1e293b" letter-spacing="0.5">
+      Harmonis <tspan fill="#b91c1c">•</tspan> Loyal <tspan fill="#b91c1c">•</tspan> Adaptif <tspan fill="#b91c1c">•</tspan> Kolaboratif
+    </text>
+    <text x="2" y="142" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="11" font-weight="700" fill="#64748b" letter-spacing="1">
+      CORE VALUES APARATUR SIPIL NEGARA
+    </text>
+  </g>
+
+  <!-- Divider Vertikal -->
+  <line x1="480" y1="36" x2="480" y2="184" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4 4"/>
+
+  <!-- Right Side: Bangga Melayani Bangsa -->
+  <g transform="translate(506, 36)">
+    <!-- Pita Merah Putih Mini -->
+    <rect x="0" y="10" width="22" height="14" rx="3" fill="#dc2626"/>
+    <rect x="0" y="24" width="22" height="14" rx="3" fill="#f8fafc" stroke="#cbd5e1" stroke-width="0.8"/>
+    
+    <text x="32" y="32" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="24" font-weight="900" fill="#b91c1c">
+      #Bangga
+    </text>
+    <text x="0" y="74" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="34" font-weight="900" fill="#0f172a" letter-spacing="-0.5">
+      MELAYANI
+    </text>
+    <text x="0" y="112" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-size="32" font-weight="900" fill="url(#goldGrad)" letter-spacing="0.5">
+      BANGSA
+    </text>
+    <rect x="0" y="128" width="270" height="3" rx="1.5" fill="#e2e8f0"/>
+  </g>
+</svg>
+`);
+
 const logo1 = new Image(); let logo1Ready = false; logo1.onload = () => { logo1Ready = true; draw(); }; logo1.src = LOGO1_SRC;
 const logo2 = new Image(); let logo2Ready = false; logo2.onload = () => { logo2Ready = true; draw(); }; logo2.src = LOGO2_SRC;
-const logoBerakhlak = new Image(); let logoBerakhlakReady = false; logoBerakhlak.onload = () => { logoBerakhlakReady = true; draw(); }; logoBerakhlak.src = LOGO_BERAKHLAK_SRC;
+
+const logoBerakhlak = new Image(); 
+let logoBerakhlakReady = false; 
+
+logoBerakhlak.onload = () => { 
+  logoBerakhlakReady = true; 
+  draw(); 
+}; 
+
+// Jika file lokal berakhlak.png tidak ditemukan, otomatis fallback ke Vector SVG HD
+logoBerakhlak.onerror = () => {
+  console.info("Memuat fallback HD Vector untuk Logo BerAKHLAK...");
+  logoBerakhlak.src = BERAKHLAK_FALLBACK_SVG;
+};
+logoBerakhlak.src = LOGO_BERAKHLAK_SRC;
 
 const $ = id => document.getElementById(id);
 const canvas = $('canvas'), ctx = canvas.getContext('2d');
@@ -828,15 +909,15 @@ function renderPhotoCard(r, idx, photo, radius = 16, borderColor = '#ffffff', bo
 
 function renderFloatingBerakhlak(photoArea){
   if(!logoBerakhlakReady) return;
-  const logoW = 600;
-  const logoH = 290;
-  const logoX = photoArea.x + photoArea.w - logoW - 10;
-  const logoY = photoArea.y - 10;
+  const logoW = 580;
+  const logoH = 160;
+  const logoX = photoArea.x + photoArea.w - logoW - 15;
+  const logoY = photoArea.y + 15;
 
   ctx.save();
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.45)';
-  ctx.shadowBlur = 16;
-  ctx.shadowOffsetY = 5;
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
+  ctx.shadowBlur = 20;
+  ctx.shadowOffsetY = 6;
   contain(logoBerakhlak, logoX, logoY, logoW, logoH);
   ctx.restore();
 }
@@ -1819,7 +1900,7 @@ function fillYears(){
     y.appendChild(o);
   }
   y.value = now;
-  $('archiveMonth').value = 'all'; // Default tampilkan semua bulan agar langsung terlihat
+  $('archiveMonth').value = 'all';
 }
 
 $('generate').addEventListener('click', () => {
