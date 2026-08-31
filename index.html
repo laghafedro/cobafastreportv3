@@ -291,10 +291,10 @@
           <option value="Kebun Dinas Wairklau Kab. Sikka">Kebun Dinas Wairklau Kab. Sikka</option>
           <option value="Kebun Dinas Detubapa Kab. Ende">Kebun Dinas Detubapa Kab. Ende</option>
           <option value="Kebun Dinas Anakoli Kab. Nagekeo">Kebun Dinas Anakoli Kab. Nagekeo</option>
-          <option value="Kebun Dinas Pinis Kab. Manggarai Timur">Kebun Dinas Pinis Kab. Manggarai Timur</option>
-          <option value="Kebun Dinas Roe Kab. Manggarai Barat">Kebun Dinas Roe Kab. Manggarai Barat</option>
-          <option value="Kebun Dinas Waikadada Kab. Sumba Barat Daya">Kebun Dinas Waikadada Kab. Sumba Barat Daya</option>
-          <option value="Kebun Dinas Hameli Kab. Sumba Barat Daya">Kebun Dinas Hameli Kab. Sumba Barat Daya</option>
+          <option value="Kebun Dinas Pinis Kab. Manggarai Timur">Pinis Kab. Manggarai Timur</option>
+          <option value="Kebun Dinas Roe Kab. Manggarai Barat">Roe Kab. Manggarai Barat</option>
+          <option value="Kebun Dinas Waikadada Kab. Sumba Barat Daya">Waikadada SBD</option>
+          <option value="Kebun Dinas Hameli Kab. Sumba Barat Daya">Hameli SBD</option>
         </select>
       </div>
 
@@ -416,8 +416,12 @@
         </button>
       </div>
 
-      <!-- Archive Output List -->
-      <div id="archiveList" class="mt-3.5 max-h-96 overflow-y-auto space-y-3 pr-1"></div>
+      <!-- Archive Output List (Hanya muncul saat tombol diklik) -->
+      <div id="archiveList" class="mt-3.5 max-h-96 overflow-y-auto space-y-3 pr-1">
+        <div class="text-[11px] text-slate-400 p-4 text-center bg-white rounded-2xl border border-slate-200">
+          Klik tombol <b>"Buka / Segarkan Arsip"</b> di atas untuk memuat daftar arsip.
+        </div>
+      </div>
     </div>
   </aside>
 
@@ -528,7 +532,6 @@ function loginSuccess(){
   setTimeout(() => { document.getElementById('loginOverlay').style.display = 'none'; }, 400);
   applyUserPermissions();
   draw();
-  loadArchive();
 }
 
 function logout(){
@@ -595,71 +598,29 @@ function showStatusAlert(msg, type = 'success', autoHide = 4500){
 let currentTemplate = 1;
 const LOGO1_SRC = "logofix.png";
 const LOGO2_SRC = "bundinas.png.jpeg";
+const LOGO_BERAKHLAK_SRC = "Berakhlak.png"; // Nama file asli Berakhlak.png
 
 const logo1 = new Image(); let logo1Ready = false; logo1.onload = () => { logo1Ready = true; draw(); }; logo1.src = LOGO1_SRC;
 const logo2 = new Image(); let logo2Ready = false; logo2.onload = () => { logo2Ready = true; draw(); }; logo2.src = LOGO2_SRC;
 
-// --- LOGO BERAKHLAK WITH HIGH-RESOLUTION SVG VECTOR FALLBACK ---
-const BERAKHLAK_SVG_DATA = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(`
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 280" width="620" height="280">
-  <defs>
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="100%" stop-color="#f8fafc"/>
-    </linearGradient>
-    <linearGradient id="goldRed" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#dc2626"/>
-      <stop offset="60%" stop-color="#ea580c"/>
-      <stop offset="100%" stop-color="#d97706"/>
-    </linearGradient>
-    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000000" flood-opacity="0.25"/>
-    </filter>
-  </defs>
-
-  <rect x="10" y="10" width="600" height="260" rx="36" fill="url(#bgGrad)" filter="url(#cardShadow)" stroke="#ffffff" stroke-width="4"/>
-  
-  <g transform="translate(45, 45)">
-    <circle cx="48" cy="48" r="46" fill="#dc2626"/>
-    <circle cx="48" cy="48" r="42" fill="#ffffff"/>
-    <circle cx="48" cy="48" r="38" fill="#b91c1c"/>
-    <path d="M 48,22 L 54,38 L 70,38 L 57,48 L 62,64 L 48,54 L 34,64 L 39,48 L 26,38 L 42,38 Z" fill="#facc15"/>
-  </g>
-
-  <text x="160" y="105" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="900" font-size="52" fill="#b91c1c" letter-spacing="-1">Ber<tspan fill="#ea580c">AKHLAK</tspan></text>
-  
-  <text x="162" y="138" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="700" font-size="14" fill="#64748b" letter-spacing="1.2">
-    BERORIENTASI PELAYANAN • AKUNTABEL • KOMPETEN • HARMONIS
-  </text>
-  <text x="162" y="158" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="700" font-size="14" fill="#64748b" letter-spacing="1.2">
-    LOYAL • ADAPTIF • KOLABORATIF
-  </text>
-
-  <rect x="40" y="185" width="540" height="54" rx="16" fill="url(#goldRed)"/>
-  <text x="310" y="221" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="800" font-size="22" fill="#ffffff" text-anchor="middle" letter-spacing="2">
-    BANGGA MELAYANI BANGSA
-  </text>
-</svg>
-`);
-
 const logoBerakhlak = new Image(); 
 let logoBerakhlakReady = false; 
-
 logoBerakhlak.onload = () => { 
   logoBerakhlakReady = true; 
   draw(); 
 };
 logoBerakhlak.onerror = () => {
-  if(logoBerakhlak.src !== BERAKHLAK_SVG_DATA){
-    logoBerakhlak.src = BERAKHLAK_SVG_DATA;
+  // Coba alternatif huruf kecil jika server hosting case-sensitive
+  if(!logoBerakhlak.src.endsWith("berakhlak.png")){
+    logoBerakhlak.src = "berakhlak.png";
   }
 };
-logoBerakhlak.src = "berakhlak.png";
+logoBerakhlak.src = LOGO_BERAKHLAK_SRC;
 
 const $ = id => document.getElementById(id);
 const canvas = $('canvas'), ctx = canvas.getContext('2d');
 let photos = []; // Array of { img: Image, offsetX: number, offsetY: number }
-let currentPhotoRects = []; // Posisi rect render foto di kanvas untuk gesture drag
+let currentPhotoRects = []; 
 let isDraggingPhoto = false;
 let draggedPhotoIndex = -1;
 let dragStartX = 0, dragStartY = 0;
@@ -832,7 +793,6 @@ function dateLabel(value){
 
 // =========================================================================
 // ADAPTIVE ASPECT-RATIO WEIGHTED LAYOUT ENGINE (1 - 8 FOTO)
-// Menyesuaikan komposisi Landscape & Portrait secara otomatis tanpa ruang kosong
 // =========================================================================
 function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap = 20){
   const rects = [];
@@ -841,23 +801,19 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
     return rects;
   }
 
-  // Ambil data rasio aspek masing-masing foto (default 1.33 jika belum ada foto)
   const ratios = [];
   for(let i = 0; i < count; i++){
     if(photosList[i] && photosList[i].img && photosList[i].img.width && photosList[i].img.height){
       ratios.push(photosList[i].img.width / photosList[i].img.height);
     } else {
-      ratios.push(1.33); // default standard 4:3
+      ratios.push(1.33);
     }
   }
 
-  // 2 FOTO: Alokasikan lebar proporsional terhadap aspek rasio
   if (count === 2) {
     const totalRatio = ratios[0] + ratios[1];
     const availW = areaW - gap;
-    // Hitung lebar masing-masing dengan pembobotan rasio
     let w0 = Math.round(availW * (ratios[0] / totalRatio));
-    // Batasi agar tidak terlalu ekstrim (min 30% lebar)
     w0 = Math.max(Math.round(availW * 0.32), Math.min(Math.round(availW * 0.68), w0));
     const w1 = availW - w0;
     rects.push({ x: areaX, y: areaY, w: w0, h: areaH });
@@ -865,12 +821,10 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
     return rects;
   }
 
-  // 3 FOTO: Deteksi apakah ada 1 foto Portrait di antara Landscape
   if (count === 3) {
     const isPortrait0 = ratios[0] < 0.95;
     const isPortrait2 = ratios[2] < 0.95;
     
-    // Jika foto pertama portrait: Berikan kolom kiri penuh, 2 foto lainnya di kanan bertumpuk
     if (isPortrait0 && !isPortrait2) {
       const wLeft = Math.round((areaW - gap) * 0.42);
       const wRight = areaW - gap - wLeft;
@@ -881,7 +835,6 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
       return rects;
     }
     
-    // Standar 3 Foto: 1 Hero kiri (lebar 56%) + 2 Kanan bertumpuk
     const wLeft = Math.round((areaW - gap) * 0.56);
     const wRight = areaW - gap - wLeft;
     const hHalf = (areaH - gap) / 2;
@@ -891,12 +844,10 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
     return rects;
   }
 
-  // Helper fungsi untuk menghitung pembagian baris berdasarkan Aspect Ratio Justified
   function layoutRows(rowCounts) {
     const numRows = rowCounts.length;
     const availH = areaH - gap * (numRows - 1);
     
-    // Hitung natural height tiap baris
     const rowNaturalHeights = [];
     let photoIdx = 0;
     for(let r = 0; r < numRows; r++){
@@ -929,7 +880,6 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
       for(let c = 0; c < cCount; c++){
         const pRatio = (ratios[photoIdx + c] || 1.33);
         let cW = (c === cCount - 1) ? (areaX + areaW - currentX) : Math.round(availW * (pRatio / sumRatio));
-        // Batasi ukuran minimum agar tetap proporsional
         cW = Math.max(Math.round(availW * 0.18), cW);
         rects.push({ x: currentX, y: currentY, w: cW, h: rH });
         currentX += cW + gap;
@@ -939,35 +889,11 @@ function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap
     }
   }
 
-  // 4 FOTO: 2 Baris x 2 Kolom (Proporsional)
-  if (count === 4) {
-    layoutRows([2, 2]);
-    return rects;
-  }
-
-  // 5 FOTO: 2 Baris (2 foto atas, 3 foto bawah)
-  if (count === 5) {
-    layoutRows([2, 3]);
-    return rects;
-  }
-
-  // 6 FOTO: 2 Baris x 3 Kolom
-  if (count === 6) {
-    layoutRows([3, 3]);
-    return rects;
-  }
-
-  // 7 FOTO: 2 Baris (3 foto atas, 4 foto bawah)
-  if (count === 7) {
-    layoutRows([3, 4]);
-    return rects;
-  }
-
-  // 8 FOTO: 2 Baris x 4 Kolom
-  if (count === 8) {
-    layoutRows([4, 4]);
-    return rects;
-  }
+  if (count === 4) { layoutRows([2, 2]); return rects; }
+  if (count === 5) { layoutRows([2, 3]); return rects; }
+  if (count === 6) { layoutRows([3, 3]); return rects; }
+  if (count === 7) { layoutRows([3, 4]); return rects; }
+  if (count === 8) { layoutRows([4, 4]); return rects; }
 
   return rects;
 }
@@ -1014,8 +940,8 @@ function renderPhotoCard(r, idx, photoObj, radius = 16, borderColor = '#ffffff',
 
 function renderFloatingBerakhlak(photoArea){
   if(!logoBerakhlakReady) return;
-  const logoW = 600;
-  const logoH = 270;
+  const logoW = 580;
+  const logoH = 260;
   const logoX = photoArea.x + photoArea.w - logoW - 10;
   const logoY = photoArea.y - 10;
 
@@ -1926,7 +1852,6 @@ function saveArchive(){
     body: JSON.stringify(payload)
   }).then(() => {
     showStatusAlert(`✅ Kolase BERHASIL diarsipkan di Google Drive dalam folder: ${gardenVal} > ${yearVal} > Bulan ${monthVal}!`, 'success', 6000);
-    setTimeout(loadArchive, 3000);
   }).catch((err) => {
     showStatusAlert('Gagal mengunggah: ' + err.message, 'error');
   });
