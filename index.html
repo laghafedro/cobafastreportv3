@@ -349,16 +349,17 @@
       <div id="thumbs" class="grid grid-cols-4 gap-2.5 mt-3"></div>
     </div>
 
-    <!-- Action Buttons -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-      <button id="generate" type="button" class="btn-shimmer btn-press py-3.5 px-4 rounded-xl bg-gradient-to-r from-brand-700 to-brand-600 hover:from-brand-800 hover:to-brand-700 text-white font-bold text-xs tracking-wide shadow-lg shadow-brand-700/25 flex items-center justify-center gap-2 transition-all">
-        <i data-lucide="cloud-upload" class="w-4 h-4"></i>
-        <span>Simpan ke G-Drive</span>
+    <!-- ACTION BUTTON (SATU TOMBOL GABUNGAN) -->
+    <div class="mb-4">
+      <button id="saveAndDownloadBtn" type="button" class="btn-shimmer btn-press w-full py-4 px-5 rounded-2xl bg-gradient-to-r from-brand-700 via-brand-600 to-emerald-600 hover:from-brand-800 hover:to-brand-700 text-white font-bold text-sm tracking-wide shadow-xl shadow-brand-700/30 flex items-center justify-center gap-3 transition-all duration-300">
+        <div class="flex items-center gap-1.5">
+          <i data-lucide="cloud-upload" class="w-5 h-5"></i>
+          <span class="text-emerald-200 font-normal">+</span>
+          <i data-lucide="download" class="w-5 h-5"></i>
+        </div>
+        <span>Simpan ke G-Drive &amp; Unduh PNG</span>
       </button>
-      <button id="download" type="button" class="btn-press py-3.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs tracking-wide shadow-md flex items-center justify-center gap-2 transition-all">
-        <i data-lucide="download" class="w-4 h-4"></i>
-        <span>Unduh PNG HD</span>
-      </button>
+      <p class="text-[11px] text-center text-slate-400 mt-2">1 Kali Klik: Mengunduh foto resolusi tinggi sekaligus mengarsipkan ke Google Drive</p>
     </div>
 
     <!-- Status Alert Container -->
@@ -617,7 +618,6 @@ logoBerakhlak.onerror = () => {
 };
 logoBerakhlak.src = LOGO_BERAKHLAK_SRC;
 
-// Logo Ayo Bangun NTT
 const logoAyoBangunNTT = new Image();
 let logoAyoBangunNTTReady = false;
 logoAyoBangunNTT.onload = () => {
@@ -633,7 +633,7 @@ logoAyoBangunNTT.src = LOGO_AYOBANGUNNTT_SRC;
 
 const $ = id => document.getElementById(id);
 const canvas = $('canvas'), ctx = canvas.getContext('2d');
-let photos = []; // Array of { img: Image, offsetX: number, offsetY: number, zoom: number }
+let photos = []; 
 let currentPhotoRects = []; 
 let isDraggingPhoto = false;
 let draggedPhotoIndex = -1;
@@ -712,7 +712,6 @@ $('files').addEventListener('change', event => {
   event.target.value = '';
 });
 
-// Update Zoom Manual dari Tombol Thumbnail
 function changePhotoZoom(idx, delta){
   if(!photos[idx]) return;
   photos[idx].zoom = Math.max(1.0, Math.min(3.5, (photos[idx].zoom || 1.0) + delta));
@@ -757,7 +756,6 @@ function renderThumbs(){
     imgWrap.appendChild(preview); 
     imgWrap.appendChild(remove);
 
-    // Toolbar Zoom di bawah thumbnail
     const zoomControls = document.createElement('div');
     zoomControls.className = 'flex items-center justify-between bg-white px-1 py-1 border-t border-slate-200 text-[10px] font-bold text-slate-700';
     zoomControls.innerHTML = `
@@ -780,7 +778,6 @@ function renderThumbs(){
   if(window.lucide) { lucide.createIcons(); }
 }
 
-// Canvas Helpers
 function rr(x, y, w, h, r){
   if(w < 2*r) r = w/2;
   if(h < 2*r) r = h/2;
@@ -793,7 +790,6 @@ function rr(x, y, w, h, r){
   ctx.closePath();
 }
 
-// Cover dengan dukungan Pan Offset & Zoom Factor
 function coverWithOffset(image, x, y, w, h, offsetX = 0, offsetY = 0, zoom = 1.0){
   const baseScale = Math.max(w / image.width, h / image.height);
   const currentScale = baseScale * Math.max(1.0, zoom);
@@ -853,9 +849,6 @@ function dateLabel(value){
   return days[d.getDay()] + ', ' + day + ' ' + months[+month-1] + ' ' + year;
 }
 
-// =========================================================================
-// ADAPTIVE ASPECT-RATIO WEIGHTED LAYOUT ENGINE (1 - 8 FOTO)
-// =========================================================================
 function calculatePhotoLayout(photosList, count, areaX, areaY, areaW, areaH, gap = 20){
   const rects = [];
   if (count <= 1) {
@@ -1000,18 +993,13 @@ function renderPhotoCard(r, idx, photoObj, radius = 16, borderColor = '#ffffff',
   }
 }
 
-// Menampilkan Logo BerAKHLAK dan Logo Ayo Bangun NTT Berdampingan & Saling Rapat
 function renderFloatingBerakhlak(photoArea){
   const logoW = 460;
   const logoH = 195;
-  // Gap negatif (-130) untuk memangkas rongga transparan bawaan PNG agar visual logo benar-benar merapat
   const gap = -130; 
   const logoY = photoArea.y + 18;
 
-  // Posisi Logo BerAKHLAK (Sebelah Kanan)
   const berakhlakX = photoArea.x + photoArea.w - logoW - 16;
-
-  // Posisi Logo Ayo Bangun NTT (Persis di samping kiri Logo BerAKHLAK)
   const ayoBangunX = berakhlakX - logoW - gap;
 
   ctx.save();
@@ -1019,12 +1007,9 @@ function renderFloatingBerakhlak(photoArea){
   ctx.shadowBlur = 14;
   ctx.shadowOffsetY = 4;
 
-  // Render Logo Ayo Bangun NTT
   if(logoAyoBangunNTTReady){
     contain(logoAyoBangunNTT, ayoBangunX, logoY, logoW, logoH);
   }
-
-  // Render Logo BerAKHLAK
   if(logoBerakhlakReady){
     contain(logoBerakhlak, berakhlakX, logoY, logoW, logoH);
   }
@@ -1849,7 +1834,6 @@ function findPhotoIndexAt(x, y){
   return -1;
 }
 
-// ZOOM DENGAN RODA MOUSE (WHEEL)
 canvas.addEventListener('wheel', (e) => {
   const pos = getCanvasCoordinates(e);
   const idx = findPhotoIndexAt(pos.x, pos.y);
@@ -1864,7 +1848,6 @@ canvas.addEventListener('wheel', (e) => {
 
 function handleDragStart(e){
   if(e.touches && e.touches.length === 2){
-    // Mulai Pinch To Zoom
     const pos1 = { x: e.touches[0].clientX, y: e.touches[0].clientY };
     const pos2 = { x: e.touches[1].clientX, y: e.touches[1].clientY };
     initialPinchDistance = Math.hypot(pos2.x - pos1.x, pos2.y - pos1.y);
@@ -1893,7 +1876,6 @@ function handleDragStart(e){
 }
 
 function handleDragMove(e){
-  // Pinch To Zoom Touch
   if(e.touches && e.touches.length === 2 && initialPinchDistance !== null && draggedPhotoIndex !== -1 && photos[draggedPhotoIndex]){
     e.preventDefault();
     const pos1 = { x: e.touches[0].clientX, y: e.touches[0].clientY };
@@ -1924,18 +1906,16 @@ function handleDragEnd(){
   }
 }
 
-// Mouse events
 canvas.addEventListener('mousedown', handleDragStart);
 window.addEventListener('mousemove', handleDragMove);
 window.addEventListener('mouseup', handleDragEnd);
 
-// Touch events for mobile/tablet
 canvas.addEventListener('touchstart', (e) => { handleDragStart(e); if(isDraggingPhoto || (e.touches && e.touches.length === 2)) e.preventDefault(); }, { passive: false });
 window.addEventListener('touchmove', (e) => { if(isDraggingPhoto || (e.touches && e.touches.length === 2)) { handleDragMove(e); e.preventDefault(); } }, { passive: false });
 window.addEventListener('touchend', handleDragEnd);
 
 // =========================================================================
-// SINKRONISASI GOOGLE DRIVE
+// SINKRONISASI GOOGLE DRIVE & UNDUH OTOMATIS
 // =========================================================================
 function getOptimizedJpeg(){
   const tempCanvas = document.createElement('canvas');
@@ -1946,12 +1926,33 @@ function getOptimizedJpeg(){
   return tempCanvas.toDataURL('image/jpeg', 0.80);
 }
 
-function saveArchive(){
+// Fungsi Download PNG Lokal
+function triggerDownloadPNG(){
+  const gardenVal = $('gardenName').value || 'Kebun';
+  const cleanGarden = gardenVal.replace(/[^a-zA-Z0-9]/g, '_');
+  const dateVal = $('date').value || 'kegiatan';
+  
+  const link = document.createElement('a');
+  link.download = `Kolase_${cleanGarden}_${dateVal}.png`;
+  link.href = canvas.toDataURL('image/png');
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+// Fungsi Gabungan: Simpan ke G-Drive & Download PNG
+function saveAndDownloadAction(){
+  draw();
+
+  // 1. Langsung unduh file PNG HD ke perangkat
+  triggerDownloadPNG();
+
+  // 2. Unggah ke Google Drive
   const gardenVal = $('gardenName').value;
   const dateVal = $('date').value || new Date().toISOString().slice(0,10);
   const [yearVal, monthVal, dayVal] = dateVal.split('-');
 
-  showStatusAlert(`⏳ Sedang mengarsipkan ke G-Drive (${gardenVal} - ${dateVal})...`, 'loading', 0);
+  showStatusAlert(`⏳ Gambar berhasil diunduh. Sedang mengarsipkan ke G-Drive (${gardenVal})...`, 'loading', 0);
   const imageBase64 = getOptimizedJpeg();
 
   const payload = {
@@ -1971,9 +1972,9 @@ function saveArchive(){
     headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify(payload)
   }).then(() => {
-    showStatusAlert(`✅ Kolase BERHASIL diarsipkan di Google Drive dalam folder: ${gardenVal} > ${yearVal} > Bulan ${monthVal}!`, 'success', 6000);
+    showStatusAlert(`✅ Sukses! Kolase terunduh & tersimpan di G-Drive folder: ${gardenVal} > ${yearVal} > Bulan ${monthVal}!`, 'success', 6500);
   }).catch((err) => {
-    showStatusAlert('Gagal mengunggah: ' + err.message, 'error');
+    showStatusAlert('Kolase telah terunduh, namun gagal tersinkron ke Drive: ' + err.message, 'error');
   });
 }
 
@@ -2128,21 +2129,8 @@ function fillYears(){
   $('archiveMonth').value = 'all';
 }
 
-$('generate').addEventListener('click', () => {
-  draw();
-  saveArchive();
-});
-
-$('download').addEventListener('click', () => {
-  draw();
-  const link = document.createElement('a');
-  link.download = 'kolase-hd-' + ($('date').value || 'kegiatan') + '.png';
-  link.href = canvas.toDataURL('image/png');
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  showStatusAlert('Kolase PNG HD berhasil diunduh ke perangkat ini.', 'success');
-});
+// EVENT LISTENER TOMBOL TUNGGAL (SIMPAN & UNDUH)
+$('saveAndDownloadBtn').addEventListener('click', saveAndDownloadAction);
 
 $('gardenName').addEventListener('change', draw);
 $('date').addEventListener('input', draw);
